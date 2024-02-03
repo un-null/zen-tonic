@@ -74,7 +74,7 @@ export async function createInitialProject(formData: FormData) {
         start_date: startDate.toDate(),
         end_date: endDate.toDate(),
         total_date: totalDate,
-        days_of_week: daysOfWeek,
+        days_of_week: JSON.stringify(daysOfWeek),
         user_id: user?.id || "",
         if_then: _if + then || "",
       },
