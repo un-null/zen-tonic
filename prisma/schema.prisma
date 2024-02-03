@@ -11,58 +11,36 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  image         String?
-  emailVerified DateTime?
+  id          String    @id @default(cuid())
+  name        String?
+  created_at  DateTime  @default(now())
+  email       String?   @unique
+  image       String?
   database_id String?
-  accounts Account[]
-  project Project[]
-  post Post[]
-}
-
-model Account {
-  id                 String     @id @default(cuid())
-  userId             String     
-  type               String
-  provider           String
-  providerAccountId  String  
-  refresh_token      String?
-  access_token       String?
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?
-  session_state      String?
-  oauth_token_secret String?
-  oauth_token        String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
+  project     Project[]
+  post        Post[]
 }
 
 model Project {
-  id String @id @default(cuid())
-  title String
-  start_date DateTime
-  end_date DateTime
-  frequency Int
-  total_date Int
-  if_then String?
-  user_id String
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  post Post[]
+  id           String   @id @default(cuid())
+  title        String
+  start_date   DateTime
+  end_date     DateTime
+  total_date   Int
+  days_of_week Json
+  if_then      String?
+  user_id      String
+  user         User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  post         Post[]
 }
 
 model Post {
-  id String @id @default(cuid())
-  content String
+  id         String   @id @default(cuid())
+  content    String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  user_id String
+  user_id    String
   project_id String
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  project Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  project    Project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
 }
