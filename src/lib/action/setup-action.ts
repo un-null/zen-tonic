@@ -57,7 +57,6 @@ export async function createInitialProject(formData: FormData) {
 
   try {
     const notionDb = await createNotionDb({ pageId, title, accessToken });
-
     await prisma.user.update({
       where: {
         id: user?.id || "",
@@ -67,14 +66,13 @@ export async function createInitialProject(formData: FormData) {
         database_id: notionDb.id,
       },
     });
-
     await prisma.project.create({
       data: {
         title,
         start_date: startDate.toDate(),
         end_date: endDate.toDate(),
         total_date: totalDate,
-        days_of_week: JSON.stringify(daysOfWeek),
+        days_of_week: daysOfWeek.join(","),
         user_id: user?.id || "",
         if_then: _if + then || "",
       },
