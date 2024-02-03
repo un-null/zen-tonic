@@ -47,7 +47,7 @@ export default function Setup() {
               w={300}
               size={"xs"}
             />
-            <Flex gap={16} mt={16}>
+            <Flex gap={16} my={16}>
               <Select
                 label="期間"
                 name="numberOfWeek"
@@ -70,6 +70,23 @@ export default function Setup() {
                   <Checkbox name="daysOfWeek[]" value="Sun" label="日" />
                 </Group>
               </Checkbox.Group>
+            </Flex>
+
+            <Flex gap={16} my={16}>
+              <TextInput
+                label="if"
+                name="_if"
+                withAsterisk
+                w={300}
+                size={"xs"}
+              />
+              <TextInput
+                label="then"
+                name="then"
+                withAsterisk
+                w={300}
+                size={"xs"}
+              />
             </Flex>
           </Box>
 

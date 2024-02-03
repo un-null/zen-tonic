@@ -19,6 +19,8 @@ const schema = z.object({
   title: z.string().min(1, { message: "タイトルを入力してください" }),
   numberOfWeek: z.enum(["4", "8"]),
   daysOfWeek: z.string().array(),
+  _if: z.string(),
+  then: z.string(),
 });
 
 export async function createInitialProject(formData: FormData) {
@@ -27,6 +29,8 @@ export async function createInitialProject(formData: FormData) {
     title: formData.get("title"),
     numberOfWeek: formData.get("numberOfWeek"),
     daysOfWeek: formData.getAll("daysOfWeek[]"),
+    _if: formData.get("_if"),
+    then: formData.get("then"),
   });
 
   if (!validatedFields.success) {
@@ -38,7 +42,8 @@ export async function createInitialProject(formData: FormData) {
     };
   }
 
-  const { pageUrl, title, numberOfWeek, daysOfWeek } = validatedFields.data;
+  const { pageUrl, title, numberOfWeek, daysOfWeek, _if, then } =
+    validatedFields.data;
 
   const user = await currentUser();
   const accessToken = await getAccessToken(user?.id);
@@ -71,6 +76,7 @@ export async function createInitialProject(formData: FormData) {
         total_date: totalDate,
         days_of_week: daysOfWeek,
         user_id: user?.id || "",
+        if_then: _if + then || "",
       },
     });
   } catch (error) {

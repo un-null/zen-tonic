@@ -16,24 +16,9 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-  setup,
 }: Readonly<{
   children: React.ReactNode;
-  setup: React.ReactNode;
 }>) {
-  // const user = await currentUser();
-
-  // const prismaUser = await prisma.user.findUnique({
-  //   where: {
-  //     id: user?.id,
-  //   },
-  //   select: {
-  //     database_id: true,
-  //   },
-  // });
-
-  // const isDatabaseId = !!prismaUser?.database_id;
-
   return (
     <ClerkProvider>
       <html lang="en">
@@ -41,10 +26,7 @@ export default async function RootLayout({
           <ColorSchemeScript />
         </head>
         <body className={inter.className}>
-          <MantineProvider>
-            {/* {!isDatabaseId ? setup : children} */}
-            {setup}
-          </MantineProvider>
+          <MantineProvider>{children}</MantineProvider>
         </body>
       </html>
     </ClerkProvider>
