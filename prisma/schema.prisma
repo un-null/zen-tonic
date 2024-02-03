@@ -27,7 +27,7 @@ model Project {
   start_date   DateTime
   end_date     DateTime
   total_date   Int
-  days_of_week Json
+  days_of_week String
   if_then      String?
   user_id      String
   user         User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
