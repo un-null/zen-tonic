@@ -1,8 +1,9 @@
+"use client";
+
 import {
   Box,
   Button,
   Checkbox,
-  CheckboxGroup,
   Container,
   Flex,
   Group,
@@ -12,20 +13,24 @@ import {
   Title,
 } from "@mantine/core";
 
+import { createInitialProject } from "@/lib/action/setup-action";
+
 export default function Setup() {
   return (
     <Container size={"md"} p={16}>
-      <form>
+      <form action={createInitialProject}>
         <Flex gap={16} direction={"column"} w={"fit"} mt={40}>
           <Title order={3}>ページ URL を取得</Title>
           <TextInput
             type={"url"}
             label="ページURL"
+            name="pageUrl"
             withAsterisk
             w={300}
             size={"xs"}
           />
         </Flex>
+
         <Flex direction={"column"} gap={32} mt={40}>
           <Box w={"fit"}>
             <Title order={3}>プロジェクトを作成</Title>
@@ -35,26 +40,36 @@ export default function Setup() {
           </Box>
 
           <Box>
-            <TextInput label="タイトル" withAsterisk w={300} size={"xs"} />
+            <TextInput
+              label="タイトル"
+              name="title"
+              withAsterisk
+              w={300}
+              size={"xs"}
+            />
             <Flex gap={16} mt={16}>
               <Select
                 label="期間"
-                data={["4 週間", "8 週間"]}
-                defaultValue={"4 週間"}
+                name="numberOfWeek"
+                data={[
+                  { value: "4", label: "4 週間" },
+                  { value: "8", label: "8 週間" },
+                ]}
+                defaultValue={"4"}
                 withAsterisk
                 size={"xs"}
               />
-              <CheckboxGroup label="曜日" withAsterisk size={"xs"}>
+              <Checkbox.Group label="曜日" withAsterisk size={"xs"}>
                 <Group mt="xs">
-                  <Checkbox value="Mon" label="月" />
-                  <Checkbox value="Tue" label="火" />
-                  <Checkbox value="Wed" label="水" />
-                  <Checkbox value="Thu" label="木" />
-                  <Checkbox value="Fri" label="金" />
-                  <Checkbox value="Sat" label="土" />
-                  <Checkbox value="Sun" label="日" />
+                  <Checkbox name="daysOfWeek[]" value="Mon" label="月" />
+                  <Checkbox name="daysOfWeek[]" value="Tue" label="火" />
+                  <Checkbox name="daysOfWeek[]" value="Wed" label="水" />
+                  <Checkbox name="daysOfWeek[]" value="Thu" label="木" />
+                  <Checkbox name="daysOfWeek[]" value="Fri" label="金" />
+                  <Checkbox name="daysOfWeek[]" value="Sat" label="土" />
+                  <Checkbox name="daysOfWeek[]" value="Sun" label="日" />
                 </Group>
-              </CheckboxGroup>
+              </Checkbox.Group>
             </Flex>
           </Box>
 
