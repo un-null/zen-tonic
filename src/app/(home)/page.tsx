@@ -1,7 +1,9 @@
+import { Title } from "@mantine/core";
+
 export default async function Home() {
   return (
     <div>
-      <h1>Hello</h1>
+      <Title>Hello</Title>
     </div>
   );
 }
