@@ -6,12 +6,7 @@ export default function Footer() {
   return (
     <Box component="footer" p={40} style={{ borderTop: "1px solid #cecece" }}>
       <Flex w={"36em"} mx={"auto"} justify={"space-between"} align={"center"}>
-        <Flex
-          justify={"space-between"}
-          align={"center"}
-          gap={8}
-          c={"original-gray.8"}
-        >
+        <Flex justify={"space-between"} align={"center"} gap={8}>
           <Avatar size={"sm"} radius={"sm"} />
           <Text size={"xs"}>zen-tonic</Text>
           <Anchor
