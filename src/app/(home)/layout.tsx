@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
-import { ActionIcon, Avatar, Box, Container } from "@mantine/core";
-import { Plus } from "lucide-react";
+import { Avatar, Box, Container } from "@mantine/core";
+
+import CraeteButton from "./create-button";
 
 export const metadata: Metadata = {
   title: "Timeline",
@@ -53,9 +54,7 @@ export default async function TimelineLayout({
           {children}
         </Box>
         <Box component="aside" pt={16}>
-          <ActionIcon radius={"xl"} variant={"outline"} size={"xl"}>
-            <Plus />
-          </ActionIcon>
+          <CraeteButton />
         </Box>
       </div>
     </Container>
