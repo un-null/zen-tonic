@@ -4,7 +4,6 @@ export default function PostCard() {
   return (
     <Card
       mx={"auto"}
-      //   shadow="xs"
       padding="lg"
       radius={0}
       style={{
