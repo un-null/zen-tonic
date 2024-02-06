@@ -15,23 +15,7 @@ export const metadata: Metadata = {
 };
 
 const theme = createTheme({
-  primaryColor: "original-gray",
-  colors: {
-    "original-gray": [
-      "#fcfcfc",
-      "#f9f9f9",
-      "#f0f0f0",
-      // "#e8e8e8",
-      // "#e0e0e0",
-      "#d9d9d9",
-      "#cecece",
-      "#bbbbbb",
-      "#8d8d8d",
-      "#838383",
-      "#646464",
-      "#202020",
-    ],
-  },
+  primaryColor: "dark",
 });
 
 export default async function RootLayout({

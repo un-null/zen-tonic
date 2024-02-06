@@ -91,9 +91,7 @@ export default function Setup() {
           </Box>
 
           <Box w={"fit"}>
-            <Button type={"submit"} bg={"original-gray.9"}>
-              作成
-            </Button>
+            <Button type={"submit"}>作成</Button>
           </Box>
         </Flex>
       </form>
