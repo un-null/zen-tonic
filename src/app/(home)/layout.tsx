@@ -20,15 +20,17 @@ export default async function TimelineLayout({
 }>) {
   const user = await currentUser();
 
-  const project = await prisma.project.findFirst({
+  const projects = await prisma.project.findMany({
     where: {
       user_id: user?.id,
     },
   });
 
-  if (!project) {
+  if (!projects) {
     redirect("/setup");
   }
+
+  const projectTitleArr = projects.map((project) => project.title);
 
   return (
     <Container
@@ -53,7 +55,7 @@ export default async function TimelineLayout({
           {children}
         </Box>
         <Box component="aside" pt={16}>
-          <CraeteButton />
+          <CraeteButton projects={projectTitleArr} />
         </Box>
       </div>
     </Container>

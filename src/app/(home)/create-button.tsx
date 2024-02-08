@@ -17,7 +17,7 @@ import { Plus } from "lucide-react";
 
 import { createPost } from "@/lib/action/post-action";
 
-export default function CraeteButton() {
+export default function CraeteButton({ projects }: { projects: string[] }) {
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
@@ -47,7 +47,7 @@ export default function CraeteButton() {
                 size={"xs"}
                 withAsterisk
                 maw={200}
-                data={["Titan"]}
+                data={projects}
                 name="project"
               />
               <Checkbox
