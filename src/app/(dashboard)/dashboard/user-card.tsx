@@ -1,13 +1,14 @@
 import { ReactNode } from "react";
 import Link from "next/link";
 
-import { Avatar, Button, Card, Flex, Text } from "@mantine/core";
+import { currentUser } from "@clerk/nextjs";
+import { Anchor, Avatar, Button, Card, Flex, Text } from "@mantine/core";
 import { Calendar, Clipboard } from "lucide-react";
 
 type CardItem = {
   icon: ReactNode;
   label: string;
-  content: string;
+  content?: string;
   href?: string;
 };
 
@@ -15,7 +16,6 @@ const cardItems = [
   {
     icon: <Calendar size="1rem" style={{ marginRight: 8 }} />,
     label: "利用開始",
-    content: "yyyy/mm/dd",
   },
   {
     icon: <Clipboard size="1rem" style={{ marginRight: 8 }} />,
@@ -25,17 +25,36 @@ const cardItems = [
   },
 ] satisfies CardItem[];
 
-export default function UserCard() {
+type Props = {
+  databaseId: string;
+  startDate: string;
+};
+
+// Fix
+export default async function UserCard({
+  databaseId = "",
+  startDate = "",
+}: Props) {
+  const user = await currentUser();
+
   return (
     <Card shadow="xs" padding="lg" radius="sm" withBorder>
       <Flex align={"center"} gap={32} pb={32}>
         <Avatar size={"lg"} radius={"sm"} />
-        <Flex flex={1} direction={"column"}>
-          <Text>username</Text>
-          <Text size={"xs"}>Notion Database Link</Text>
+        <Flex flex={1} gap={4} direction={"column"}>
+          <Text fw={600}>{user?.firstName}</Text>
+          <Anchor
+            size={"xs"}
+            component={Link}
+            href={"/dashboard"}
+            underline={"always"}
+            c={"#2483e2"}
+          >
+            Notion Database Link
+          </Anchor>
         </Flex>
         <Button
-          href={"/dashboard/setting"}
+          href={"/dashboard/settings"}
           component={Link}
           variant={"outline"}
           c={"dark.8"}
@@ -63,7 +82,7 @@ export default function UserCard() {
               {item.icon}
               {item.label}
             </Text>
-            <Text size={"sm"}>{item.content}</Text>
+            <Text size={"sm"}>{item.content ? item.content : startDate}</Text>
           </Flex>
         </Flex>
       ))}
