@@ -47,7 +47,7 @@ export default function CraeteButton() {
                 size={"xs"}
                 withAsterisk
                 maw={200}
-                data={["Test"]}
+                data={["Titan"]}
                 name="project"
               />
               <Checkbox

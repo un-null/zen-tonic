@@ -36,8 +36,7 @@ export async function createPost(formData: FormData) {
 
   const user = await currentUser();
   const accessToken = await getAccessToken(user?.id);
-  const databaseId = await getDatabaseId(user?.id);
-  const projectId = await getProjectId(project);
+  const { projectId, databaseId } = await getProject(project);
 
   const isDone = !!done;
 
@@ -64,24 +63,18 @@ export async function createPost(formData: FormData) {
   redirect("/");
 }
 
-const getDatabaseId = async (userId: string = "") => {
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
-  return user?.database_id;
-};
-
 // Fix refactor
-const getProjectId = async (title: string = "") => {
+const getProject = async (title: string = "") => {
   const project = await prisma.project.findFirst({
     where: {
       title,
     },
   });
 
-  return project?.id;
+  return {
+    projectId: project?.id,
+    databaseId: project?.database_id,
+  };
 };
 
 const getAccessToken = async (userId: string = "") => {
@@ -117,7 +110,18 @@ const createNotionPage = async ({
         title: [
           {
             text: {
-              content: "@Today",
+              content: "",
+            },
+          },
+          {
+            mention: {
+              template_mention: {
+                type: "template_mention_date",
+                template_mention_date: "today",
+              },
+              date: {
+                start: new Date().toISOString().substring(0, 10),
+              },
             },
           },
         ],
