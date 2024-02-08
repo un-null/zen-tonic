@@ -40,7 +40,7 @@ export default async function UserCard({
   return (
     <Card shadow="xs" padding="lg" radius="sm" withBorder>
       <Flex align={"center"} gap={32} pb={32}>
-        <Avatar size={"lg"} radius={"sm"} />
+        <Avatar size={"lg"} radius={"sm"} src={user?.imageUrl} />
         <Flex flex={1} gap={4} direction={"column"}>
           <Text fw={600}>{user?.firstName}</Text>
           <Anchor
