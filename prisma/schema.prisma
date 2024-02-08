@@ -11,27 +11,27 @@ datasource db {
 }
 
 model User {
-  id          String    @id @default(cuid())
-  name        String?
-  created_at  DateTime  @default(now())
-  email       String?   @unique
-  image       String?
-  database_id String?
-  project     Project[]
-  post        Post[]
+  id         String    @id @default(cuid())
+  name       String?
+  created_at DateTime  @default(now())
+  email      String?   @unique
+  image      String?
+  project    Project[]
+  post       Post[]
 }
 
 model Project {
-  id           String   @id @default(cuid())
-  title        String
-  start_date   DateTime
-  end_date     DateTime
-  total_date   Int
-  days_of_week String
-  if_then      String?
-  user_id      String
-  user         User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  post         Post[]
+  id          String   @id @default(cuid())
+  title       String
+  start_date  DateTime
+  end_date    DateTime
+  total_date  Int
+  weekDays    String
+  if_then     String?
+  database_id String?
+  user_id     String
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  post        Post[]
 }
 
 model Post {

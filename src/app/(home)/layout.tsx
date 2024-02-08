@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
+import { currentUser } from "@clerk/nextjs";
 import { Avatar, Box, Container } from "@mantine/core";
+
+import { prisma } from "@/lib/prisma";
 
 import CraeteButton from "./create-button";
 
@@ -14,22 +18,17 @@ export default async function TimelineLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const user = await currentUser();
+  const user = await currentUser();
 
-  // const prismaUser = await prisma.user.findUnique({
-  //   where: {
-  //     id: user?.id,
-  //   },
-  //   select: {
-  //     database_id: true,
-  //   },
-  // });
+  const project = await prisma.project.findFirst({
+    where: {
+      user_id: user?.id,
+    },
+  });
 
-  // const isDatabaseId = !!prismaUser?.database_id;
-
-  // if (!isDatabaseId) {
-  //   redirect("/setup");
-  // }
+  if (!project) {
+    redirect("/setup");
+  }
 
   return (
     <Container

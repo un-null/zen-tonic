@@ -23,8 +23,6 @@ export default async function Home() {
     // take: 1
   });
 
-  const isCompleteTask = userLatestPost!.created_at === new Date();
-
   return (
     <Tab>
       <Box my={40}>
