@@ -64,7 +64,7 @@ export async function createInitialProject(formData: FormData) {
         start_date: startDate.toDate(),
         end_date: endDate.toDate(),
         total_date: totalDate,
-        weekDays: daysOfWeek.join(","),
+        week_days: daysOfWeek.join(","),
         database_id: notionDb.id,
         user_id: user?.id || "",
         if_then: _if + then || "",

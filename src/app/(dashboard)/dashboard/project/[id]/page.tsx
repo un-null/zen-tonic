@@ -18,7 +18,7 @@ import { prisma } from "@/lib/prisma";
 type CardItem = {
   icon: ReactNode;
   label: string;
-  key?: "weekDays" | "total_date" | "if_then";
+  key?: "week_days" | "total_date" | "if_then";
 };
 
 const cardItems = [
@@ -29,7 +29,7 @@ const cardItems = [
   {
     icon: <Repeat2 size="1rem" style={{ marginRight: 8 }} />,
     label: "頻度",
-    key: "weekDays",
+    key: "week_days",
   },
   {
     icon: <CopyCheck size="1rem" style={{ marginRight: 8 }} />,
@@ -62,12 +62,12 @@ export default async function PageDetail({
   const progress = Math.round((posts.length / project?.total_date!) * 100);
 
   const getClosestWeekday = ({
-    weekDays,
+    week_days,
     total_date,
     start_date,
     end_date,
-  }: Pick<Project, "weekDays" | "total_date" | "start_date" | "end_date">) => {
-    const targetDays = weekDays.split(",").map((day) => day.trim());
+  }: Pick<Project, "week_days" | "total_date" | "start_date" | "end_date">) => {
+    const targetDays = week_days.split(",").map((day) => day.trim());
     const startDate = dayjs(start_date);
     const endDate = dayjs(end_date);
 
@@ -89,7 +89,7 @@ export default async function PageDetail({
   };
 
   const closestDate = getClosestWeekday({
-    weekDays: project?.weekDays!,
+    week_days: project?.week_days!,
     total_date: project?.total_date!,
     start_date: project?.start_date!,
     end_date: project?.end_date!,

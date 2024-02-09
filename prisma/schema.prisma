@@ -26,7 +26,7 @@ model Project {
   start_date  DateTime
   end_date    DateTime
   total_date  Int
-  weekDays    String
+  week_days   String
   if_then     String?
   database_id String?
   user_id     String
