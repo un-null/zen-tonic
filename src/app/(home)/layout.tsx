@@ -22,11 +22,11 @@ export default async function TimelineLayout({
 
   const projects = await prisma.project.findMany({
     where: {
-      user_id: user?.id,
+      user_id: user?.id || "",
     },
   });
 
-  if (!projects) {
+  if (projects.length === 0) {
     redirect("/setup");
   }
 
