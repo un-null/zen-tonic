@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 import Tab from "./home-tab";
 import NoPostCard from "./no-post-card";
+import PostMenu from "./post-menu";
 
 export default async function Home() {
   const user = await currentUser();
@@ -40,17 +41,20 @@ export default async function Home() {
               padding="lg"
               radius={0}
               style={{
-                // borderTop: "1px solid #C9C9C9",
                 borderBottom: "1px solid #C9C9C9",
               }}
             >
               <Flex gap={16}>
                 <Avatar size={"md"} radius={"sm"} src={user?.imageUrl}></Avatar>
 
-                <Flex direction={"column"} gap={8}>
-                  <Text size="sm" c={"dimmed"}>
-                    {"@" + user?.firstName}
-                  </Text>
+                <Flex direction={"column"} gap={8} flex={1}>
+                  <Flex align={"center"}>
+                    <Text flex={1} size="sm" c={"dimmed"}>
+                      {"@" + user?.firstName}
+                    </Text>
+                    <PostMenu postId={post.id} />
+                  </Flex>
+
                   <Text size="sm">{post.content}</Text>
                 </Flex>
               </Flex>
