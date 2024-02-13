@@ -67,7 +67,7 @@ export default async function PageDetail({
     start_date,
     end_date,
   }: Pick<Project, "week_days" | "total_date" | "start_date" | "end_date">) => {
-    const targetDays = week_days.split(",").map((day) => day.trim());
+    const targetDays = week_days?.split(",").map((day) => day.trim());
     const startDate = dayjs(start_date);
     const endDate = dayjs(end_date);
 
@@ -75,7 +75,7 @@ export default async function PageDetail({
       (closest, _, i) => {
         const currentDate = startDate.add(i, "day");
 
-        if (targetDays.includes(currentDate.format("ddd"))) {
+        if (targetDays?.includes(currentDate.format("ddd"))) {
           const diff = Math.abs(currentDate.diff(endDate, "milliseconds"));
           return diff < closest.diff ? { date: currentDate, diff } : closest;
         }
@@ -176,7 +176,7 @@ export default async function PageDetail({
             <Text size={"lg"} px={16} pb={16} fw={600}>
               次の記録日:{" "}
               <Text span ml={16} fw={600}>
-                {closestDate.format("YYYY/MM/DD")}
+                {closestDate?.format("YYYY/MM/DD")}
               </Text>
             </Text>
           </Flex>

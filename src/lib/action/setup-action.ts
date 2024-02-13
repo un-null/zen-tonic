@@ -12,23 +12,22 @@ import { prisma } from "../prisma";
 
 // Todo review key name
 const schema = z.object({
-  pageUrl: z
-    .string()
-    .min(1, { message: "URL を入力してください" })
-    .url({ message: "正しいURL形式で入力してください" }),
   title: z.string().min(1, { message: "タイトルを入力してください" }),
+  object: z.string(),
+  id: z.string(),
   numberOfWeek: z.enum(["4", "8"]),
-  daysOfWeek: z.string().array(),
+  weekDays: z.string().array(),
   _if: z.string(),
   then: z.string(),
 });
 
 export async function createInitialProject(formData: FormData) {
   const validatedFields = schema.safeParse({
-    pageUrl: formData.get("pageUrl"),
     title: formData.get("title"),
     numberOfWeek: formData.get("numberOfWeek"),
-    daysOfWeek: formData.getAll("daysOfWeek[]"),
+    object: formData.get("object"),
+    id: formData.get("id"),
+    weekDays: formData.getAll("weekDays[]"),
     _if: formData.get("_if"),
     then: formData.get("then"),
   });
@@ -42,21 +41,25 @@ export async function createInitialProject(formData: FormData) {
     };
   }
 
-  const { pageUrl, title, numberOfWeek, daysOfWeek, _if, then } =
+  const { title, numberOfWeek, weekDays, _if, then, id, object } =
     validatedFields.data;
 
   const user = await currentUser();
   const accessToken = await getAccessToken(user?.id);
-  const pageId = getPageId(pageUrl);
 
   const startDate = dayjs();
   const endDate = startDate.add(7 * Number(numberOfWeek), "day").endOf("day");
 
   // Todo: fix
-  const totalDate = getTotalDays({ startDate, endDate, daysOfWeek });
+  const totalDate = getTotalDays({ startDate, endDate, weekDays });
 
   try {
-    const notionDb = await createNotionDb({ pageId, title, accessToken });
+    let notionId: string | undefined = undefined;
+
+    if (object === "page") {
+      const notionDb = await createNotionDb({ pageId: id, title, accessToken });
+      notionId = notionDb.id;
+    }
 
     await prisma.project.create({
       data: {
@@ -64,8 +67,8 @@ export async function createInitialProject(formData: FormData) {
         start_date: startDate.toDate(),
         end_date: endDate.toDate(),
         total_date: totalDate,
-        week_days: daysOfWeek.join(","),
-        database_id: notionDb.id,
+        week_days: weekDays.join(","),
+        database_id: notionId ? notionId : id,
         user_id: user?.id || "",
         if_then: _if + then || "",
       },
@@ -78,24 +81,19 @@ export async function createInitialProject(formData: FormData) {
   redirect("/");
 }
 
-const getPageId = (pageUrl: string) => {
-  const parsedUrl = new URL(pageUrl);
-  return parsedUrl.pathname.split("-")[1];
-};
-
 // Todo: rewrite reduce ???
 const getTotalDays = ({
   startDate,
   endDate,
-  daysOfWeek,
+  weekDays,
 }: {
   startDate: Dayjs;
   endDate: Dayjs;
-  daysOfWeek: string[];
+  weekDays: string[];
 }) => {
   return Array.from({ length: endDate.diff(startDate, "day") + 1 }, (_, i) =>
     startDate.add(i, "day"),
-  ).filter((day) => daysOfWeek.includes(day.format("ddd"))).length;
+  ).filter((day) => weekDays.includes(day.format("ddd"))).length;
 };
 
 const getAccessToken = async (userId: string = "") => {
