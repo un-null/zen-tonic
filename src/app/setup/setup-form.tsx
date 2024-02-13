@@ -1,9 +1,12 @@
 "use client";
 
+import { useState } from "react";
+
 import {
   Box,
   Button,
   Checkbox,
+  ComboboxItem,
   Flex,
   Group,
   Select,
@@ -18,28 +21,41 @@ import { createInitialProject } from "@/lib/action/setup-action";
 type Props = {
   data: {
     id: string;
+    object: "database" | "page";
+    title: string;
     properties: DatabaseObjectResponse["properties"];
-    // properties: any;
   }[];
 };
 
 export default function SetupForm({ data }: Props) {
-  console.log(data);
+  const [value, setValue] = useState<ComboboxItem | null>({
+    value: "database",
+    label: "データベースを登録する",
+  });
+
+  // Fix
+  const pageOption = data
+    .filter((d) => d.object === "page")
+    .map((value) => {
+      return {
+        value: value.id,
+        label: value.title,
+      };
+    });
+
+  // Fix
+  const dbOption = data
+    .filter((d) => d.object === "database")
+    .map((value) => {
+      return {
+        value: value.id,
+        label: value.title,
+      };
+    });
 
   return (
+    // + database or page ID を action に渡す！
     <form action={createInitialProject}>
-      <Flex gap={16} direction={"column"} w={"fit"} mt={40}>
-        <Title order={3}>ページ URL を取得</Title>
-        <TextInput
-          type={"url"}
-          label="ページURL"
-          name="pageUrl"
-          withAsterisk
-          w={300}
-          size={"xs"}
-        />
-      </Flex>
-
       <Flex direction={"column"} gap={32} mt={40}>
         <Box w={"fit"}>
           <Title order={3}>プロジェクトを作成</Title>
@@ -56,6 +72,33 @@ export default function SetupForm({ data }: Props) {
             w={300}
             size={"xs"}
           />
+
+          <Select
+            label="アクション"
+            name="object"
+            w={300}
+            my={16}
+            data={[
+              { value: "database", label: "データベースを登録する" },
+              { value: "page", label: "ページにデータベースを作成する" },
+            ]}
+            value={value ? value.value : "database"}
+            onChange={(_value, option) => setValue(option)}
+            withAsterisk
+            size={"xs"}
+          />
+
+          {/* Fix validation */}
+          <Select
+            label={value?.value === "database" ? "データベース" : "ページ"}
+            name="id"
+            w={300}
+            my={16}
+            data={value?.value === "database" ? dbOption : pageOption}
+            withAsterisk
+            size={"xs"}
+          />
+
           <Flex gap={16} my={16}>
             <Select
               label="期間"
@@ -70,13 +113,13 @@ export default function SetupForm({ data }: Props) {
             />
             <Checkbox.Group label="曜日" withAsterisk size={"xs"}>
               <Group mt="xs">
-                <Checkbox name="daysOfWeek[]" value="Mon" label="月" />
-                <Checkbox name="daysOfWeek[]" value="Tue" label="火" />
-                <Checkbox name="daysOfWeek[]" value="Wed" label="水" />
-                <Checkbox name="daysOfWeek[]" value="Thu" label="木" />
-                <Checkbox name="daysOfWeek[]" value="Fri" label="金" />
-                <Checkbox name="daysOfWeek[]" value="Sat" label="土" />
-                <Checkbox name="daysOfWeek[]" value="Sun" label="日" />
+                <Checkbox name="weekDays[]" value="Mon" label="月" />
+                <Checkbox name="weekDays[]" value="Tue" label="火" />
+                <Checkbox name="weekDays[]" value="Wed" label="水" />
+                <Checkbox name="weekDays[]" value="Thu" label="木" />
+                <Checkbox name="weekDays[]" value="Fri" label="金" />
+                <Checkbox name="weekDays[]" value="Sat" label="土" />
+                <Checkbox name="weekDays[]" value="Sun" label="日" />
               </Group>
             </Checkbox.Group>
           </Flex>
