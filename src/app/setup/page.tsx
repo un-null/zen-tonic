@@ -18,14 +18,14 @@ const retrieveIntegratedData = async (accessToken: string = "") => {
   });
 
   return (await notion.search({})).results
-    .filter((result: any) => result.parent.type === "workspace")
+    .filter((result: any) => result.parent?.type === "workspace")
     .map((data: any) => {
       return {
-        id: data.id,
-        object: data.object,
-        title: data.title
-          ? data.title[0].plain_text
-          : data.properties.title.title[0].plain_text,
+        id: data?.id,
+        object: data?.object,
+        title: data?.title
+          ? data.title[0]?.plain_text
+          : data.properties?.title.title[0].plain_text,
         properties: data.properties,
       };
     });
