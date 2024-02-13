@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Avatar, Box, Container } from "@mantine/core";
+import { Avatar, Box, Container, Flex } from "@mantine/core";
 
 import { prisma } from "@/lib/prisma";
 
 import CraeteButton from "./create-button";
+import LinkButton from "./link-button";
 
 export const metadata: Metadata = {
   title: "Timeline",
@@ -48,9 +49,18 @@ export default async function TimelineLayout({
           minHeight: "full",
         }}
       >
-        <Box component="aside" pt={12}>
-          <Avatar size={"lg"} radius={"sm"} />
-        </Box>
+        <Flex
+          component="aside"
+          pt={12}
+          pb={32}
+          align={"center"}
+          direction={"column"}
+        >
+          <Box flex={1}>
+            <Avatar size={"lg"} radius={"sm"} />
+          </Box>
+          <LinkButton />
+        </Flex>
         <Box component="main" w={"36em"} mx={"auto"}>
           {children}
         </Box>
