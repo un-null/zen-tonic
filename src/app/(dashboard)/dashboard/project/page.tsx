@@ -13,7 +13,7 @@ import {
   Title,
 } from "@mantine/core";
 import dayjs from "dayjs";
-import { Clipboard } from "lucide-react";
+import { Clipboard, Plus } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
 
@@ -66,6 +66,25 @@ export default async function Project() {
             </Card>
           </Link>
         ))}
+        <Link href={`/setup`} style={{ textDecoration: "none" }}>
+          <Card
+            style={{ aspectRatio: 1, placeItems: "center" }}
+            display={"grid"}
+            withBorder
+            maw={300}
+            pt={0}
+            px={16}
+          >
+            <Text
+              size={"sm"}
+              display={"inline-flex"}
+              style={{ alignItems: "center", gap: 8 }}
+            >
+              new
+              <Plus size={16} />
+            </Text>
+          </Card>
+        </Link>
       </SimpleGrid>
     </Box>
   );

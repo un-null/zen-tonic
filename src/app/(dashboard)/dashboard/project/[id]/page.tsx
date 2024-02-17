@@ -10,10 +10,11 @@ import {
   PenLine,
   Repeat2,
   StickyNote,
-  Trash2,
 } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
+
+import DeleteButton from "./delete-button";
 
 type CardItem = {
   icon: ReactNode;
@@ -46,16 +47,17 @@ const cardItems = [
 export default async function PageDetail({
   params,
 }: {
-  params: { slug: string };
+  params: { id: string };
 }) {
   const project = await prisma.project.findFirst({
     where: {
-      id: params.slug,
+      id: params.id,
     },
   });
+
   const posts = await prisma.post.findMany({
     where: {
-      project_id: params.slug,
+      project_id: params.id,
     },
   });
 
@@ -115,16 +117,7 @@ export default async function PageDetail({
             >
               <PenLine size={20} />
             </Button>
-            <Button
-              href={"/dashboard/settings"}
-              component={Link}
-              variant={"outline"}
-              c={"dark.8"}
-              p={4}
-              style={{ borderColor: "#C9C9C9", aspectRatio: 1 }}
-            >
-              <Trash2 size={20} />
-            </Button>
+            <DeleteButton projectId={params.id} />
           </Group>
         </Flex>
         {cardItems.map((item) => (
