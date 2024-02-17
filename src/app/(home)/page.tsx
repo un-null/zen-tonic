@@ -10,7 +10,7 @@ import PostMenu from "./post-menu";
 export default async function Home() {
   const user = await currentUser();
 
-  // promise All
+  // promise All + remove waste fetch
   const AllPosts = await prisma.post.findMany({
     orderBy: { created_at: "desc" },
     // take: 10,
@@ -24,14 +24,21 @@ export default async function Home() {
     // take: 1
   });
 
+  const projects = await prisma.project.findMany({
+    where: {
+      user_id: user?.id || "",
+    },
+  });
+
+  const projectTitleArr = projects.map((project) => project.title);
   return (
     <Tab>
       <Box my={40}>
         <TabsPanel value="all">
           {!userLatestPost ? (
-            <NoPostCard />
+            <NoPostCard projects={projectTitleArr} />
           ) : userLatestPost.created_at.getDate() !== new Date().getDate() ? (
-            <NoPostCard />
+            <NoPostCard projects={projectTitleArr} />
           ) : null}
 
           {AllPosts.map((post) => (
@@ -62,7 +69,7 @@ export default async function Home() {
           ))}
         </TabsPanel>
         <TabsPanel value="friends">
-          <NoPostCard />
+          <NoPostCard projects={projectTitleArr} />
         </TabsPanel>
       </Box>
     </Tab>
