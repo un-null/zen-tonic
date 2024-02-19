@@ -1,5 +1,6 @@
 import { ReactNode, Suspense } from "react";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 import {
   Box,
@@ -58,6 +59,7 @@ export default async function PageDetail({
 }: {
   params: { id: string };
 }) {
+  // promise All
   const project = await prisma.project.findFirst({
     where: {
       id: params.id,
@@ -69,6 +71,10 @@ export default async function PageDetail({
       project_id: params.id,
     },
   });
+
+  if (!project) {
+    notFound();
+  }
 
   const progress = Math.round((posts.length / project?.total_date!) * 100);
 
