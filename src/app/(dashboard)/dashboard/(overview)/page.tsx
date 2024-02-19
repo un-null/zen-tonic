@@ -1,10 +1,12 @@
+import { Suspense } from "react";
+
 import { currentUser } from "@clerk/nextjs";
-import { Box, Flex, Title } from "@mantine/core";
+import { Box, Flex, Skeleton, Title } from "@mantine/core";
 
 import { prisma } from "@/lib/prisma";
 
 import HeatMap from "./heatmap";
-import UserCard from "./user-card";
+import UserCard from "./usercard";
 
 export default async function Dashboard() {
   const user = await currentUser();
@@ -34,11 +36,30 @@ export default async function Dashboard() {
       <Title order={2}>ダッシュボード</Title>
       <Flex direction={"column"} mt={32} gap={32}>
         {/* Fix composition and props */}
-        <UserCard
-          databaseId={latestProject?.database_id!}
-          startDate={latestProject?.start_date.toISOString().substring(0, 10)!}
-        />
-        <HeatMap dateArr={dateArr} />
+        <Suspense
+          fallback={
+            <Box miw={"md"}>
+              <Skeleton h={240} />
+            </Box>
+          }
+        >
+          <UserCard
+            databaseId={latestProject?.database_id!}
+            startDate={
+              latestProject?.start_date.toISOString().substring(0, 10)!
+            }
+          />
+        </Suspense>
+
+        <Suspense
+          fallback={
+            <Box miw={"md"}>
+              <Skeleton h={240} />
+            </Box>
+          }
+        >
+          <HeatMap dateArr={dateArr} />
+        </Suspense>
       </Flex>
     </Box>
   );
