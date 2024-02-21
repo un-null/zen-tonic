@@ -44,7 +44,7 @@ export async function createPost(formData: FormData) {
   const isDatabaseId = !!databaseId;
   const isAccessToken = !!accessToken;
 
-  if (!user?.id || isAccessToken) {
+  if (!user?.id || !isAccessToken) {
     redirect("/sign-in");
   }
 

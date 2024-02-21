@@ -21,10 +21,14 @@ export default function CraeteButton({
   projects,
   isDone,
   type,
+  username,
+  avatar,
 }: {
   projects: string[];
   isDone?: true;
   type: "text" | "button";
+  username?: string | null;
+  avatar?: string | null;
 }) {
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -70,10 +74,10 @@ export default function CraeteButton({
             p={16}
             style={{ border: "1px solid #C9C9C9", borderRadius: 4 }}
           >
-            <Avatar size={"md"} radius={"sm"} />
+            <Avatar size={"md"} radius={"sm"} src={avatar} />
             <Flex direction={"column"} gap={16} flex={1}>
               <Text size="sm" c={"dimmed"}>
-                @username
+                {`@${username ? username : "username"}`}
               </Text>
               <form action={createPost}>
                 <Select
@@ -95,7 +99,11 @@ export default function CraeteButton({
 
                 <Textarea
                   placeholder="コメントを残す..."
-                  style={{ borderStyle: "none", borderColor: "transparent" }}
+                  style={{
+                    borderStyle: "none",
+                    borderColor: "transparent",
+                  }}
+                  autosize
                   name="comment"
                 />
 

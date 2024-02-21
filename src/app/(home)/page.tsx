@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
 import { Avatar, Box, Card, Flex, TabsPanel, Text } from "@mantine/core";
@@ -13,27 +14,33 @@ import Loading from "./loading";
 export default async function Home() {
   const user = await currentUser();
 
+  if (!user) {
+    redirect("/sign-in");
+  }
+
   // promise All + remove waste fetch
   const AllPosts = await prisma.post.findMany({
     orderBy: { created_at: "desc" },
-    // take: 10,
   });
 
   const userLatestPost = await prisma.post.findFirst({
     where: {
-      user_id: user?.id,
+      user_id: user.id,
     },
     orderBy: { created_at: "desc" },
-    // take: 1
   });
 
+  // Fix remove waste featch maybe
   const projects = await prisma.project.findMany({
     where: {
-      user_id: user?.id || "",
+      user_id: user.id,
     },
   });
 
   const projectTitleArr = projects.map((project) => project.title);
+
+  const isPostedToday =
+    userLatestPost?.created_at.getDate() !== new Date().getDate();
 
   return (
     <Tab>
@@ -42,7 +49,7 @@ export default async function Home() {
           <TabsPanel value="all">
             {!userLatestPost ? (
               <NoPostCard projects={projectTitleArr} />
-            ) : userLatestPost.created_at.getDate() !== new Date().getDate() ? (
+            ) : isPostedToday ? (
               <NoPostCard projects={projectTitleArr} />
             ) : null}
 
@@ -57,21 +64,19 @@ export default async function Home() {
                 }}
               >
                 <Flex gap={16}>
-                  <Avatar
-                    size={"md"}
-                    radius={"sm"}
-                    src={user?.imageUrl}
-                  ></Avatar>
+                  <Avatar size={"md"} radius={"sm"} src={user.imageUrl} />
 
                   <Flex direction={"column"} gap={8} flex={1}>
                     <Flex align={"center"}>
                       <Text flex={1} size="sm" c={"dimmed"}>
-                        {"@" + user?.firstName}
+                        {"@" + user.firstName}
                       </Text>
                       <PostMenu postId={post.id} />
                     </Flex>
 
-                    <Text size="sm">{post.content}</Text>
+                    <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
+                      {post.content}
+                    </Text>
                   </Flex>
                 </Flex>
               </Card>

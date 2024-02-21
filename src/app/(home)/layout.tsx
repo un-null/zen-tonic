@@ -21,9 +21,13 @@ export default async function TimelineLayout({
 }>) {
   const user = await currentUser();
 
+  if (!user) {
+    redirect("/sign-in");
+  }
+
   const projects = await prisma.project.findMany({
     where: {
-      user_id: user?.id || "",
+      user_id: user.id,
     },
   });
 
@@ -33,12 +37,16 @@ export default async function TimelineLayout({
 
   const projectTitleArr = projects.map((project) => project.title);
 
+  // Fix prisma
   const userLatestPost = await prisma.post.findFirst({
     where: {
-      user_id: user?.id,
+      user_id: user.id,
     },
     orderBy: { created_at: "desc" },
   });
+
+  const isPostedToday =
+    userLatestPost?.created_at.getDate() !== new Date().getDate();
 
   return (
     <Container
@@ -72,10 +80,21 @@ export default async function TimelineLayout({
           {children}
         </Box>
         <Box component="aside" pt={16}>
-          {userLatestPost?.created_at.getDate() !== new Date().getDate() ? (
-            <CraeteButton projects={projectTitleArr} type={"button"} />
+          {isPostedToday ? (
+            <CraeteButton
+              projects={projectTitleArr}
+              username={user.firstName}
+              avatar={user.imageUrl}
+              type={"button"}
+            />
           ) : (
-            <CraeteButton projects={projectTitleArr} isDone type={"button"} />
+            <CraeteButton
+              projects={projectTitleArr}
+              isDone
+              type={"button"}
+              username={user.firstName}
+              avatar={user.imageUrl}
+            />
           )}
         </Box>
       </div>
