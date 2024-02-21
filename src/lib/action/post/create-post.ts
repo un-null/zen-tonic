@@ -3,11 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { clerkClient, currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs";
 import { Client } from "@notionhq/client";
 import { z } from "zod";
 
-import { prisma } from "../prisma";
+import { getAccessToken } from "@/lib/auth/getAccessToken";
+
+import { prisma } from "../../prisma";
 
 // Todo review key name
 const schema = z.object({
@@ -28,7 +30,7 @@ export async function createPost(formData: FormData) {
 
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "必要項目が不足しています。プロジェクトの作成に失敗しました",
+      message: "必要項目が不足しています",
     };
   }
 
@@ -39,10 +41,20 @@ export async function createPost(formData: FormData) {
   const { projectId, databaseId } = await getProject(project);
 
   const isDone = !!done;
+  const isDatabaseId = !!databaseId;
+  const isAccessToken = !!accessToken;
+
+  if (!user?.id || isAccessToken) {
+    redirect("/sign-in");
+  }
+
+  if (!isDatabaseId) {
+    throw Error("プロジェクトの取得に失敗しました");
+  }
 
   try {
-    const notionDb = await createNotionPage({
-      databaseId: databaseId!,
+    await createNotionPage({
+      databaseId: databaseId,
       isDone,
       comment: comment || "",
       accessToken,
@@ -51,12 +63,12 @@ export async function createPost(formData: FormData) {
     await prisma.post.create({
       data: {
         content: comment || "",
-        user_id: user?.id || "",
+        user_id: user.id || "",
         project_id: projectId || "",
       },
     });
   } catch (error) {
-    throw Error("エラーが発生しました");
+    throw Error("投稿の作成に失敗しました。");
   }
 
   revalidatePath("/");
@@ -75,14 +87,6 @@ const getProject = async (title: string = "") => {
     projectId: project?.id,
     databaseId: project?.database_id,
   };
-};
-
-const getAccessToken = async (userId: string = "") => {
-  const tokenData = await clerkClient.users.getUserOauthAccessToken(
-    userId,
-    "oauth_notion",
-  );
-  return tokenData[0].token;
 };
 
 const createNotionPage = async ({

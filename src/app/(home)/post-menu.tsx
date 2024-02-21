@@ -5,7 +5,7 @@ import { useState } from "react";
 import { ActionIcon, Menu, MenuItem, MenuTarget } from "@mantine/core";
 import { MoreVertical, Trash2 } from "lucide-react";
 
-import { deletePost } from "@/lib/action/delete-post";
+import { deletePost } from "@/lib/action/post/delete-post";
 
 const navItem = [
   {

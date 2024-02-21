@@ -16,7 +16,7 @@ import {
 } from "@mantine/core";
 import { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 
-import { createInitialProject } from "@/lib/action/setup-action";
+import { createProject } from "@/lib/action/project/create-project";
 
 type Props = {
   data: {
@@ -55,7 +55,7 @@ export default function SetupForm({ data }: Props) {
 
   return (
     // + database or page ID を action に渡す！
-    <form action={createInitialProject}>
+    <form action={createProject}>
       <Flex direction={"column"} gap={32} mt={40}>
         <Box w={"fit"}>
           <Title order={3}>プロジェクトを作成</Title>

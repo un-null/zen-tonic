@@ -15,7 +15,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { ArrowRight, Plus } from "lucide-react";
 
-import { createPost } from "@/lib/action/post-action";
+import { createPost } from "@/lib/action/post/create-post";
 
 export default function CraeteButton({
   projects,
@@ -54,6 +54,7 @@ export default function CraeteButton({
           <ArrowRight size={20} style={{ marginLeft: 2 }} />
         </Text>
       )}
+
       <Modal
         opened={opened}
         onClose={close}

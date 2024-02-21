@@ -3,12 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { clerkClient, currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs";
 import { Client } from "@notionhq/client";
 import dayjs, { Dayjs } from "dayjs";
 import { z } from "zod";
 
-import { prisma } from "../prisma";
+import { getAccessToken } from "@/lib/auth/getAccessToken";
+
+import { prisma } from "../../prisma";
 
 // Todo review key name
 const schema = z.object({
@@ -21,7 +23,7 @@ const schema = z.object({
   then: z.string(),
 });
 
-export async function createInitialProject(formData: FormData) {
+export async function createProject(formData: FormData) {
   const validatedFields = schema.safeParse({
     title: formData.get("title"),
     numberOfWeek: formData.get("numberOfWeek"),
@@ -94,14 +96,6 @@ const getTotalDays = ({
   return Array.from({ length: endDate.diff(startDate, "day") + 1 }, (_, i) =>
     startDate.add(i, "day"),
   ).filter((day) => weekDays.includes(day.format("ddd"))).length;
-};
-
-const getAccessToken = async (userId: string = "") => {
-  const tokenData = await clerkClient.users.getUserOauthAccessToken(
-    userId,
-    "oauth_notion",
-  );
-  return tokenData[0].token;
 };
 
 const createNotionDb = async ({
