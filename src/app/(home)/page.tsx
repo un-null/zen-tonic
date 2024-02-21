@@ -5,10 +5,10 @@ import { Avatar, Box, Card, Flex, TabsPanel, Text } from "@mantine/core";
 
 import { prisma } from "@/lib/prisma";
 
-import Tab from "./home-tab";
+import Tab from "./_components/home-tab";
+import NoPostCard from "./_components/no-post-card";
+import PostMenu from "./_components/post-menu";
 import Loading from "./loading";
-import NoPostCard from "./no-post-card";
-import PostMenu from "./post-menu";
 
 export default async function Home() {
   const user = await currentUser();
