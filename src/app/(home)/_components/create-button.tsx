@@ -14,8 +14,12 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { ArrowRight, Plus } from "lucide-react";
+import { useFormState } from "react-dom";
 
-import { createPost } from "@/lib/action/post/create-post";
+import { createPost, State } from "@/lib/action/post/create-post";
+
+// type cut out ???
+const initialState: State = { message: null, errors: {} };
 
 export default function CraeteButton({
   projects,
@@ -31,6 +35,7 @@ export default function CraeteButton({
   avatar?: string | null;
 }) {
   const [opened, { open, close }] = useDisclosure(false);
+  const [state, dispatch] = useFormState(createPost, initialState);
 
   return (
     <>
@@ -79,7 +84,7 @@ export default function CraeteButton({
               <Text size="sm" c={"dimmed"}>
                 {`@${username ? username : "username"}`}
               </Text>
-              <form action={createPost}>
+              <form action={dispatch}>
                 <Select
                   label="プロジェクト名"
                   size={"xs"}
@@ -88,6 +93,12 @@ export default function CraeteButton({
                   data={projects}
                   name="project"
                 />
+                {state.errors?.project &&
+                  state.errors.project.map((error: string) => (
+                    <Text key={error} size="xs" c={"#e06259"} pt={4}>
+                      {error}
+                    </Text>
+                  ))}
                 <Checkbox
                   mt={"md"}
                   size={"xs"}

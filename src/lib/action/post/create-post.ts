@@ -18,7 +18,16 @@ const schema = z.object({
   comment: z.string().optional(),
 });
 
-export async function createPost(formData: FormData) {
+type SchemaType = z.infer<typeof schema>;
+
+export type State = {
+  errors?: {
+    [K in keyof SchemaType]?: string[];
+  };
+  message?: string | null;
+};
+
+export async function createPost(state: State, formData: FormData) {
   const validatedFields = schema.safeParse({
     project: formData.get("project"),
     done: formData.get("done"),
@@ -26,8 +35,6 @@ export async function createPost(formData: FormData) {
   });
 
   if (!validatedFields.success) {
-    console.log(validatedFields.error.flatten().fieldErrors);
-
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "必要項目が不足しています",
