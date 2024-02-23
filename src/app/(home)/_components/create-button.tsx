@@ -14,19 +14,28 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { ArrowRight, Plus } from "lucide-react";
+import { useFormState } from "react-dom";
 
-import { createPost } from "@/lib/action/post-action";
+import { createPost, State } from "@/lib/action/post/create-post";
+
+// type cut out ???
+const initialState: State = { message: null, errors: {} };
 
 export default function CraeteButton({
   projects,
   isDone,
   type,
+  username,
+  avatar,
 }: {
   projects: string[];
   isDone?: true;
   type: "text" | "button";
+  username?: string | null;
+  avatar?: string | null;
 }) {
   const [opened, { open, close }] = useDisclosure(false);
+  const [state, dispatch] = useFormState(createPost, initialState);
 
   return (
     <>
@@ -54,6 +63,7 @@ export default function CraeteButton({
           <ArrowRight size={20} style={{ marginLeft: 2 }} />
         </Text>
       )}
+
       <Modal
         opened={opened}
         onClose={close}
@@ -69,12 +79,12 @@ export default function CraeteButton({
             p={16}
             style={{ border: "1px solid #C9C9C9", borderRadius: 4 }}
           >
-            <Avatar size={"md"} radius={"sm"} />
+            <Avatar size={"md"} radius={"sm"} src={avatar} />
             <Flex direction={"column"} gap={16} flex={1}>
               <Text size="sm" c={"dimmed"}>
-                @username
+                {`@${username ? username : "username"}`}
               </Text>
-              <form action={createPost}>
+              <form action={dispatch}>
                 <Select
                   label="プロジェクト名"
                   size={"xs"}
@@ -83,6 +93,12 @@ export default function CraeteButton({
                   data={projects}
                   name="project"
                 />
+                {state.errors?.project &&
+                  state.errors.project.map((error: string) => (
+                    <Text key={error} size="xs" c={"#e06259"} pt={4}>
+                      {error}
+                    </Text>
+                  ))}
                 <Checkbox
                   mt={"md"}
                   size={"xs"}
@@ -94,7 +110,11 @@ export default function CraeteButton({
 
                 <Textarea
                   placeholder="コメントを残す..."
-                  style={{ borderStyle: "none", borderColor: "transparent" }}
+                  style={{
+                    borderStyle: "none",
+                    borderColor: "transparent",
+                  }}
+                  autosize
                   name="comment"
                 />
 

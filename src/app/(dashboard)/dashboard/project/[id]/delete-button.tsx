@@ -4,7 +4,7 @@ import { Button, Flex, Modal, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Trash2 } from "lucide-react";
 
-import { deleteProject } from "@/lib/action/delete-project";
+import { deleteProject } from "@/lib/action/project/delete-project";
 
 export default function DeleteButton({ projectId }: { projectId: string }) {
   const [opened, { toggle, close }] = useDisclosure(false);

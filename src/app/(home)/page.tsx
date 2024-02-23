@@ -1,39 +1,59 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Avatar, Box, Card, Flex, TabsPanel, Text } from "@mantine/core";
+import { Avatar, Box, Card, Flex, Group, TabsPanel, Text } from "@mantine/core";
+import dayjs from "dayjs";
+import { CheckSquare2 } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
 
-import Tab from "./home-tab";
+import Tab from "./_components/home-tab";
+import NoPostCard from "./_components/no-post-card";
+import PostMenu from "./_components/post-menu";
 import Loading from "./loading";
-import NoPostCard from "./no-post-card";
-import PostMenu from "./post-menu";
 
 export default async function Home() {
   const user = await currentUser();
 
+  if (!user) {
+    redirect("/sign-in");
+  }
+
   // promise All + remove waste fetch
   const AllPosts = await prisma.post.findMany({
     orderBy: { created_at: "desc" },
-    // take: 10,
+    select: {
+      id: true,
+      created_at: true,
+      content: true,
+      project: {
+        select: {
+          title: true,
+          start_date: true,
+        },
+      },
+    },
   });
 
   const userLatestPost = await prisma.post.findFirst({
     where: {
-      user_id: user?.id,
+      user_id: user.id,
     },
     orderBy: { created_at: "desc" },
-    // take: 1
   });
 
+  // Fix remove waste featch maybe
   const projects = await prisma.project.findMany({
     where: {
-      user_id: user?.id || "",
+      user_id: user.id,
     },
   });
 
   const projectTitleArr = projects.map((project) => project.title);
+
+  const isPostedToday =
+    userLatestPost?.created_at.getDate() !== new Date().getDate();
 
   return (
     <Tab>
@@ -42,7 +62,7 @@ export default async function Home() {
           <TabsPanel value="all">
             {!userLatestPost ? (
               <NoPostCard projects={projectTitleArr} />
-            ) : userLatestPost.created_at.getDate() !== new Date().getDate() ? (
+            ) : isPostedToday ? (
               <NoPostCard projects={projectTitleArr} />
             ) : null}
 
@@ -57,21 +77,56 @@ export default async function Home() {
                 }}
               >
                 <Flex gap={16}>
-                  <Avatar
-                    size={"md"}
-                    radius={"sm"}
-                    src={user?.imageUrl}
-                  ></Avatar>
+                  <Avatar size={"md"} radius={"sm"} src={user.imageUrl} />
 
                   <Flex direction={"column"} gap={8} flex={1}>
                     <Flex align={"center"}>
-                      <Text flex={1} size="sm" c={"dimmed"}>
-                        {"@" + user?.firstName}
-                      </Text>
+                      <Group flex={1} c={"dimmed"} gap={"xs"}>
+                        <Text size="sm">{`@${user.firstName}`}</Text>
+                        <Text size="xs">
+                          {dayjs(post.created_at).format("YYYY.MM.DD")}
+                        </Text>
+                      </Group>
+
                       <PostMenu postId={post.id} />
                     </Flex>
 
-                    <Text size="sm">{post.content}</Text>
+                    <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
+                      {post.content}
+                    </Text>
+
+                    <Flex
+                      direction={"column"}
+                      gap={4}
+                      p={12}
+                      style={{
+                        whiteSpace: "pre-wrap",
+                        border: "1px solid #C9C9C9",
+                        borderRadius: 4,
+                      }}
+                    >
+                      <Text size="sm" fw={"bold"}>
+                        {post.project.title}
+                      </Text>
+                      <Group gap={4} mt={8} pl={2} c={"dimmed"}>
+                        <CheckSquare2 size={14} />
+                        <Text size="xs">Done</Text>
+                      </Group>
+
+                      {/* Fix spec  */}
+                      <Box mt={4} ml={2}>
+                        <Text
+                          size="xs"
+                          py={3}
+                          px={6}
+                          bg={"#DDEBF1"}
+                          display={"inline"}
+                          style={{ borderRadius: 4 }}
+                        >
+                          {`${dayjs(post.created_at).diff(post.project.start_date, "day")}日継続中`}
+                        </Text>
+                      </Box>
+                    </Flex>
                   </Flex>
                 </Flex>
               </Card>
