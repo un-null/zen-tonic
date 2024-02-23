@@ -2,7 +2,9 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Avatar, Box, Card, Flex, TabsPanel, Text } from "@mantine/core";
+import { Avatar, Box, Card, Flex, Group, TabsPanel, Text } from "@mantine/core";
+import dayjs from "dayjs";
+import { CheckSquare2 } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
 
@@ -21,6 +23,17 @@ export default async function Home() {
   // promise All + remove waste fetch
   const AllPosts = await prisma.post.findMany({
     orderBy: { created_at: "desc" },
+    select: {
+      id: true,
+      created_at: true,
+      content: true,
+      project: {
+        select: {
+          title: true,
+          start_date: true,
+        },
+      },
+    },
   });
 
   const userLatestPost = await prisma.post.findFirst({
@@ -68,15 +81,52 @@ export default async function Home() {
 
                   <Flex direction={"column"} gap={8} flex={1}>
                     <Flex align={"center"}>
-                      <Text flex={1} size="sm" c={"dimmed"}>
-                        {"@" + user.firstName}
-                      </Text>
+                      <Group flex={1} c={"dimmed"} gap={"xs"}>
+                        <Text size="sm">{`@${user.firstName}`}</Text>
+                        <Text size="xs">
+                          {dayjs(post.created_at).format("YYYY.MM.DD")}
+                        </Text>
+                      </Group>
+
                       <PostMenu postId={post.id} />
                     </Flex>
 
                     <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
                       {post.content}
                     </Text>
+
+                    <Flex
+                      direction={"column"}
+                      gap={4}
+                      p={12}
+                      style={{
+                        whiteSpace: "pre-wrap",
+                        border: "1px solid #C9C9C9",
+                        borderRadius: 4,
+                      }}
+                    >
+                      <Text size="sm" fw={"bold"}>
+                        {post.project.title}
+                      </Text>
+                      <Group gap={4} mt={8} pl={2} c={"dimmed"}>
+                        <CheckSquare2 size={14} />
+                        <Text size="xs">Done</Text>
+                      </Group>
+
+                      {/* Fix spec  */}
+                      <Box mt={4} ml={2}>
+                        <Text
+                          size="xs"
+                          py={3}
+                          px={6}
+                          bg={"#DDEBF1"}
+                          display={"inline"}
+                          style={{ borderRadius: 4 }}
+                        >
+                          {`${dayjs(post.created_at).diff(post.project.start_date, "day")}日継続中`}
+                        </Text>
+                      </Box>
+                    </Flex>
                   </Flex>
                 </Flex>
               </Card>
