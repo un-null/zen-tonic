@@ -90,6 +90,7 @@ export default function SetupForm({ data }: Props) {
 
           {/* Fix validation */}
           <Select
+            key={value?.value}
             label={value?.value === "database" ? "データベース" : "ページ"}
             name="id"
             w={300}
