@@ -1,10 +1,12 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Box, Container, Text, Title } from "@mantine/core";
+import { Box, Button, Container, Text, Title } from "@mantine/core";
 import { Client } from "@notionhq/client";
 
 import { getAccessToken } from "@/lib/auth/getAccessToken";
+import { prisma } from "@/lib/prisma";
 
 import SetupForm from "./setup-form";
 
@@ -18,18 +20,45 @@ export default async function Setup() {
     redirect("/sign-in");
   }
 
+  const projects = await prisma.project.findMany({
+    where: {
+      user_id: user?.id,
+    },
+  });
+
+  const inProgressProjects = projects.filter(
+    (project) => project.end_date >= new Date(),
+  );
+  const hasInProgressProjects = inProgressProjects.length !== 0;
+
   const integratedData = await retrieveIntegratedData(accessToken);
 
   return (
     <Container size={"md"}>
-      <Box w={"fit"} mb={32}>
-        <Title order={3}>プロジェクトを作成</Title>
-        <Text size={"sm"} mt={16}>
-          習慣にしたいことを決めてみましょう！
-        </Text>
-      </Box>
+      {!hasInProgressProjects ? (
+        <>
+          <Box w={"fit"} mb={32}>
+            <Title order={3}>プロジェクトを作成</Title>
+            <Text size={"sm"} mt={16}>
+              習慣にしたいことを決めてみましょう！
+            </Text>
+          </Box>
 
-      <SetupForm data={integratedData} />
+          <SetupForm data={integratedData} />
+        </>
+      ) : (
+        <>
+          <Box w={"fit"} mb={32}>
+            <Title order={3} c={"#2483e2"}>
+              現在進行中のプロジェクトがあります
+            </Title>
+          </Box>
+
+          <Button component={Link} href={"/dashboard/project"}>
+            プロジェクト一覧に戻る
+          </Button>
+        </>
+      )}
     </Container>
   );
 }

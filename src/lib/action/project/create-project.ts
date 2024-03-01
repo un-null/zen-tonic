@@ -55,11 +55,13 @@ export async function createProject(prevState: State, formData: FormData) {
     validatedFields.data;
 
   const user = await currentUser();
-  if (!user) {
+  const accessToken = await getAccessToken(user?.id);
+
+  const isAccessToken = !!accessToken;
+
+  if (!user?.id || !isAccessToken) {
     redirect("/sign-in");
   }
-
-  const accessToken = await getAccessToken(user.id);
 
   const startDate = dayjs();
   const endDate = startDate.add(7 * Number(numberOfWeek), "day").endOf("day");
