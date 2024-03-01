@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Container } from "@mantine/core";
+import { Box, Container, Text, Title } from "@mantine/core";
 import { Client } from "@notionhq/client";
 
 import { getAccessToken } from "@/lib/auth/getAccessToken";
@@ -22,6 +22,13 @@ export default async function Setup() {
 
   return (
     <Container size={"md"}>
+      <Box w={"fit"} mb={32}>
+        <Title order={3}>プロジェクトを作成</Title>
+        <Text size={"sm"} mt={16}>
+          習慣にしたいことを決めてみましょう！
+        </Text>
+      </Box>
+
       <SetupForm data={integratedData} />
     </Container>
   );

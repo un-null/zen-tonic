@@ -12,7 +12,7 @@ import { getAccessToken } from "@/lib/auth/getAccessToken";
 
 import { prisma } from "../../prisma";
 
-// Todo review key name
+// Todo review key name and error message
 const schema = z.object({
   title: z.string().min(1, { message: "タイトルを入力してください" }),
   object: z.string(),
@@ -23,7 +23,18 @@ const schema = z.object({
   then: z.string(),
 });
 
-export async function createProject(formData: FormData) {
+// Fix type cuz maybe use only id
+type SchemaType = z.infer<typeof schema>;
+type SchemaKey = keyof SchemaType;
+
+export type State = {
+  errors?: {
+    [K in SchemaKey]?: string[];
+  };
+  message?: string;
+};
+
+export async function createProject(prevState: State, formData: FormData) {
   const validatedFields = schema.safeParse({
     title: formData.get("title"),
     numberOfWeek: formData.get("numberOfWeek"),
@@ -35,11 +46,8 @@ export async function createProject(formData: FormData) {
   });
 
   if (!validatedFields.success) {
-    console.log(validatedFields.error.flatten().fieldErrors);
-
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "必要項目が不足しています。プロジェクトの作成に失敗しました",
+      message: "プロジェクトの作成に失敗しました",
     };
   }
 
@@ -47,7 +55,11 @@ export async function createProject(formData: FormData) {
     validatedFields.data;
 
   const user = await currentUser();
-  const accessToken = await getAccessToken(user?.id);
+  if (!user) {
+    redirect("/sign-in");
+  }
+
+  const accessToken = await getAccessToken(user.id);
 
   const startDate = dayjs();
   const endDate = startDate.add(7 * Number(numberOfWeek), "day").endOf("day");
@@ -63,18 +75,34 @@ export async function createProject(formData: FormData) {
       notionId = notionDb.id;
     }
 
-    await prisma.project.create({
-      data: {
-        title,
-        start_date: startDate.toDate(),
-        end_date: endDate.toDate(),
-        total_date: totalDate,
-        week_days: weekDays.join(","),
-        database_id: notionId ? notionId : id,
-        user_id: user?.id || "",
-        if_then: _if + then || "",
+    const duplicateProject = await prisma.project.findFirst({
+      where: {
+        id: notionId ? notionId : id,
+      },
+      select: {
+        title: true,
       },
     });
+
+    if (duplicateProject) {
+      return {
+        error: { id: ["すでに登録済みのデータベースです"] },
+        message: "プロジェクトの作成に失敗しました",
+      };
+    } else {
+      await prisma.project.create({
+        data: {
+          title,
+          start_date: startDate.toDate(),
+          end_date: endDate.toDate(),
+          total_date: totalDate,
+          week_days: weekDays.join(","),
+          database_id: notionId ? notionId : id,
+          user_id: user.id,
+          if_then: _if + then || "",
+        },
+      });
+    }
   } catch (error) {
     throw Error("エラーが発生しました");
   }
