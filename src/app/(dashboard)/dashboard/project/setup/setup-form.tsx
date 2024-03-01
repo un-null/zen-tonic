@@ -56,7 +56,7 @@ export default function SetupForm({ data }: Props) {
   return (
     // + database or page ID を action に渡す！
     <form action={createProject}>
-      <Flex direction={"column"} gap={32} mt={40}>
+      <Flex direction={"column"} gap={32}>
         <Box w={"fit"}>
           <Title order={3}>プロジェクトを作成</Title>
           <Text size={"sm"} mt={16}>

@@ -78,7 +78,10 @@ export default async function Project() {
               </Card>
             </Link>
           ))}
-          <Link href={`/setup`} style={{ textDecoration: "none" }}>
+          <Link
+            href={`/dashboard/project/setup`}
+            style={{ textDecoration: "none" }}
+          >
             <Card
               style={{ aspectRatio: 1, placeItems: "center" }}
               display={"grid"}

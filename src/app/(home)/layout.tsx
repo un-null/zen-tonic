@@ -4,7 +4,8 @@ import { redirect } from "next/navigation";
 import { currentUser } from "@clerk/nextjs";
 import { Avatar, Box, Container, Flex } from "@mantine/core";
 
-import { prisma } from "@/lib/prisma";
+import { getUserLatestPosts } from "@/lib/db/post";
+import { getProjectTitles } from "@/lib/db/project";
 
 import CraeteButton from "./_components/create-button";
 import LinkButton from "./_components/link-button";
@@ -25,28 +26,22 @@ export default async function TimelineLayout({
     redirect("/sign-in");
   }
 
-  const projects = await prisma.project.findMany({
-    where: {
-      user_id: user.id,
-    },
-  });
+  const [projectTitles, latestPost] = await Promise.all([
+    getProjectTitles(user.id),
+    getUserLatestPosts(user.id),
+  ]);
 
-  if (projects.length === 0) {
-    redirect("/setup");
+  const isProjectTitles = !!projectTitles;
+  const isLatestPost = !!latestPost;
+
+  if (!isProjectTitles || !isLatestPost) {
+    throw Error("データの取得に失敗しました");
   }
 
-  const projectTitleArr = projects.map((project) => project.title);
-
-  // Fix prisma
-  const userLatestPost = await prisma.post.findFirst({
-    where: {
-      user_id: user.id,
-    },
-    orderBy: { created_at: "desc" },
-  });
-
   const isPostedToday =
-    userLatestPost?.created_at.getDate() !== new Date().getDate();
+    latestPost.created_at.getDate() !== new Date().getDate();
+
+  const projectTitleArr = projectTitles.map((data) => data.title);
 
   return (
     <Container
@@ -79,6 +74,8 @@ export default async function TimelineLayout({
         <Box component="main" w={"36em"} mx={"auto"}>
           {children}
         </Box>
+
+        {/* fix props drilling */}
         <Box component="aside" pt={16}>
           {isPostedToday ? (
             <CraeteButton
