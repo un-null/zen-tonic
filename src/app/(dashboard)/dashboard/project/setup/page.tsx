@@ -32,16 +32,38 @@ const retrieveIntegratedData = async (accessToken: string) => {
     auth: accessToken,
   });
 
-  return (await notion.search({})).results
-    .filter((result: any) => result.parent?.type === "workspace")
-    .map((data: any) => {
-      return {
-        id: data?.id,
-        object: data?.object,
-        title: data?.title
-          ? data.title[0]?.plain_text
-          : data.properties?.title.title[0].plain_text,
-        properties: data.properties,
-      };
-    });
+  const filteredSerchResults = (await notion.search({})).results.filter(
+    (result) => {
+      if ("parent" in result) {
+        return result.parent.type === "workspace";
+      }
+    },
+  );
+
+  return filteredSerchResults.map((result) => {
+    switch (result.object) {
+      case "page":
+        if ("properties" in result) {
+          return {
+            id: result.id,
+            object: result.object,
+            title:
+              result.properties["title"].type === "title"
+                ? result.properties["title"].title[0].plain_text
+                : "",
+          };
+        }
+      case "database":
+        if ("title" in result) {
+          return {
+            id: result.id,
+            object: result.object,
+            title: result.title[0].plain_text,
+            properties: result.properties,
+          };
+        }
+      default:
+        throw Error("データの取得に失敗しました");
+    }
+  });
 };

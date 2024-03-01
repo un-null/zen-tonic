@@ -23,7 +23,7 @@ type Props = {
     id: string;
     object: "database" | "page";
     title: string;
-    properties: DatabaseObjectResponse["properties"];
+    properties?: DatabaseObjectResponse["properties"];
   }[];
 };
 
