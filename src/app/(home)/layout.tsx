@@ -31,8 +31,9 @@ export default async function TimelineLayout({
     getUserLatestPosts(user.id),
   ]);
 
-  const isProjectTitles = !!projectTitles;
-  const isLatestPost = !!latestPost;
+  const isProjectTitles = projectTitles.length !== 0;
+  const isLatestPost =
+    latestPost !== null && Object.keys(latestPost).length !== 0;
 
   if (!isProjectTitles || !isLatestPost) {
     throw Error("データの取得に失敗しました");

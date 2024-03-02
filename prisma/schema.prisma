@@ -33,6 +33,8 @@ model Project {
   user_id     String
   user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   post        Post[]
+
+  @@index([user_id])
 }
 
 model Post {
@@ -44,4 +46,7 @@ model Post {
   project_id String
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   project    Project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([project_id])
 }
