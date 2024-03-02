@@ -31,16 +31,8 @@ export default async function TimelineLayout({
     getUserLatestPosts(user.id),
   ]);
 
-  const isProjectTitles = projectTitles.length !== 0;
-  const isLatestPost =
-    latestPost !== null && Object.keys(latestPost).length !== 0;
-
-  if (!isProjectTitles || !isLatestPost) {
-    throw Error("データの取得に失敗しました");
-  }
-
   const isPostedToday =
-    latestPost.created_at.getDate() !== new Date().getDate();
+    latestPost?.created_at.getDate() !== new Date().getDate();
 
   const projectTitleArr = projectTitles.map((data) => data.title);
 
