@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
 import {
@@ -21,6 +22,11 @@ import { prisma } from "@/lib/prisma";
 
 export default async function Project() {
   const user = await currentUser();
+
+  if (!user) {
+    redirect("/sign-in");
+  }
+
   const projects = await prisma.project.findMany({
     where: {
       user_id: user?.id,
@@ -78,7 +84,10 @@ export default async function Project() {
               </Card>
             </Link>
           ))}
-          <Link href={`/setup`} style={{ textDecoration: "none" }}>
+          <Link
+            href={`/dashboard/project/setup`}
+            style={{ textDecoration: "none" }}
+          >
             <Card
               style={{ aspectRatio: 1, placeItems: "center" }}
               display={"grid"}
