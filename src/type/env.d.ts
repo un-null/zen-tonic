@@ -6,5 +6,6 @@ declare namespace NodeJS {
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: string;
 
     NGROK_WEBHOOK_SECRET: string;
+    CLERK_WEBHOOK_SECRET: string;
   }
 }
