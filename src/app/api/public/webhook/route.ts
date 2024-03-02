@@ -5,8 +5,8 @@ import { Webhook } from "svix";
 
 import { prisma } from "@/lib/prisma";
 
-const webhookSecret: string =
-  process.env.NGROK_WEBHOOK_SECRET || process.env.CLERK_WEBHOOK_SECRET || "";
+// const webhookSecret: string = process.env.NGROK_WEBHOOK_SECRET || "";
+const webhookSecret: string = process.env.CLERK_WEBHOOK_SECRET || "";
 
 type Event = {
   data: EventData;
