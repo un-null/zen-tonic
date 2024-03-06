@@ -39,34 +39,32 @@ export default function LinkButton() {
   const [opened, setOpened] = useState(false);
 
   return (
-    <>
-      <Menu opened={opened} onChange={setOpened}>
-        <MenuTarget>
-          <ActionIcon
-            radius={"xl"}
-            variant={"outline"}
-            size={"xl"}
-            c={"dark.1"}
-            style={{ border: "1px solid #C9C9C9" }}
-          >
-            <MoreHorizontal />
-          </ActionIcon>
-        </MenuTarget>
+    <Menu opened={opened} onChange={setOpened}>
+      <MenuTarget>
+        <ActionIcon
+          radius={"xl"}
+          variant={"outline"}
+          size={"xl"}
+          c={"dark.1"}
+          style={{ border: "1px solid #C9C9C9" }}
+        >
+          <MoreHorizontal />
+        </ActionIcon>
+      </MenuTarget>
 
-        <Menu.Dropdown px={16} pt={16} pb={8}>
-          {navItem.map((item) => (
-            <MenuItem
-              key={item.label}
-              leftSection={item.leftSection}
-              component={Link}
-              href={`${item.href}`}
-              mb={8}
-            >
-              {item.label}
-            </MenuItem>
-          ))}
-        </Menu.Dropdown>
-      </Menu>
-    </>
+      <Menu.Dropdown px={16} pt={16} pb={8}>
+        {navItem.map((item) => (
+          <MenuItem
+            key={item.label}
+            leftSection={item.leftSection}
+            component={Link}
+            href={`${item.href}`}
+            mb={8}
+          >
+            {item.label}
+          </MenuItem>
+        ))}
+      </Menu.Dropdown>
+    </Menu>
   );
 }

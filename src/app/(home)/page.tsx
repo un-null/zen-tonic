@@ -1,17 +1,14 @@
-import { Suspense } from "react";
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Avatar, Box, Card, Flex, Group, TabsPanel, Text } from "@mantine/core";
+import { Avatar, Box, Card, Flex, Group, Text } from "@mantine/core";
 import dayjs from "dayjs";
 import { CheckSquare2 } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
 
-import Tab from "./_components/home-tab";
 import NoPostCard from "./_components/no-post-card";
 import PostMenu from "./_components/post-menu";
-import Loading from "./loading";
 
 export default async function Home() {
   const user = await currentUser();
@@ -56,87 +53,143 @@ export default async function Home() {
     userLatestPost?.created_at.getDate() !== new Date().getDate();
 
   return (
-    <Tab>
-      <Suspense fallback={<Loading />}>
-        <Box my={40}>
-          <TabsPanel value="all">
-            {!userLatestPost ? (
-              <NoPostCard projects={projectTitleArr} />
-            ) : isPostedToday ? (
-              <NoPostCard projects={projectTitleArr} />
-            ) : null}
+    <Box my={20}>
+      {!userLatestPost ? (
+        <NoPostCard projects={projectTitleArr} />
+      ) : isPostedToday ? (
+        <NoPostCard projects={projectTitleArr} />
+      ) : null}
 
-            {AllPosts.map((post) => (
-              <Card
-                key={post.id}
-                mx={"auto"}
-                padding="lg"
-                radius={0}
+      {AllPosts.map((post) => (
+        <Card
+          key={post.id}
+          mx={"auto"}
+          padding="lg"
+          radius={0}
+          style={{
+            borderBottom: "1px solid #C9C9C9",
+          }}
+        >
+          <Flex gap={16}>
+            <Avatar size={"md"} radius={"sm"} src={user.imageUrl} />
+
+            <Flex direction={"column"} gap={8} flex={1}>
+              <Flex align={"center"}>
+                <Group flex={1} c={"dimmed"} gap={"xs"}>
+                  <Text size="sm">{`@${user.firstName}`}</Text>
+                  <Text size="xs">
+                    {dayjs(post.created_at).format("YYYY.MM.DD")}
+                  </Text>
+                </Group>
+
+                <PostMenu postId={post.id} />
+              </Flex>
+
+              <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
+                {post.content}
+              </Text>
+
+              <Flex
+                direction={"column"}
+                gap={4}
+                p={12}
                 style={{
-                  borderBottom: "1px solid #C9C9C9",
+                  whiteSpace: "pre-wrap",
+                  border: "1px solid #C9C9C9",
+                  borderRadius: 4,
                 }}
               >
-                <Flex gap={16}>
-                  <Avatar size={"md"} radius={"sm"} src={user.imageUrl} />
+                <Text size="sm" fw={"bold"}>
+                  {post.project.title}
+                </Text>
+                <Group gap={4} mt={8} pl={2} c={"dimmed"}>
+                  <CheckSquare2 size={14} />
+                  <Text size="xs">Done</Text>
+                </Group>
 
-                  <Flex direction={"column"} gap={8} flex={1}>
-                    <Flex align={"center"}>
-                      <Group flex={1} c={"dimmed"} gap={"xs"}>
-                        <Text size="sm">{`@${user.firstName}`}</Text>
-                        <Text size="xs">
-                          {dayjs(post.created_at).format("YYYY.MM.DD")}
-                        </Text>
-                      </Group>
+                {/* Fix spec  */}
+                <Box mt={4} ml={2}>
+                  <Text
+                    size="xs"
+                    py={3}
+                    px={6}
+                    bg={"#DDEBF1"}
+                    display={"inline"}
+                    style={{ borderRadius: 4 }}
+                  >
+                    {`${dayjs(post.created_at).diff(post.project.start_date, "day")}日継続中`}
+                  </Text>
+                </Box>
+              </Flex>
+            </Flex>
+          </Flex>
+        </Card>
+      ))}
 
-                      <PostMenu postId={post.id} />
-                    </Flex>
+      <Card
+        mx={"auto"}
+        padding="lg"
+        radius={0}
+        style={{
+          borderBottom: "1px solid #C9C9C9",
+        }}
+      >
+        <Flex gap={16}>
+          <Avatar size={"md"} radius={"sm"} src={user.imageUrl} />
 
-                    <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
-                      {post.content}
-                    </Text>
+          <Flex direction={"column"} gap={8} flex={1}>
+            <Flex align={"center"}>
+              <Group flex={1} c={"dimmed"} gap={"xs"}>
+                <Text size="sm">{`@${user.firstName}`}</Text>
+                <Text size="xs">
+                  {/* {dayjs(post.created_at).format("YYYY.MM.DD")} */}
+                  YYYY.MM.DD
+                </Text>
+              </Group>
 
-                    <Flex
-                      direction={"column"}
-                      gap={4}
-                      p={12}
-                      style={{
-                        whiteSpace: "pre-wrap",
-                        border: "1px solid #C9C9C9",
-                        borderRadius: 4,
-                      }}
-                    >
-                      <Text size="sm" fw={"bold"}>
-                        {post.project.title}
-                      </Text>
-                      <Group gap={4} mt={8} pl={2} c={"dimmed"}>
-                        <CheckSquare2 size={14} />
-                        <Text size="xs">Done</Text>
-                      </Group>
+              <PostMenu postId={""} />
+            </Flex>
 
-                      {/* Fix spec  */}
-                      <Box mt={4} ml={2}>
-                        <Text
-                          size="xs"
-                          py={3}
-                          px={6}
-                          bg={"#DDEBF1"}
-                          display={"inline"}
-                          style={{ borderRadius: 4 }}
-                        >
-                          {`${dayjs(post.created_at).diff(post.project.start_date, "day")}日継続中`}
-                        </Text>
-                      </Box>
-                    </Flex>
-                  </Flex>
-                </Flex>
-              </Card>
-            ))}
-          </TabsPanel>
-          <TabsPanel value="friends">
-            <NoPostCard projects={projectTitleArr} />
-          </TabsPanel>
-        </Box>
-      </Suspense>
-    </Tab>
+            <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
+              Test Test
+            </Text>
+
+            <Flex
+              direction={"column"}
+              gap={4}
+              p={12}
+              style={{
+                whiteSpace: "pre-wrap",
+                border: "1px solid #C9C9C9",
+                borderRadius: 4,
+              }}
+            >
+              <Text size="sm" fw={"bold"}>
+                Title
+              </Text>
+              <Group gap={4} mt={8} pl={2} c={"dimmed"}>
+                <CheckSquare2 size={14} />
+                <Text size="xs">Done</Text>
+              </Group>
+
+              {/* Fix spec  */}
+              <Box mt={4} ml={2}>
+                <Text
+                  size="xs"
+                  py={3}
+                  px={6}
+                  bg={"#DDEBF1"}
+                  display={"inline"}
+                  style={{ borderRadius: 4 }}
+                >
+                  {/* {`${dayjs(post.created_at).diff(post.project.start_date, "day")}日継続中`} */}
+                  x 日継続中
+                </Text>
+              </Box>
+            </Flex>
+          </Flex>
+        </Flex>
+      </Card>
+    </Box>
   );
 }
