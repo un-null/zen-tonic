@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { Box, Container } from "@mantine/core";
 
 import AsideNav from "./aside-nav";
+import FixedButton from "./fixed-button";
 import Footer from "./footer";
 
 export const metadata: Metadata = {
@@ -19,13 +20,13 @@ export default async function DashboardLayout({
     <Container
       size={"md"}
       display={"grid"}
+      pos={"relative"}
       px={0}
       style={{ gridTemplateRows: "1fr auto" }}
     >
-      {/* Fix height */}
       <Box
         display={"grid"}
-        mih={"90dvh"}
+        mih={{ base: "100dvh", md: "90dvh" }}
         style={{
           gridTemplateColumns: "auto 1fr",
         }}
@@ -36,6 +37,8 @@ export default async function DashboardLayout({
         </Box>
       </Box>
       <Footer />
+
+      <FixedButton />
     </Container>
   );
 }

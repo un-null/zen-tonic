@@ -30,7 +30,7 @@ export default function Header() {
         </Flex>
       ) : (
         <Box>
-          <Flex justify={"space-between"} align={"center"} px={16}>
+          <Flex justify={"space-between"} align={"center"} p={16}>
             <Box>
               <Avatar size={"lg"} radius={"sm"} />
             </Box>
@@ -39,7 +39,7 @@ export default function Header() {
             </Box>
           </Flex>
 
-          <Box mt={16}>
+          <Box>
             <Tab type="home" />
           </Box>
         </Box>

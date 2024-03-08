@@ -31,10 +31,7 @@ type Props = {
 };
 
 // Fix
-export default async function UserCard({
-  databaseId = "",
-  startDate = "",
-}: Props) {
+export default async function UserCard({ startDate = "" }: Props) {
   const user = await currentUser();
 
   return (
@@ -45,12 +42,12 @@ export default async function UserCard({
           <Text fw={600}>{user?.firstName}</Text>
           <Anchor
             size={"xs"}
-            component={Link}
-            href={"/dashboard"}
+            href={"https://www.notion.so/"}
             underline={"always"}
+            target={"_blank"}
             c={"#2483e2"}
           >
-            Notion Database Link
+            Go to your Notion
           </Anchor>
         </Flex>
         <Button

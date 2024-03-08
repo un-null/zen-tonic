@@ -6,17 +6,18 @@ import { useMediaQuery } from "@mantine/hooks";
 import CraeteButton from "./create-button";
 import LinkButton from "./link-button";
 
+// Fix Position
 export default function FixedButton() {
   const isMobile = useMediaQuery(`(max-width: ${em(768)})`);
 
   return (
     <>
       {!isMobile ? (
-        <Box pos={"absolute"} bottom={48} left={32}>
+        <Box pos={"absolute"} bottom={32} left={32}>
           <LinkButton />
         </Box>
       ) : (
-        <Box pos={"absolute"} bottom={48} right={32}>
+        <Box pos={"absolute"} bottom={48} right={48}>
           <CraeteButton
             // projects={projectTitleArr}
             isDone
