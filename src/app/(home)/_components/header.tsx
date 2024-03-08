@@ -35,9 +35,6 @@ export default function Header() {
               <Avatar size={"lg"} radius={"sm"} />
             </Box>
             <Box>
-              <Avatar size={"lg"} radius={"sm"} />
-            </Box>
-            <Box>
               <LinkButton />
             </Box>
           </Flex>

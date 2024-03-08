@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 
-import { currentUser } from "@clerk/nextjs";
 import { Box, Container } from "@mantine/core";
-
-import { prisma } from "@/lib/prisma";
 
 import FixedButton from "./_components/fixed-button";
 import Header from "./_components/header";
@@ -19,30 +15,30 @@ export default async function TimelineLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await currentUser();
+  // const user = await currentUser();
 
-  if (!user) {
-    redirect("/sign-in");
-  }
+  // if (!user) {
+  //   redirect("/sign-in");
+  // }
 
-  const userLatestPost = await prisma.post.findFirst({
-    where: {
-      user_id: user.id,
-    },
-    orderBy: { created_at: "desc" },
-  });
+  // const userLatestPost = await prisma.post.findFirst({
+  //   where: {
+  //     user_id: user.id,
+  //   },
+  //   orderBy: { created_at: "desc" },
+  // });
 
-  // Fix remove waste featch maybe
-  const projects = await prisma.project.findMany({
-    where: {
-      user_id: user.id,
-    },
-  });
+  // // Fix remove waste featch maybe
+  // const projects = await prisma.project.findMany({
+  //   where: {
+  //     user_id: user.id,
+  //   },
+  // });
 
-  const projectTitleArr = projects.map((project) => project.title);
+  // const projectTitleArr = projects.map((project) => project.title);
 
-  const isPostedToday =
-    userLatestPost?.created_at.getDate() !== new Date().getDate();
+  // const isPostedToday =
+  //   userLatestPost?.created_at.getDate() !== new Date().getDate();
 
   return (
     <Container size={"md"} mih={"100dvh"} pos={"relative"}>

@@ -1,11 +1,9 @@
+import { ReactNode } from "react";
 import Image from "next/image";
 
 import { Box, Card, SimpleGrid } from "@mantine/core";
 
-import CraeteButton from "./create-button";
-
-// Fix props drilling
-export default function NoPostCard({ projects }: { projects: string[] }) {
+export default function NoPostCard({ children }: { children: ReactNode }) {
   return (
     <Card shadow="xs" padding="lg" radius="sm" withBorder>
       <SimpleGrid cols={2}>
@@ -14,7 +12,7 @@ export default function NoPostCard({ projects }: { projects: string[] }) {
         </Box>
 
         <Box px={8} m={"auto"}>
-          <CraeteButton type={"text"} projects={projects} />
+          {children}
         </Box>
       </SimpleGrid>
     </Card>
