@@ -99,6 +99,7 @@ export default async function Project() {
               <Text
                 size={"sm"}
                 display={"inline-flex"}
+                mt={8}
                 style={{ alignItems: "center", gap: 8 }}
               >
                 new

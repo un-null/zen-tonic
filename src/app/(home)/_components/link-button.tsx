@@ -52,7 +52,7 @@ export default function LinkButton() {
         </ActionIcon>
       </MenuTarget>
 
-      <Menu.Dropdown px={16} pt={16} pb={8}>
+      <Menu.Dropdown px={{ base: 8, md: 16 }} pt={16} pb={8}>
         {navItem.map((item) => (
           <MenuItem
             key={item.label}
