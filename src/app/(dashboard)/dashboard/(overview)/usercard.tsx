@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { currentUser } from "@clerk/nextjs";
 import { Anchor, Avatar, Button, Card, Flex, Text } from "@mantine/core";
+import dayjs from "dayjs";
 import { Calendar, Clipboard } from "lucide-react";
 
 type CardItem = {
@@ -12,27 +13,29 @@ type CardItem = {
   href?: string;
 };
 
-const cardItems = [
-  {
-    icon: <Calendar size="1rem" style={{ marginRight: 8 }} />,
-    label: "利用開始",
-  },
-  {
-    icon: <Clipboard size="1rem" style={{ marginRight: 8 }} />,
-    label: "進行中のプロジェクト",
-    content: "プロジェクトタイトル",
-    href: "/dashboard/project",
-  },
-] satisfies CardItem[];
-
 type Props = {
-  databaseId: string;
-  startDate: string;
+  id?: string;
+  title?: string;
+  startDate?: string;
 };
 
 // Fix
-export default async function UserCard({ startDate = "" }: Props) {
+export default async function UserCard({ id = "", title, startDate }: Props) {
   const user = await currentUser();
+
+  const cardItems = [
+    {
+      icon: <Calendar size="1rem" style={{ marginRight: 8 }} />,
+      content: startDate ? dayjs(startDate).format("YYYY.MM.DD") : "未設定",
+      label: "利用開始",
+    },
+    {
+      icon: <Clipboard size="1rem" style={{ marginRight: 8 }} />,
+      label: "進行中のプロジェクト",
+      content: title ? title : "未設定",
+      href: "/dashboard/project",
+    },
+  ] satisfies CardItem[];
 
   return (
     <Card shadow="xs" padding="lg" radius="sm" withBorder>
@@ -60,7 +63,7 @@ export default async function UserCard({ startDate = "" }: Props) {
           設定
         </Button>
       </Flex>
-      {cardItems.map((item) => (
+      {cardItems.map((item, index) => (
         <Flex
           key={item.label}
           align={"center"}
@@ -79,7 +82,19 @@ export default async function UserCard({ startDate = "" }: Props) {
               {item.icon}
               {item.label}
             </Text>
-            <Text size={"sm"}>{item.content ? item.content : startDate}</Text>
+            {index === 1 ? (
+              <Anchor
+                component={Link}
+                href={`dashboard/project/${id}`}
+                size={"sm"}
+                underline={"always"}
+                c={"#2483e2"}
+              >
+                {item.content}
+              </Anchor>
+            ) : (
+              <Text size={"sm"}>{item.content}</Text>
+            )}
           </Flex>
         </Flex>
       ))}

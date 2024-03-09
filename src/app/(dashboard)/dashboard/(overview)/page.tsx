@@ -11,16 +11,21 @@ import UserCard from "./usercard";
 export default async function Dashboard() {
   const user = await currentUser();
 
-  const latestProject = await prisma.project.findFirst({
+  const inProgressProject = await prisma.project.findFirst({
     where: {
       user_id: user?.id,
     },
     orderBy: { start_date: "desc" },
+    select: {
+      id: true,
+      title: true,
+      start_date: true,
+    },
   });
 
   const posts = await prisma.post.findMany({
     where: {
-      project_id: latestProject?.id,
+      project_id: inProgressProject?.id,
     },
     orderBy: { created_at: "desc" },
   });
@@ -31,6 +36,7 @@ export default async function Dashboard() {
     };
   });
 
+  // Fix component fetch
   return (
     <Box>
       <Title order={2}>ダッシュボード</Title>
@@ -44,9 +50,10 @@ export default async function Dashboard() {
           }
         >
           <UserCard
-            databaseId={latestProject?.database_id!}
+            id={inProgressProject?.title}
+            title={inProgressProject?.title}
             startDate={
-              latestProject?.start_date.toISOString().substring(0, 10)!
+              inProgressProject?.start_date.toISOString().substring(0, 10)!
             }
           />
         </Suspense>
