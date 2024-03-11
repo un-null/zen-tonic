@@ -1,13 +1,14 @@
 "use client";
 
+import { ReactNode } from "react";
+
 import { Box, em } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 
-import CraeteButton from "./create-button";
 import LinkButton from "./link-button";
 
 // Fix Position
-export default function FixedButton() {
+export default function FixedButton({ children }: { children: ReactNode }) {
   const isMobile = useMediaQuery(`(max-width: ${em(768)})`);
 
   return (
@@ -18,13 +19,7 @@ export default function FixedButton() {
         </Box>
       ) : (
         <Box pos={"absolute"} bottom={48} right={48}>
-          <CraeteButton
-            // projects={projectTitleArr}
-            isDone
-            type={"button"}
-            // username={user.firstName}
-            // avatar={user.imageUrl}
-          />
+          {children}
         </Box>
       )}
     </>
