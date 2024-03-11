@@ -13,31 +13,34 @@ import {
   Settings,
 } from "lucide-react";
 
-const navItem = [
-  {
-    leftSection: <LayoutTemplate size="1rem" />,
-    label: "ダッシュボード",
-    href: "/dashboard",
-  },
-  {
-    leftSection: <ClipboardList size="1rem" />,
-    label: "プロジェクト",
-    href: "/dashboard/project",
-  },
-  {
-    leftSection: <Bell size="1rem" />,
-    label: "通知",
-    href: "/dashboard/notice",
-  },
-  {
-    leftSection: <Settings size="1rem" />,
-    label: "設定",
-    href: "/dashboard/settings",
-  },
-];
-
 export default function AsideNav() {
   const pathname = usePathname();
+
+  const navItem = [
+    {
+      leftSection: <LayoutTemplate size="1rem" />,
+      label: "ダッシュボード",
+      href: "/dashboard",
+    },
+    {
+      leftSection: <ClipboardList size="1rem" />,
+      label: "プロジェクト",
+      href: "/dashboard/project",
+    },
+    {
+      leftSection: <Bell size="1rem" />,
+      label: "通知",
+      href:
+        pathname === "/dashboard/notice"
+          ? "/dashboard/notice"
+          : "/dashboard/notice/request",
+    },
+    {
+      leftSection: <Settings size="1rem" />,
+      label: "設定",
+      href: "/dashboard/settings",
+    },
+  ];
 
   return (
     <Flex>

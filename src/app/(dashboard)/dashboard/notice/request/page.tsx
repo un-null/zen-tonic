@@ -26,7 +26,7 @@ export default async function Notice() {
             </Flex>
 
             <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
-              user さんがいいねしました
+              user さんが友達申請をしました
             </Text>
           </Flex>
         </Flex>
