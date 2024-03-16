@@ -9,7 +9,6 @@ import { getAllPosts, getUserLatestPosts } from "@/lib/db/post";
 import { getProjectTitles } from "@/lib/db/project";
 
 import CraeteButton from "./_components/create-button";
-import FixedButton from "./_components/fixed-button";
 import NoPostCard from "./_components/no-post-card";
 import PostMenu from "./_components/post-menu";
 
@@ -108,26 +107,6 @@ export default async function Home() {
           </Flex>
         </Card>
       ))}
-
-      {/* Fix props and isPostedToday branch */}
-      <FixedButton>
-        {isPostedToday ? (
-          <CraeteButton
-            projects={projectTitleArr}
-            type={"button"}
-            username={user.firstName}
-            avatar={user.imageUrl}
-          />
-        ) : (
-          <CraeteButton
-            projects={projectTitleArr}
-            isDone
-            type={"button"}
-            username={user.firstName}
-            avatar={user.imageUrl}
-          />
-        )}
-      </FixedButton>
     </Box>
   );
 }

@@ -1,13 +1,14 @@
 "use client";
 
+import { ReactNode } from "react";
+
 import { Avatar, Box, em, Flex } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 
-import CraeteButton from "./create-button";
 import LinkButton from "./link-button";
 import Tab from "./tab";
 
-export default function Header() {
+export default function Header({ children }: { children: ReactNode }) {
   const isMobile = useMediaQuery(`(max-width: ${em(768)})`);
 
   return (
@@ -19,14 +20,7 @@ export default function Header() {
           </Box>
 
           <Tab type="home" />
-          <Box>
-            <CraeteButton
-              //   projects={projectTitleArr}
-              //   username={user.firstName}
-              //   avatar={user.imageUrl}
-              type={"button"}
-            />
-          </Box>
+          <Box>{children}</Box>
         </Flex>
       ) : (
         <Box>

@@ -37,7 +37,7 @@ export default function CraeteButton({
   const [opened, { open, close }] = useDisclosure(false);
   const [state, dispatch] = useFormState(createPost, initialState);
 
-  const isProjects = !projects || projects.length === 0;
+  const isProjects = !projects || projects.length !== 0;
 
   return (
     <>
