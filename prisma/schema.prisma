@@ -19,6 +19,7 @@ model User {
   image      String?
   project    Project[]
   post       Post[]
+  Like       Like[]
 }
 
 model Project {
@@ -46,7 +47,20 @@ model Post {
   project_id String
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   project    Project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  Like       Like[]
 
   @@index([user_id])
   @@index([project_id])
+}
+
+model Like {
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+  user_id    String
+  post_id    String
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  post       Post     @relation(fields: [post_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([post_id])
 }
