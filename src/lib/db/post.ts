@@ -10,3 +10,20 @@ export const getUserLatestPosts = (userId: string) => {
     orderBy: { created_at: "desc" },
   });
 };
+
+export const getAllPosts = () => {
+  return prisma.post.findMany({
+    orderBy: { created_at: "desc" },
+    select: {
+      id: true,
+      created_at: true,
+      content: true,
+      project: {
+        select: {
+          title: true,
+          start_date: true,
+        },
+      },
+    },
+  });
+};

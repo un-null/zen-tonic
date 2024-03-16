@@ -1,26 +1,39 @@
-import { Suspense } from "react";
+import { ReactNode, Suspense } from "react";
 
 import { currentUser } from "@clerk/nextjs";
-import { Box, Flex, Skeleton, Title } from "@mantine/core";
+import { Avatar, Box, Flex, Group, Skeleton, Text, Title } from "@mantine/core";
+import dayjs from "dayjs";
+import { Calendar, Clipboard } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
 
 import HeatMap from "./heatmap";
-import UserCard from "./usercard";
+
+type CardItem = {
+  icon: ReactNode;
+  label: string;
+  content?: string;
+  href?: string;
+};
 
 export default async function Dashboard() {
   const user = await currentUser();
 
-  const latestProject = await prisma.project.findFirst({
+  const inProgressProject = await prisma.project.findFirst({
     where: {
       user_id: user?.id,
     },
     orderBy: { start_date: "desc" },
+    select: {
+      id: true,
+      title: true,
+      start_date: true,
+    },
   });
 
   const posts = await prisma.post.findMany({
     where: {
-      project_id: latestProject?.id,
+      project_id: inProgressProject?.id,
     },
     orderBy: { created_at: "desc" },
   });
@@ -31,36 +44,81 @@ export default async function Dashboard() {
     };
   });
 
+  const startDate = inProgressProject?.start_date
+    .toISOString()
+    .substring(0, 10);
+
+  const cardItems = [
+    {
+      icon: <Calendar size="1rem" style={{ marginRight: 8 }} />,
+      content: startDate ? dayjs(startDate).format("YYYY.MM.DD") : "未設定",
+      label: "利用開始",
+    },
+    {
+      icon: <Clipboard size="1rem" style={{ marginRight: 8 }} />,
+      label: "取り組み中",
+      content: inProgressProject?.title ? inProgressProject?.title : "未設定",
+      href: "/dashboard/project",
+    },
+  ] satisfies CardItem[];
+
+  // Fix component fetch
   return (
     <Box>
-      <Title order={2}>ダッシュボード</Title>
-      <Flex direction={"column"} mt={32} gap={32}>
-        {/* Fix composition and props */}
-        <Suspense
-          fallback={
-            <Box miw={"md"}>
-              <Skeleton h={240} />
-            </Box>
-          }
-        >
-          <UserCard
-            databaseId={latestProject?.database_id!}
-            startDate={
-              latestProject?.start_date.toISOString().substring(0, 10)!
-            }
-          />
-        </Suspense>
+      {/* Fix composition and props */}
+      <Suspense
+        fallback={
+          <Box miw={"md"}>
+            <Skeleton h={240} />
+          </Box>
+        }
+      >
+        <Box mt={32}>
+          <Box h={{ base: 120, md: 156 }} bg={"gray.4"}></Box>
+          <Box px={{ base: 16, md: 32 }}>
+            <Avatar mt={-36} size={72} radius={"sm"} src={user?.imageUrl} />
 
-        <Suspense
-          fallback={
-            <Box miw={"md"}>
-              <Skeleton h={240} />
-            </Box>
-          }
-        >
+            <Flex
+              direction={"column"}
+              mt={32}
+              pb={32}
+              gap={16}
+              style={{ borderBottom: "1px solid #CDCDCD" }}
+            >
+              <Title order={2}>{user?.firstName}</Title>
+              <Flex direction={"column"} gap={8}>
+                {cardItems.map((item) => (
+                  <Flex key={item.label} gap={16}>
+                    <Group
+                      gap={4}
+                      w={100}
+                      display={"inline-flex"}
+                      style={{ alignItems: "center" }}
+                      fz={14}
+                    >
+                      {item.icon}
+                      {item.label}
+                    </Group>
+                    <Text fz={14}>{item.content}</Text>
+                  </Flex>
+                ))}
+              </Flex>
+            </Flex>
+          </Box>
+        </Box>
+      </Suspense>
+
+      <Suspense
+        fallback={
+          <Box miw={"md"}>
+            <Skeleton h={240} />
+          </Box>
+        }
+      >
+        <Box mt={32} px={16}>
           <HeatMap dateArr={dateArr} />
-        </Suspense>
-      </Flex>
+        </Box>
+      </Suspense>
     </Box>
   );
 }

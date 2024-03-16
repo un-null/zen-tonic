@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Avatar, Box, Container, Flex } from "@mantine/core";
+import { Box, Container } from "@mantine/core";
 
-import { getUserLatestPosts } from "@/lib/db/post";
+import { getAllPosts, getUserLatestPosts } from "@/lib/db/post";
 import { getProjectTitles } from "@/lib/db/project";
 
 import CraeteButton from "./_components/create-button";
-import LinkButton from "./_components/link-button";
+import FixedButton from "./_components/fixed-button";
+import Header from "./_components/header";
 
 export const metadata: Metadata = {
   title: "Timeline | All",
@@ -26,68 +27,60 @@ export default async function TimelineLayout({
     redirect("/sign-in");
   }
 
-  const [projectTitles, latestPost] = await Promise.all([
+  const [projectTitles, latestPost, allPosts] = await Promise.all([
     getProjectTitles(user.id),
     getUserLatestPosts(user.id),
+    getAllPosts(),
   ]);
+
+  const projectTitleArr = projectTitles.map((project) => project.title);
 
   const isPostedToday =
     latestPost?.created_at.getDate() !== new Date().getDate();
-
-  const projectTitleArr = projectTitles.map((data) => data.title);
-
   return (
-    <Container
-      display={"grid"}
-      size={"md"}
-      mih={"100dvh"}
-      style={{
-        gridTemplateRows: "1fr auto",
-      }}
-    >
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "auto 1fr auto",
-          minHeight: "full",
-        }}
-      >
-        <Flex
-          component="aside"
-          pt={12}
-          pb={32}
-          align={"center"}
-          direction={"column"}
-        >
-          <Box flex={1}>
-            <Avatar size={"lg"} radius={"sm"} />
-          </Box>
-          <LinkButton />
-        </Flex>
-        <Box component="main" w={"36em"} mx={"auto"}>
-          {children}
-        </Box>
+    <Container size={"md"} mih={"100dvh"} pos={"relative"}>
+      <Header>
+        {isPostedToday ? (
+          <CraeteButton
+            projects={projectTitleArr}
+            type={"button"}
+            username={user.firstName}
+            avatar={user.imageUrl}
+          />
+        ) : (
+          <CraeteButton
+            projects={projectTitleArr}
+            isDone
+            type={"button"}
+            username={user.firstName}
+            avatar={user.imageUrl}
+          />
+        )}
+      </Header>
 
-        {/* fix props drilling */}
-        <Box component="aside" pt={16}>
-          {isPostedToday ? (
-            <CraeteButton
-              projects={projectTitleArr}
-              username={user.firstName}
-              avatar={user.imageUrl}
-              type={"button"}
-            />
-          ) : (
-            <CraeteButton
-              projects={projectTitleArr}
-              isDone
-              type={"button"}
-              username={user.firstName}
-              avatar={user.imageUrl}
-            />
-          )}
-        </Box>
-      </div>
+      <Box w={{ base: "100%", xs: 576 }} mx={"auto"} component={"main"}>
+        {children}
+      </Box>
+
+      {/* Fix props and isPostedToday branch */}
+      <FixedButton>
+        {isPostedToday ? (
+          <CraeteButton
+            projects={projectTitleArr}
+            type={"button"}
+            username={user.firstName}
+            avatar={user.imageUrl}
+          />
+        ) : (
+          <CraeteButton
+            projects={projectTitleArr}
+            isDone
+            type={"button"}
+            username={user.firstName}
+            avatar={user.imageUrl}
+          />
+        )}
+      </FixedButton>
     </Container>
   );
 }
