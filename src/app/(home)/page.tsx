@@ -9,6 +9,7 @@ import { getAllPosts, getUserLatestPosts } from "@/lib/db/post";
 import { getProjectTitles } from "@/lib/db/project";
 
 import CraeteButton from "./_components/create-button";
+import LikeButton from "./_components/like-button";
 import NoPostCard from "./_components/no-post-card";
 import PostMenu from "./_components/post-menu";
 
@@ -103,6 +104,10 @@ export default async function Home() {
                   </Text>
                 </Box>
               </Flex>
+
+              <Box mt={8}>
+                <LikeButton isLike={post.like.length !== 0} postId={post.id} />
+              </Box>
             </Flex>
           </Flex>
         </Card>

@@ -1,36 +1,46 @@
+import { currentUser } from "@clerk/nextjs";
 import { Avatar, Box, Card, Flex, Group, Text } from "@mantine/core";
 import dayjs from "dayjs";
 
+import { getAllLikes } from "@/lib/db/like";
+
 export default async function Notice() {
+  const user = await currentUser();
+
+  const allLikes = await getAllLikes(user?.id);
+
   return (
     <Box>
-      <Card
-        mx={"auto"}
-        padding="lg"
-        radius={0}
-        style={{
-          borderBottom: "1px solid #C9C9C9",
-        }}
-      >
-        <Flex gap={16}>
-          <Avatar size={"md"} radius={"sm"} />
+      {allLikes.map((like) => (
+        <Card
+          mx={"auto"}
+          key={like.id}
+          padding="lg"
+          radius={0}
+          style={{
+            borderBottom: "1px solid #C9C9C9",
+          }}
+        >
+          <Flex gap={16}>
+            <Avatar size={"md"} radius={"sm"} src={like.user.image} />
 
-          <Flex direction={"column"} gap={8} flex={1}>
-            <Flex align={"center"}>
-              <Group flex={1} c={"dimmed"} gap={"xs"}>
-                <Text size="sm">{`@user`}</Text>
-                <Text size="xs">
-                  {dayjs("2024-03-09").format("YYYY.MM.DD")}
-                </Text>
-              </Group>
+            <Flex direction={"column"} gap={8} flex={1}>
+              <Flex align={"center"}>
+                <Group flex={1} c={"dimmed"} gap={"xs"}>
+                  <Text size="sm">{`@${like.user.name}`}</Text>
+                  <Text size="xs">
+                    {dayjs(like.created_at).format("YYYY.MM.DD")}
+                  </Text>
+                </Group>
+              </Flex>
+
+              <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
+                {like.user.name} さんがあなたの投稿にいいねをしました
+              </Text>
             </Flex>
-
-            <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
-              user さんがいいねしました
-            </Text>
           </Flex>
-        </Flex>
-      </Card>
+        </Card>
+      ))}
     </Box>
   );
 }
