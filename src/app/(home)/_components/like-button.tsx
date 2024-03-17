@@ -18,8 +18,6 @@ export default function LikeButton({
     return !state;
   });
 
-  console.log(optimisticState);
-
   return (
     <ActionIcon
       variant={"outline"}
