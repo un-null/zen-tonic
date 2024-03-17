@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useOptimistic } from "react";
 
 import { ActionIcon } from "@mantine/core";
 import { Heart } from "lucide-react";
@@ -14,26 +14,28 @@ export default function LikeButton({
   postId: string;
   isLike: boolean;
 }) {
-  const [isLikeState, setIsLike] = useState(isLike);
+  const [optimisticState, addOptimistic] = useOptimistic(isLike, (state, _) => {
+    return !state;
+  });
 
-  console.log(isLikeState);
+  console.log(optimisticState);
 
   return (
     <ActionIcon
       variant={"outline"}
       radius={"xl"}
       size={"md"}
-      color={isLikeState ? "#F91980" : "#C9C9C9"}
-      disabled={isLike ? isLike : isLikeState}
+      color={optimisticState ? "#F91980" : "#C9C9C9"}
+      disabled={isLike ? isLike : optimisticState}
       onClick={async () => {
+        addOptimistic(() => !optimisticState && !optimisticState);
         await addLike(postId);
-        setIsLike(() => !isLikeState && !isLikeState);
       }}
     >
       <Heart
-        color={isLikeState ? "#F91980" : "#C9C9C9"}
+        color={optimisticState ? "#F91980" : "#C9C9C9"}
         style={{ width: "60%", height: "60%" }}
-        fill={isLikeState ? "#F91980" : "white"}
+        fill={optimisticState ? "#F91980" : "white"}
       />
     </ActionIcon>
   );
