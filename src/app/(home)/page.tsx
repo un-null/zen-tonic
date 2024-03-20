@@ -13,6 +13,7 @@ import {
 import dayjs from "dayjs";
 import { CheckSquare2 } from "lucide-react";
 
+import { getFollows } from "@/lib/db/follow";
 import { getAllPosts, getUserLatestPosts } from "@/lib/db/post";
 import { getProjectTitles } from "@/lib/db/project";
 
@@ -30,10 +31,11 @@ export default async function Home() {
     redirect("/sign-in");
   }
 
-  const [projectTitles, latestPost, allPosts] = await Promise.all([
+  const [projectTitles, latestPost, allPosts, follows] = await Promise.all([
     getProjectTitles(user.id),
     getUserLatestPosts(user.id),
     getAllPosts(),
+    getFollows(user.id),
   ]);
 
   const projectTitleArr = projectTitles.map((project) => project.title);
@@ -79,7 +81,11 @@ export default async function Home() {
                   <Title order={3}>{post.user.name}</Title>
                 </Group>
                 {user.id !== post.user.id && (
-                  <FollowButton>友達申請</FollowButton>
+                  <FollowButton
+                    followerId={user.id}
+                    followeeId={post.user.id}
+                    follows={follows}
+                  />
                 )}
               </Flex>
             </Avatar>
