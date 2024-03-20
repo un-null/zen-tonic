@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-import { Anchor, Flex, NavLink } from "@mantine/core";
+import { useClerk } from "@clerk/nextjs";
+import { Anchor, Button, Flex, NavLink } from "@mantine/core";
 import {
   ArrowLeft,
   Bell,
@@ -15,6 +16,8 @@ import {
 
 export default function AsideNav() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { signOut } = useClerk();
 
   const navItem = [
     {
@@ -77,17 +80,15 @@ export default function AsideNav() {
             />
           ))}
         </Flex>
-        <Anchor
-          component={Link}
-          href={"/dashboard"}
+        <Button
           c="#e06259"
           mx={"auto"}
-          display={"inline-flex"}
-          style={{ alignItems: "center" }}
+          variant={"transparent"}
+          rightSection={<LogOut size={16} />}
+          onClick={() => signOut(() => router.push("/"))}
         >
           ログアウト
-          <LogOut size={16} style={{ marginLeft: 2 }} />
-        </Anchor>
+        </Button>
       </Flex>
     </Flex>
   );
