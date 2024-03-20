@@ -23,6 +23,7 @@ export default async function Settings() {
       data: "テスト!!",
     },
   ];
+
   return (
     <Box mt={32}>
       <Box h={120} bg={"gray.4"}></Box>

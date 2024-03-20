@@ -1,14 +1,24 @@
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Avatar, Box, Card, Flex, Group, Text } from "@mantine/core";
+import {
+  Box,
+  Card,
+  Flex,
+  Group,
+  Avatar as MantineAvatar,
+  Text,
+  Title,
+} from "@mantine/core";
 import dayjs from "dayjs";
 import { CheckSquare2 } from "lucide-react";
 
 import { getAllPosts, getUserLatestPosts } from "@/lib/db/post";
 import { getProjectTitles } from "@/lib/db/project";
 
+import Avatar from "./_components/avatar";
 import CraeteButton from "./_components/create-button";
+import FollowButton from "./_components/follow-button";
 import LikeButton from "./_components/like-button";
 import NoPostCard from "./_components/no-post-card";
 import PostMenu from "./_components/post-menu";
@@ -54,12 +64,30 @@ export default async function Home() {
           }}
         >
           <Flex gap={16}>
-            <Avatar size={"md"} radius={"sm"} src={user.imageUrl} />
+            <Avatar
+              image={post.user.image}
+              title={post.project.title}
+              start={post.project.start_date}
+            >
+              <Flex justify={"space-between"}>
+                <Group gap={8}>
+                  <MantineAvatar
+                    size={32}
+                    radius={"sm"}
+                    src={post.user.image}
+                  />
+                  <Title order={3}>{post.user.name}</Title>
+                </Group>
+                {user.id !== post.user.id && (
+                  <FollowButton>友達申請</FollowButton>
+                )}
+              </Flex>
+            </Avatar>
 
             <Flex direction={"column"} gap={8} flex={1}>
               <Flex align={"center"}>
                 <Group flex={1} c={"dimmed"} gap={"xs"}>
-                  <Text size="sm">{`@${user.firstName}`}</Text>
+                  <Text size="sm">{`@${post.user.name}`}</Text>
                   <Text size="xs">
                     {dayjs(post.created_at).format("YYYY.MM.DD")}
                   </Text>

@@ -24,6 +24,13 @@ export const getAllPosts = () => {
           start_date: true,
         },
       },
+      user: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
+      },
       // Fix get only first data  ???
       like: true,
     },
