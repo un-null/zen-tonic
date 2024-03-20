@@ -20,6 +20,8 @@ model User {
   project    Project[]
   post       Post[]
   like       Like[]
+  followers  Follow[]  @relation("asFollowee")
+  followees  Follow[]  @relation("asFollower")
 }
 
 model Project {
@@ -63,4 +65,15 @@ model Like {
 
   @@index([user_id])
   @@index([post_id])
+}
+
+model Follow {
+  id          String @id @default(cuid())
+  follower_id String
+  followee_id String
+  follower    User   @relation("asFollower", fields: [follower_id], references: [id], onDelete: Cascade)
+  followee    User   @relation("asFollowee", fields: [followee_id], references: [id], onDelete: Cascade)
+
+  @@index([follower_id])
+  @@index([followee_id])
 }
