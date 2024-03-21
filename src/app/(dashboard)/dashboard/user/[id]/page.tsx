@@ -1,16 +1,30 @@
+import { redirect } from "next/navigation";
+
+import { currentUser } from "@clerk/nextjs";
 import { Avatar, Box, Card, Flex, Group, Text, Title } from "@mantine/core";
 import dayjs from "dayjs";
 import { CheckSquare2 } from "lucide-react";
 
 import LikeButton from "@/app/(home)/_components/like-button";
+import { getFollowById } from "@/lib/db/follow";
 import { getPostsByUserId } from "@/lib/db/post";
+
+import FollowButton from "../follow-button";
 
 export default async function UserIdPage({
   params,
 }: {
   params: { id: string };
 }) {
+  const user = await currentUser();
+
+  if (!user) {
+    redirect("/sign-in");
+  }
+
   const posts = await getPostsByUserId(params.id);
+
+  const follow = await getFollowById(user.id, params.id);
 
   return (
     <Box mt={32}>
@@ -25,15 +39,25 @@ export default async function UserIdPage({
         />
 
         <Flex direction={"column"} mt={32} pb={32} gap={16}>
-          <Title
-            order={2}
+          <Group
             pb={16}
             style={{
               borderBottom: "1px solid #C9C9C9",
             }}
           >
-            {posts[0].user.name}
-          </Title>
+            <Title order={2}>{posts[0].user.name}</Title>
+            {/* Fix undefind */}
+            {!follow?.status ? (
+              <FollowButton type={"unfollow"} follow={follow!}>
+                友達申請
+              </FollowButton>
+            ) : (
+              <FollowButton type={"follow"} follow={follow}>
+                フォロー解除
+              </FollowButton>
+            )}
+          </Group>
+
           <Box>
             {posts.map((post) => (
               <Card
