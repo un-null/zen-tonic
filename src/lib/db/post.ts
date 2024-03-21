@@ -29,8 +29,6 @@ export const getAllPosts = () => {
           id: true,
           name: true,
           image: true,
-          followees: true,
-          followers: true,
         },
       },
       // Fix get only first data  ???

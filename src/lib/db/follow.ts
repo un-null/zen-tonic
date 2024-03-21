@@ -8,6 +8,25 @@ export const getFollows = (followerId: string) => {
   });
 };
 
+export const getFollowsRequest = async (followeeId: string) => {
+  return await prisma.follow.findMany({
+    where: {
+      followee_id: followeeId,
+      status: false,
+    },
+    select: {
+      id: true,
+      status: false,
+      follower: {
+        select: {
+          name: true,
+          image: true,
+        },
+      },
+    },
+  });
+};
+
 export const getFollowById = async (followerId: string, followeeId: string) => {
   return await prisma.follow.findFirst({
     where: {
