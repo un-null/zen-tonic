@@ -27,7 +27,7 @@ export default async function TimelineLayout({
     redirect("/sign-in");
   }
 
-  const [projectTitles, latestPost, allPosts] = await Promise.all([
+  const [projectTitles, latestPost] = await Promise.all([
     getProjectTitles(user.id),
     getUserLatestPosts(user.id),
     getAllPosts(),
