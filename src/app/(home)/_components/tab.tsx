@@ -30,8 +30,19 @@ const NoticeTabItem = [
   },
 ];
 
+const usreTabItem = [
+  {
+    href: "/dashboard/user/followee",
+    label: "フォロー",
+  },
+  {
+    href: "/dashboard/user/follower",
+    label: "フォロワー",
+  },
+];
+
 // Fix type.type
-export default function Tab({ type }: { type: "home" | "notice" }) {
+export default function Tab({ type }: { type: "home" | "notice" | "user" }) {
   const pathname = usePathname();
 
   return (
@@ -42,8 +53,8 @@ export default function Tab({ type }: { type: "home" | "notice" }) {
       h={"100%"}
       align={"end"}
       style={{ borderBottom: "1px solid #C9C9C9" }}
-      gap={type === "notice" ? 16 : undefined}
-      pl={type === "notice" ? 16 : undefined}
+      gap={type !== "home" ? 16 : undefined}
+      pl={type !== "home" ? 16 : undefined}
     >
       {type === "home" &&
         HomeTabItem.map((item) => (
@@ -84,6 +95,27 @@ export default function Tab({ type }: { type: "home" | "notice" }) {
               <Box display={"inline-flex"} ta={"center"}>
                 {item.leftSection}
               </Box>
+              <Text pb={4} size={"sm"}>
+                {item.label}
+              </Text>
+            </Flex>
+          </Anchor>
+        ))}
+
+      {type === "user" &&
+        usreTabItem.map((item) => (
+          <Anchor key={item.href} component={Link} href={item.href} td={"none"}>
+            <Flex
+              gap={4}
+              align={"center"}
+              style={
+                pathname === item.href
+                  ? {
+                      borderBottom: "2px solid #242424",
+                    }
+                  : undefined
+              }
+            >
               <Text pb={4} size={"sm"}>
                 {item.label}
               </Text>

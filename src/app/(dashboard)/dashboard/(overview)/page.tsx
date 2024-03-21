@@ -1,7 +1,17 @@
 import { ReactNode, Suspense } from "react";
+import Link from "next/link";
 
 import { currentUser } from "@clerk/nextjs";
-import { Avatar, Box, Flex, Group, Skeleton, Text, Title } from "@mantine/core";
+import {
+  Anchor,
+  Avatar,
+  Box,
+  Flex,
+  Group,
+  Skeleton,
+  Text,
+  Title,
+} from "@mantine/core";
 import dayjs from "dayjs";
 import { Calendar, Clipboard } from "lucide-react";
 
@@ -85,7 +95,9 @@ export default async function Dashboard() {
               gap={16}
               style={{ borderBottom: "1px solid #CDCDCD" }}
             >
-              <Title order={2}>{user?.firstName}</Title>
+              <Anchor component={Link} href={`/dashboard/user/${user?.id}`}>
+                <Title order={2}>{user?.firstName}</Title>
+              </Anchor>
               <Flex direction={"column"} gap={8}>
                 {cardItems.map((item) => (
                   <Flex key={item.label} gap={16}>

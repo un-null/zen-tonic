@@ -9,6 +9,7 @@ import {
   ArrowLeft,
   Bell,
   ClipboardList,
+  Contact,
   LayoutTemplate,
   LogOut,
   Settings,
@@ -37,6 +38,14 @@ export default function AsideNav() {
         pathname === "/dashboard/notice"
           ? "/dashboard/notice"
           : "/dashboard/notice/request",
+    },
+    {
+      leftSection: <Contact size="1rem" />,
+      label: "友達",
+      href:
+        pathname === "/dashboard/user/followee"
+          ? "/dashboard/user/followee"
+          : "/dashboard/user/follower",
     },
     {
       leftSection: <Settings size="1rem" />,
@@ -73,6 +82,7 @@ export default function AsideNav() {
               key={item.label}
               component={Link}
               href={item.href}
+              // Fix startwith
               active={item.href === pathname}
               label={item.label}
               leftSection={item.leftSection}
