@@ -54,7 +54,7 @@ export default async function Setup() {
             </Title>
           </Box>
 
-          <Button component={Link} href={"/dashboard/project"}>
+          <Button component={Link} href={"/d/project"}>
             プロジェクト一覧に戻る
           </Button>
         </>

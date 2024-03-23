@@ -35,7 +35,7 @@ export default async function Follower() {
               fw={"bold"}
               flex={1}
               component={Link}
-              href={`/dashboard/user/${user.follower.id}`}
+              href={`/d/user/${user.follower.id}`}
             >
               {user.follower.name}
             </Anchor>

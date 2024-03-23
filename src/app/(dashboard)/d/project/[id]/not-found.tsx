@@ -12,7 +12,7 @@ export default function NotFound() {
           404 Not Found
         </Title>
         <Text size={"sm"}>プロジェクトが見つかりませんでした</Text>
-        <Button component={Link} href="/dashboard/project">
+        <Button component={Link} href="/d/project">
           プロジェクト一覧に戻る
         </Button>
       </Flex>

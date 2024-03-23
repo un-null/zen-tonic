@@ -16,22 +16,22 @@ const navItem = [
   {
     leftSection: <LayoutTemplate size="1rem" />,
     label: "ダッシュボード",
-    href: "/dashboard",
+    href: "/d",
   },
   {
     leftSection: <ClipboardList size="1rem" />,
     label: "プロジェクト",
-    href: "/dashboard/project",
+    href: "/d/project",
   },
   {
     leftSection: <Bell size="1rem" />,
     label: "通知",
-    href: "/dashboard/notice",
+    href: "/d/notice",
   },
   {
     leftSection: <Settings size="1rem" />,
     label: "設定",
-    href: "/dashboard/settings",
+    href: "/d/settings",
   },
 ];
 

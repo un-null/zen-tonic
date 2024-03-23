@@ -50,7 +50,7 @@ export default async function Project() {
           {projects.map((project) => (
             <Link
               key={project.id}
-              href={`/dashboard/project/${project.id}`}
+              href={`/d/project/${project.id}`}
               style={{ textDecoration: "none" }}
             >
               <Card
@@ -84,10 +84,7 @@ export default async function Project() {
               </Card>
             </Link>
           ))}
-          <Link
-            href={`/dashboard/project/setup`}
-            style={{ textDecoration: "none" }}
-          >
+          <Link href={`/d/project/setup`} style={{ textDecoration: "none" }}>
             <Card
               style={{ aspectRatio: 1, placeItems: "center" }}
               display={"grid"}

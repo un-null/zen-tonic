@@ -24,33 +24,30 @@ export default function AsideNav() {
     {
       leftSection: <LayoutTemplate size="1rem" />,
       label: "ダッシュボード",
-      href: "/dashboard",
+      href: "/d",
     },
     {
       leftSection: <ClipboardList size="1rem" />,
       label: "プロジェクト",
-      href: "/dashboard/project",
+      href: "/d/project",
     },
     {
       leftSection: <Bell size="1rem" />,
       label: "通知",
-      href:
-        pathname === "/dashboard/notice"
-          ? "/dashboard/notice"
-          : "/dashboard/notice/request",
+      href: pathname === "/d/notice" ? "/d/notice" : "/d/notice/request",
     },
     {
       leftSection: <Contact size="1rem" />,
       label: "友達",
       href:
-        pathname === "/dashboard/user/followee"
-          ? "/dashboard/user/followee"
-          : "/dashboard/user/follower",
+        pathname === "/d/user/followee"
+          ? "/d/user/followee"
+          : "/d/user/follower",
     },
     {
       leftSection: <Settings size="1rem" />,
       label: "設定",
-      href: "/dashboard/settings",
+      href: "/d/settings",
     },
   ];
 

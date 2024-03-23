@@ -37,7 +37,7 @@ export default async function Followee() {
               fw={"bold"}
               flex={1}
               component={Link}
-              href={`/dashboard/user/${user.followee.id}`}
+              href={`/d/user/${user.followee.id}`}
             >
               {user.followee.name}
             </Anchor>

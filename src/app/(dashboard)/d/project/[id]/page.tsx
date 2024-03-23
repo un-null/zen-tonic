@@ -130,7 +130,7 @@ export default async function PageDetail({
             </Flex>
             <Group>
               <Button
-                href={"/dashboard/settings"}
+                href={"/d/settings"}
                 component={Link}
                 variant={"outline"}
                 c={"dark.8"}

@@ -37,10 +37,10 @@ export default function Footer() {
               <Anchor component={Link} href={"/"} size={"sm"}>
                 ホーム
               </Anchor>
-              <Anchor href="/dashboard" size={"sm"}>
+              <Anchor href="/d" size={"sm"}>
                 規約とポリシー
               </Anchor>
-              <Anchor href="/dashboard" size={"sm"}>
+              <Anchor href="/d" size={"sm"}>
                 使い方
               </Anchor>
             </SimpleGrid>
