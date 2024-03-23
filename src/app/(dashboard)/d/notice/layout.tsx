@@ -1,6 +1,10 @@
+import { Suspense } from "react";
+
 import { Box, Title } from "@mantine/core";
 
 import Tab from "@/app/(home)/_components/tab";
+
+import { NoticeSkeleton } from "../skeletons";
 
 export default async function NoticeLayout({
   children,
@@ -13,7 +17,7 @@ export default async function NoticeLayout({
       <Box mt={32}>
         <Tab type={"notice"} />
         <Box mt={32} px={16}>
-          {children}
+          <Suspense fallback={<NoticeSkeleton />}>{children}</Suspense>
         </Box>
       </Box>
     </Box>
