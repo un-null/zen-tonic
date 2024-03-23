@@ -15,7 +15,7 @@ export default async function Followee() {
 
   const users = await getFolloweeList(user.id);
 
-  console.log(users);
+  // console.log(users);
 
   return (
     <Box>

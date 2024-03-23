@@ -11,12 +11,11 @@ export default function HeatMap({ dateArr }: { dateArr: { date: string }[] }) {
   const endOfYear = new Date(today.getFullYear(), 11, 31, 23, 59, 59, 999);
 
   return (
-    <Card shadow="xs" padding={"md"} radius="sm" withBorder>
+    <Card w={"auto"} shadow="xs" padding={"md"} radius="sm" withBorder>
       <Flex gap={32} direction={"column"}>
         <Title order={5}>アクティビティ</Title>
 
-        {/* fix width */}
-        <ScrollArea type={"always"} w={{ base: 264, sm: 500, md: "100%" }}>
+        <ScrollArea type={"always"} w={{ base: 252, xs: 436, sm: 636 }}>
           <Box w={768}>
             <CalendarHeatmap
               startDate={startOfYear}
@@ -31,8 +30,6 @@ export default function HeatMap({ dateArr }: { dateArr: { date: string }[] }) {
             />
           </Box>
         </ScrollArea>
-
-        {/* Fix color  */}
       </Flex>
     </Card>
   );
