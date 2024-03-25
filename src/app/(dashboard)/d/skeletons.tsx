@@ -21,3 +21,16 @@ export function NoticeSkeleton() {
     </Flex>
   );
 }
+
+export function UserDetailInfoSkeleton() {
+  return <Skeleton w={{ base: "auto" }} h={{ base: 288 }} />;
+}
+
+export function PostCardSkeleton() {
+  return (
+    <Flex gap={16} direction={"column"} px={16}>
+      <Skeleton w={{ base: "auto" }} h={{ base: 220, md: 230 }} />
+      {/* <Skeleton w={{ base: "auto" }} h={{ base: 220 }} /> */}
+    </Flex>
+  );
+}
