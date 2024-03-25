@@ -44,7 +44,7 @@ export default async function UserInfo() {
       icon: <Clipboard size="1rem" style={{ marginRight: 8 }} />,
       label: "取り組み中",
       content: inProgressProject?.title ? inProgressProject?.title : "未設定",
-      href: "/d/project",
+      href: `/d/project/${inProgressProject?.id}`,
     },
   ] satisfies CardItem[];
 
@@ -77,7 +77,13 @@ export default async function UserInfo() {
                   {item.icon}
                   {item.label}
                 </Group>
-                <Text fz={14}>{item.content}</Text>
+                {item.href ? (
+                  <Anchor component={Link} href={item.href} fz={14}>
+                    {item.content}
+                  </Anchor>
+                ) : (
+                  <Text fz={14}>{item.content}</Text>
+                )}
               </Flex>
             ))}
           </Flex>
