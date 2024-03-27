@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 
-import { currentUser } from "@clerk/nextjs";
 import { Box, Container } from "@mantine/core";
-
-import { getAllPosts, getUserLatestPosts } from "@/lib/db/post";
-import { getProjectTitles } from "@/lib/db/project";
 
 import CraeteButton from "./_components/create-button";
 import FixedButton from "./_components/fixed-button";
@@ -18,44 +13,15 @@ export const metadata: Metadata = {
 
 export default async function TimelineLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
-  const user = await currentUser();
-
-  if (!user) {
-    redirect("/sign-in");
-  }
-
-  const [projectTitles, latestPost] = await Promise.all([
-    getProjectTitles(user.id),
-    getUserLatestPosts(user.id),
-    getAllPosts(),
-  ]);
-
-  const projectTitleArr = projectTitles.map((project) => project.title);
-
-  const isPostedToday =
-    latestPost?.created_at.getDate() !== new Date().getDate();
   return (
     <Container size={"md"} mih={"100dvh"} pos={"relative"}>
       <Header>
-        {isPostedToday ? (
-          <CraeteButton
-            projects={projectTitleArr}
-            type={"button"}
-            username={user.firstName}
-            avatar={user.imageUrl}
-          />
-        ) : (
-          <CraeteButton
-            projects={projectTitleArr}
-            isDone
-            type={"button"}
-            username={user.firstName}
-            avatar={user.imageUrl}
-          />
-        )}
+        <CraeteButton type={"button"} />
       </Header>
 
       <Box w={{ base: "100%", xs: 576 }} mx={"auto"} component={"main"}>
@@ -64,23 +30,10 @@ export default async function TimelineLayout({
 
       {/* Fix props and isPostedToday branch */}
       <FixedButton>
-        {isPostedToday ? (
-          <CraeteButton
-            projects={projectTitleArr}
-            type={"button"}
-            username={user.firstName}
-            avatar={user.imageUrl}
-          />
-        ) : (
-          <CraeteButton
-            projects={projectTitleArr}
-            isDone
-            type={"button"}
-            username={user.firstName}
-            avatar={user.imageUrl}
-          />
-        )}
+        <CraeteButton type={"button"} />
       </FixedButton>
+
+      {modal}
     </Container>
   );
 }

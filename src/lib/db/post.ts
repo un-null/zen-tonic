@@ -8,6 +8,15 @@ export const getUserLatestPosts = (userId: string) => {
     where: {
       user_id: userId,
     },
+    select: {
+      created_at: true,
+      user: {
+        select: {
+          name: true,
+          image: true,
+        },
+      },
+    },
     orderBy: { created_at: "desc" },
   });
 };
