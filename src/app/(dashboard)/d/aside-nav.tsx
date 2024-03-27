@@ -25,29 +25,31 @@ export default function AsideNav() {
       leftSection: <LayoutTemplate size="1rem" />,
       label: "ダッシュボード",
       href: "/d",
+      active: pathname === "/d",
     },
     {
       leftSection: <ClipboardList size="1rem" />,
       label: "プロジェクト",
       href: "/d/project",
+      active: pathname.startsWith("/d/project"),
     },
     {
       leftSection: <Bell size="1rem" />,
       label: "通知",
-      href: pathname === "/d/notice" ? "/d/notice" : "/d/notice/request",
+      href: "/d/notice",
+      active: pathname.startsWith("/d/notice"),
     },
     {
       leftSection: <Contact size="1rem" />,
       label: "友達",
-      href:
-        pathname === "/d/user/followee"
-          ? "/d/user/followee"
-          : "/d/user/follower",
+      href: "/d/user/followee",
+      active: pathname.startsWith("/d/user"),
     },
     {
       leftSection: <Settings size="1rem" />,
       label: "設定",
       href: "/d/settings",
+      active: pathname.startsWith("/d/settings"),
     },
   ];
 
@@ -79,8 +81,7 @@ export default function AsideNav() {
               key={item.label}
               component={Link}
               href={item.href}
-              // Fix startwith
-              active={item.href === pathname}
+              active={item.active}
               label={item.label}
               leftSection={item.leftSection}
               style={{ borderRadius: "4px" }}
