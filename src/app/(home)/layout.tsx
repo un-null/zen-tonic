@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 
 import { Box, Container } from "@mantine/core";
@@ -5,6 +6,7 @@ import { Box, Container } from "@mantine/core";
 import CraeteButton from "./_components/create-button";
 import FixedButton from "./_components/fixed-button";
 import Header from "./_components/header";
+import { TimelineSkeleton } from "./_components/skeletons";
 
 export const metadata: Metadata = {
   title: "Timeline | All",
@@ -24,8 +26,8 @@ export default async function TimelineLayout({
         <CraeteButton type={"button"} />
       </Header>
 
-      <Box w={{ base: "100%", xs: 576 }} mx={"auto"} component={"main"}>
-        {children}
+      <Box w={{ base: "100%", xs: 576 }} mx={"auto"} component={"main"} my={20}>
+        <Suspense fallback={<TimelineSkeleton />}>{children}</Suspense>
       </Box>
 
       {/* Fix props and isPostedToday branch */}

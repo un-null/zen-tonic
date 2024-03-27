@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import { Box, Button, Card, Text } from "@mantine/core";
 
-import { UserDetailInfoSkeleton } from "../skeletons";
+import { UserDetailInfoSkeleton } from "../../../(home)/_components/skeletons";
 import UserSettingInfo from "./user-setting-info";
 
 export default async function Settings() {

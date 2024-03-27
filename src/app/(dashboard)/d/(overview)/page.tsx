@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import { Box, Flex, Skeleton } from "@mantine/core";
 
-import { UserInfoSkeleton } from "../skeletons";
+import { UserInfoSkeleton } from "../../../(home)/_components/skeletons";
 import HeatMapWrapper from "./heatmap-wrapper";
 import UserInfo from "./user-info";
 

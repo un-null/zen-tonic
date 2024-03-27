@@ -5,7 +5,7 @@ import { Box, Flex } from "@mantine/core";
 import {
   ProjectDetailInfoSkeleton,
   ProjectProgressSkeleton,
-} from "../../skeletons";
+} from "../../../../(home)/_components/skeletons";
 import Progress from "./progress";
 import ProjectInfo from "./project-info";
 

@@ -14,7 +14,7 @@ import {
 import dayjs from "dayjs";
 import { CheckSquare2 } from "lucide-react";
 
-import { getFolloweeAllPosts } from "@/lib/db/post";
+import { getFolloweeAllPosts, getUserLatestPosts } from "@/lib/db/post";
 
 import Avatar from "../_components/avatar";
 import CraeteButton from "../_components/create-button";
@@ -29,13 +29,21 @@ export default async function Home() {
     redirect("/sign-in");
   }
 
+  // Fix promise.all
   const followeesAllPosts = await getFolloweeAllPosts(user.id);
+
+  const [latestPost] = await Promise.all([getUserLatestPosts(user.id)]);
+
+  const isPostedToday =
+    latestPost?.created_at.getDate() === new Date().getDate();
 
   return (
     <Box my={20}>
-      <NoPostCard>
-        <CraeteButton type={"text"} />
-      </NoPostCard>
+      {!isPostedToday && (
+        <NoPostCard>
+          <CraeteButton type={"text"} />
+        </NoPostCard>
+      )}
 
       {followeesAllPosts.map((post) => (
         <Card

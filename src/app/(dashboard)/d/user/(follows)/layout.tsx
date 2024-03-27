@@ -4,7 +4,7 @@ import { Box, Title } from "@mantine/core";
 
 import Tab from "@/app/(home)/_components/tab";
 
-import { NoticeSkeleton } from "../../skeletons";
+import { NoticeSkeleton } from "../../../../(home)/_components/skeletons";
 
 export default async function UserLayout({
   children,

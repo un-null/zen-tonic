@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import { Box, Title } from "@mantine/core";
 
-import { ProjectHomekeleton } from "../skeletons";
+import { ProjectHomekeleton } from "../../../(home)/_components/skeletons";
 import ProjectList from "./project-list";
 
 export default async function Project() {

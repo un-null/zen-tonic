@@ -2,7 +2,10 @@ import { Suspense } from "react";
 
 import { Flex } from "@mantine/core";
 
-import { PostCardSkeleton, UserDetailInfoSkeleton } from "../../skeletons";
+import {
+  PostCardSkeleton,
+  UserDetailInfoSkeleton,
+} from "../../../../(home)/_components/skeletons";
 import PostList from "./post-list";
 import UserDetailInfo from "./user-info";
 
