@@ -11,3 +11,11 @@ export const getProjectTitles = (userId: string) => {
     },
   });
 };
+
+export const getProjectDetail = (projectId: string) => {
+  return prisma.project.findFirst({
+    where: {
+      id: projectId,
+    },
+  });
+};

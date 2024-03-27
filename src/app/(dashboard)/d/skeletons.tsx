@@ -1,4 +1,4 @@
-import { Flex, SimpleGrid, Skeleton } from "@mantine/core";
+import { Box, Flex, SimpleGrid, Skeleton } from "@mantine/core";
 
 export function UserInfoSkeleton() {
   return <Skeleton w={{ base: "auto" }} h={{ base: 324, md: 395 }} />;
@@ -32,5 +32,17 @@ export function PostCardSkeleton() {
       <Skeleton w={{ base: "auto" }} h={{ base: 220, md: 230 }} />
       {/* <Skeleton w={{ base: "auto" }} h={{ base: 220 }} /> */}
     </Flex>
+  );
+}
+
+export function ProjectDetailInfoSkeleton() {
+  return <Skeleton w={{ base: "auto" }} h={{ base: 383, md: 419 }} />;
+}
+
+export function ProjectProgressSkeleton() {
+  return (
+    <Box px={{ base: 16, md: 32 }}>
+      <Skeleton w={{ base: "auto" }} h={{ base: 240 }} />
+    </Box>
   );
 }
