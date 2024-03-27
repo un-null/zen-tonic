@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 
 import { Box, Container } from "@mantine/core";
 
-import CraeteButton from "./_components/create-button";
 import FixedButton from "./_components/fixed-button";
 import Header from "./_components/header";
 import { TimelineSkeleton } from "./_components/skeletons";
@@ -22,18 +21,13 @@ export default async function TimelineLayout({
 }>) {
   return (
     <Container size={"md"} mih={"100dvh"} pos={"relative"}>
-      <Header>
-        <CraeteButton type={"button"} />
-      </Header>
+      <Header />
 
       <Box w={{ base: "100%", xs: 576 }} mx={"auto"} component={"main"} my={20}>
         <Suspense fallback={<TimelineSkeleton />}>{children}</Suspense>
       </Box>
 
-      {/* Fix props and isPostedToday branch */}
-      <FixedButton>
-        <CraeteButton type={"button"} />
-      </FixedButton>
+      <FixedButton />
 
       {modal}
     </Container>
