@@ -7,6 +7,7 @@ import { ActionIcon, Menu, MenuItem, MenuTarget } from "@mantine/core";
 import {
   Bell,
   ClipboardList,
+  Contact,
   LayoutTemplate,
   MoreHorizontal,
   Settings,
@@ -27,6 +28,11 @@ const navItem = [
     leftSection: <Bell size="1rem" />,
     label: "通知",
     href: "/d/notice",
+  },
+  {
+    leftSection: <Contact size="1rem" />,
+    label: "友達",
+    href: "/d/user/followee",
   },
   {
     leftSection: <Settings size="1rem" />,
