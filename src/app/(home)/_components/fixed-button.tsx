@@ -12,11 +12,11 @@ export default function FixedButton() {
   return (
     <>
       {!isMobile ? (
-        <Box pos={"sticky"} bottom={32} left={32}>
-          <LinkButton />
+        <Box pos={"sticky"} bottom={32}>
+          <LinkButton type="dashboard" />
         </Box>
       ) : (
-        <Box pos={"absolute"} bottom={48} right={48}>
+        <Box pos={"fixed"} bottom={48} right={48}>
           <CraeteButton type={"button"} />
         </Box>
       )}

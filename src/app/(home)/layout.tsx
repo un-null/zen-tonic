@@ -26,10 +26,9 @@ export default async function TimelineLayout({
       <Box w={{ base: "100%", xs: 576 }} mx={"auto"} component={"main"} my={20}>
         <Suspense fallback={<TimelineSkeleton />}>{children}</Suspense>
       </Box>
+      {modal}
 
       <FixedButton />
-
-      {modal}
     </Container>
   );
 }

@@ -8,6 +8,7 @@ import {
   Bell,
   ClipboardList,
   Contact,
+  Home,
   LayoutTemplate,
   MoreHorizontal,
   Settings,
@@ -41,36 +42,53 @@ const navItem = [
   },
 ];
 
-export default function LinkButton() {
+export default function LinkButton({ type }: { type: "home" | "dashboard" }) {
   const [opened, setOpened] = useState(false);
 
   return (
-    <Menu opened={opened} onChange={setOpened}>
-      <MenuTarget>
+    <>
+      {type === "home" && (
         <ActionIcon
           radius={"xl"}
           variant={"outline"}
-          size={"xl"}
+          size={50}
+          component={Link}
+          href={"/"}
           c={"dark.1"}
           style={{ border: "1px solid #C9C9C9" }}
         >
-          <MoreHorizontal />
+          <Home />
         </ActionIcon>
-      </MenuTarget>
+      )}
+      {type === "dashboard" && (
+        <Menu opened={opened} onChange={setOpened}>
+          <MenuTarget>
+            <ActionIcon
+              radius={"xl"}
+              variant={"outline"}
+              size={50}
+              c={"dark.3"}
+              style={{ border: "1px solid #C9C9C9" }}
+            >
+              <MoreHorizontal />
+            </ActionIcon>
+          </MenuTarget>
 
-      <Menu.Dropdown px={{ base: 8, md: 16 }} pt={16} pb={8}>
-        {navItem.map((item) => (
-          <MenuItem
-            key={item.label}
-            leftSection={item.leftSection}
-            component={Link}
-            href={`${item.href}`}
-            mb={8}
-          >
-            {item.label}
-          </MenuItem>
-        ))}
-      </Menu.Dropdown>
-    </Menu>
+          <Menu.Dropdown px={{ base: 8, md: 16 }} pt={16} pb={8}>
+            {navItem.map((item) => (
+              <MenuItem
+                key={item.label}
+                leftSection={item.leftSection}
+                component={Link}
+                href={`${item.href}`}
+                mb={8}
+              >
+                {item.label}
+              </MenuItem>
+            ))}
+          </Menu.Dropdown>
+        </Menu>
+      )}
+    </>
   );
 }

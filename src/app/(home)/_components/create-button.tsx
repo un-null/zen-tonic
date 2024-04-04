@@ -12,8 +12,9 @@ export default function CraeteButton({ type }: { type: "text" | "button" }) {
           variant={"outline"}
           component={Link}
           href={"/add"}
-          size={"xl"}
+          size={50}
           c={"dark.1"}
+          bg={"white"}
           style={{ border: "1px solid #C9C9C9" }}
         >
           <Plus />

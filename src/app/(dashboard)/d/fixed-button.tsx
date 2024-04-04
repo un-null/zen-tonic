@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, em } from "@mantine/core";
+import { Card, em, Flex } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 
 import LinkButton from "../../(home)/_components/link-button";
@@ -12,9 +12,19 @@ export default function FixedButton() {
   return (
     <>
       {!isMobile ? null : (
-        <Box pos={"absolute"} bottom={32} right={32}>
-          <LinkButton />
-        </Box>
+        <Card
+          pos={"absolute"}
+          bottom={32}
+          right={32}
+          withBorder
+          p={8}
+          radius={"lg"}
+        >
+          <Flex gap={4}>
+            <LinkButton type={"home"} />
+            <LinkButton type={"dashboard"} />
+          </Flex>
+        </Card>
       )}
     </>
   );
