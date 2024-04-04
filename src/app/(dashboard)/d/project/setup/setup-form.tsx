@@ -36,6 +36,11 @@ export default function SetupForm({ data }: Props) {
     label: "データベースを登録する",
   });
 
+  const [weekdayOption, setWeekdayOption] = useState<ComboboxItem | null>({
+    value: "毎日",
+    label: "毎日",
+  });
+
   const [state, dispatch] = useFormState(createProject, initialState);
 
   const { pageOption, dbOption } = retrieveOptions(data);
@@ -43,27 +48,26 @@ export default function SetupForm({ data }: Props) {
   return (
     // + database or page ID を action に渡す！
     <form action={dispatch}>
-      <Flex direction={"column"} gap={32}>
+      <Flex direction={"column"} gap={32} w={"auto"}>
         <Box>
           <TextInput
             label="タイトル"
             name="title"
             withAsterisk
-            w={300}
+            w={{ base: "auto", sm: 300 }}
             size={"xs"}
           />
 
           <Select
             label="アクション"
             name="object"
-            w={300}
+            w={{ base: "auto", sm: 300 }}
             my={16}
             data={[
               { value: "database", label: "データベースを登録する" },
               { value: "page", label: "ページにデータベースを作成する" },
             ]}
-            value={value ? value.value : "database"}
-            onChange={(_value, option) => setValue(option)}
+            onChange={(_, option) => setValue(option)}
             withAsterisk
             size={"xs"}
           />
@@ -73,7 +77,7 @@ export default function SetupForm({ data }: Props) {
               key={value?.value}
               label={value?.value === "database" ? "データベース" : "ページ"}
               name="id"
-              w={300}
+              w={{ base: "auto", sm: 300 }}
               data={value?.value === "database" ? dbOption : pageOption}
               withAsterisk
               size={"xs"}
@@ -87,7 +91,7 @@ export default function SetupForm({ data }: Props) {
               ))}
           </Box>
 
-          <Flex gap={16} my={16}>
+          <Flex gap={16} my={16} direction={{ base: "column", md: "row" }}>
             <Select
               label="期間"
               name="numberOfWeek"
@@ -98,23 +102,51 @@ export default function SetupForm({ data }: Props) {
               defaultValue={"4"}
               withAsterisk
               size={"xs"}
+              w={{ base: "auto", sm: 300 }}
             />
-            <Checkbox.Group label="曜日" withAsterisk size={"xs"}>
-              <Group mt="xs">
-                <Checkbox name="weekDays[]" value="Mon" label="月" />
-                <Checkbox name="weekDays[]" value="Tue" label="火" />
-                <Checkbox name="weekDays[]" value="Wed" label="水" />
-                <Checkbox name="weekDays[]" value="Thu" label="木" />
-                <Checkbox name="weekDays[]" value="Fri" label="金" />
-                <Checkbox name="weekDays[]" value="Sat" label="土" />
-                <Checkbox name="weekDays[]" value="Sun" label="日" />
-              </Group>
-            </Checkbox.Group>
+
+            {/* Todo：FormData での受け渡し方法を考える */}
+            <Select
+              label="曜日"
+              data={[
+                { value: "毎日", label: "毎日" },
+                { value: "カスタム", label: "カスタム" },
+              ]}
+              defaultValue={"毎日"}
+              onChange={(_, option) => setWeekdayOption(option)}
+              withAsterisk
+              name="weekDayOption"
+              size={"xs"}
+              w={{ base: "auto", sm: 300 }}
+            />
+            {weekdayOption?.value === "カスタム" && (
+              <Checkbox.Group withAsterisk size={"xs"}>
+                <Group mt="xs">
+                  <Checkbox name="weekDays[]" value="月" label="月" />
+                  <Checkbox name="weekDays[]" value="火" label="火" />
+                  <Checkbox name="weekDays[]" value="水" label="水" />
+                  <Checkbox name="weekDays[]" value="木" label="木" />
+                  <Checkbox name="weekDays[]" value="金" label="金" />
+                  <Checkbox name="weekDays[]" value="土" label="土" />
+                  <Checkbox name="weekDays[]" value="日" label="日" />
+                </Group>
+              </Checkbox.Group>
+            )}
           </Flex>
 
-          <Flex gap={16} my={16}>
-            <TextInput label="if" name="_if" w={300} size={"xs"} />
-            <TextInput label="then" name="then" w={300} size={"xs"} />
+          <Flex gap={16} my={16} direction={{ base: "column", md: "row" }}>
+            <TextInput
+              label="if"
+              name="_if"
+              w={{ base: "auto", sm: 300 }}
+              size={"xs"}
+            />
+            <TextInput
+              label="then"
+              name="then"
+              w={{ base: "auto", sm: 300 }}
+              size={"xs"}
+            />
           </Flex>
         </Box>
 

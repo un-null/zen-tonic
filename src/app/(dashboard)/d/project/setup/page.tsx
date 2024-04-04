@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Box, Button, Container, Text, Title } from "@mantine/core";
+import { Box, Button, Text, Title } from "@mantine/core";
 import { Client } from "@notionhq/client";
 
 import { getAccessToken } from "@/lib/auth/getAccessToken";
@@ -34,8 +34,8 @@ export default async function Setup() {
   const integratedData = await retrieveIntegratedData(accessToken);
 
   return (
-    <Container size={"md"}>
-      {!hasInProgressProjects ? (
+    <Box px={16} w={{ base: "100%", md: 992 }}>
+      {hasInProgressProjects ? (
         <>
           <Box w={"fit"} mb={32}>
             <Title order={3}>プロジェクトを作成</Title>
@@ -59,7 +59,7 @@ export default async function Setup() {
           </Button>
         </>
       )}
-    </Container>
+    </Box>
   );
 }
 

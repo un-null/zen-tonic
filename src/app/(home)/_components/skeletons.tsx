@@ -41,6 +41,11 @@ export function ProjectProgressSkeleton() {
   );
 }
 
+// Project Setup
+export function ProjectSetupSkeleton() {
+  return <Skeleton w={{ base: "auto" }} h={{ base: 695, md: 524 }} />;
+}
+
 export function UserDetailInfoSkeleton() {
   return <Skeleton w={{ base: "auto" }} h={{ base: 288 }} />;
 }
