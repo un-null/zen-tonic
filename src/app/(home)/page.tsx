@@ -42,7 +42,7 @@ export default async function Home() {
   return (
     <>
       {!isPostedToday && (
-        <NoPostCard>
+        <NoPostCard type={"timeline"}>
           <CraeteButton type={"text"} />
         </NoPostCard>
       )}

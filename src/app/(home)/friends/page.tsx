@@ -40,7 +40,7 @@ export default async function Home() {
   return (
     <Box my={20}>
       {!isPostedToday && (
-        <NoPostCard>
+        <NoPostCard type={"timeline"}>
           <CraeteButton type={"text"} />
         </NoPostCard>
       )}
