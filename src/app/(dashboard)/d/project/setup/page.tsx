@@ -35,7 +35,7 @@ export default async function Setup() {
 
   return (
     <Box px={16} w={{ base: "100%", md: 992 }}>
-      {hasInProgressProjects ? (
+      {!hasInProgressProjects ? (
         <>
           <Box w={"fit"} mb={32}>
             <Title order={3}>プロジェクトを作成</Title>

@@ -63,8 +63,6 @@ export async function createProject(prevState: State, formData: FormData) {
     object,
   } = validatedFields.data;
 
-  console.log(weekDayOption);
-
   const user = await currentUser();
   const accessToken = await getAccessToken(user?.id);
 
@@ -124,8 +122,8 @@ export async function createProject(prevState: State, formData: FormData) {
     throw Error("エラーが発生しました");
   }
 
-  revalidatePath("/");
-  redirect("/");
+  revalidatePath("/d/project");
+  redirect("/d/project");
 }
 
 // Todo: rewrite reduce ???

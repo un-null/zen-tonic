@@ -18,12 +18,7 @@ type Props = {
   follows?: Follow[];
 };
 
-export default function UserMenu({
-  follows,
-  followerId,
-  followeeId,
-  avatar,
-}: Props) {
+export default function UserMenu({ follows, followeeId, avatar }: Props) {
   const follow = follows?.filter((d) => d.followee_id === followeeId);
 
   return (
@@ -31,7 +26,7 @@ export default function UserMenu({
       <MenuTarget>
         <Avatar
           size={32}
-          radius={"sm"}
+          radius={"xs"}
           src={avatar}
           style={{ cursor: "pointer" }}
         />
