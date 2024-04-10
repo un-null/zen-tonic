@@ -9,8 +9,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { z } from "zod";
 
 import { getAccessToken } from "@/lib/auth/getAccessToken";
-
-import { prisma } from "../../prisma";
+import { prisma } from "@/lib/prisma";
 
 // Todo review key name and error message
 const schema = z.object({
@@ -18,6 +17,7 @@ const schema = z.object({
   object: z.string(),
   id: z.string(),
   numberOfWeek: z.enum(["4", "8"]),
+  weekDayOption: z.enum(["毎日", "カスタム"]),
   weekDays: z.string().array(),
   _if: z.string(),
   then: z.string(),
@@ -40,6 +40,7 @@ export async function createProject(prevState: State, formData: FormData) {
     numberOfWeek: formData.get("numberOfWeek"),
     object: formData.get("object"),
     id: formData.get("id"),
+    weekDayOption: formData.get("weekDayOption"),
     weekDays: formData.getAll("weekDays[]"),
     _if: formData.get("_if"),
     then: formData.get("then"),
@@ -51,8 +52,18 @@ export async function createProject(prevState: State, formData: FormData) {
     };
   }
 
-  const { title, numberOfWeek, weekDays, _if, then, id, object } =
-    validatedFields.data;
+  const {
+    title,
+    numberOfWeek,
+    weekDayOption,
+    weekDays,
+    _if,
+    then,
+    id,
+    object,
+  } = validatedFields.data;
+
+  console.log(weekDayOption);
 
   const user = await currentUser();
   const accessToken = await getAccessToken(user?.id);
@@ -68,6 +79,11 @@ export async function createProject(prevState: State, formData: FormData) {
 
   // Todo: fix
   const totalDate = getTotalDays({ startDate, endDate, weekDays });
+
+  const weekDayValue =
+    weekDayOption === "毎日" || weekDays.length === 7
+      ? "毎日"
+      : weekDays.join(",");
 
   try {
     let notionId: string | undefined = undefined;
@@ -85,7 +101,6 @@ export async function createProject(prevState: State, formData: FormData) {
         title: true,
       },
     });
-
     if (duplicateProject) {
       return {
         error: { id: ["すでに登録済みのデータベースです"] },
@@ -98,7 +113,7 @@ export async function createProject(prevState: State, formData: FormData) {
           start_date: startDate.toDate(),
           end_date: endDate.toDate(),
           total_date: totalDate,
-          week_days: weekDays.join(","),
+          week_days: weekDayOption,
           database_id: notionId ? notionId : id,
           user_id: user.id,
           if_then: _if + then || "",

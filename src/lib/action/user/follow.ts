@@ -25,8 +25,8 @@ export const allowFollowRequest = async (reqId: string) => {
     },
   });
 
-  revalidatePath("/dashboard/notice/request");
-  redirect("/dashboard/notice/request");
+  revalidatePath("/d/notice/request");
+  redirect("/d/notice/request");
 };
 
 export const disallowRequest = async (reqId: string) => {
@@ -38,6 +38,6 @@ export const disallowRequest = async (reqId: string) => {
     },
   });
 
-  revalidatePath("/dashboard/notice/request");
-  redirect("/dashboard/notice/request");
+  revalidatePath("/d/notice/request");
+  redirect("/d/notice/request");
 };

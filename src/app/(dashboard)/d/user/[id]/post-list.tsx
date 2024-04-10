@@ -1,44 +1,25 @@
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Box, Card, Flex, Group, Text } from "@mantine/core";
+import { Avatar, Box, Card, Flex, Group, Text } from "@mantine/core";
 import dayjs from "dayjs";
 import { CheckSquare2 } from "lucide-react";
 
-import { getFollows } from "@/lib/db/follow";
-import { getAllPosts, getUserLatestPosts } from "@/lib/db/post";
+import LikeButton from "@/app/(home)/_components/like-button";
+import { getPostsByUserId } from "@/lib/db/post";
 
-import CraeteButton from "./_components/create-button";
-import LikeButton from "./_components/like-button";
-import NoPostCard from "./_components/no-post-card";
-import PostMenu from "./_components/post-menu";
-import UserMenu from "./_components/user-menu";
-
-export default async function Home() {
+export default async function PostList({ id }: { id: string }) {
   const user = await currentUser();
 
   if (!user) {
     redirect("/sign-in");
   }
 
-  const [allPosts, follows, latestPost] = await Promise.all([
-    getAllPosts(),
-    getFollows(user.id),
-    getUserLatestPosts(user.id),
-  ]);
-
-  const isPostedToday =
-    latestPost?.created_at.getDate() === new Date().getDate();
+  const posts = await getPostsByUserId(id);
 
   return (
-    <>
-      {!isPostedToday && (
-        <NoPostCard type={"timeline"}>
-          <CraeteButton type={"text"} />
-        </NoPostCard>
-      )}
-
-      {allPosts.map((post) => (
+    <Box>
+      {posts.map((post) => (
         <Card
           key={post.id}
           mx={"auto"}
@@ -49,12 +30,7 @@ export default async function Home() {
           }}
         >
           <Flex gap={16}>
-            <UserMenu
-              followerId={user.id}
-              followeeId={post.user.id}
-              follows={follows}
-              avatar={post.user.image}
-            />
+            <Avatar size={32} radius={"sm"} src={post.user.image} />
 
             <Flex direction={"column"} gap={8} flex={1}>
               <Flex align={"center"}>
@@ -64,8 +40,6 @@ export default async function Home() {
                     {dayjs(post.created_at).format("YYYY.MM.DD")}
                   </Text>
                 </Group>
-
-                <PostMenu postId={post.id} />
               </Flex>
 
               <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
@@ -112,6 +86,6 @@ export default async function Home() {
           </Flex>
         </Card>
       ))}
-    </>
+    </Box>
   );
 }

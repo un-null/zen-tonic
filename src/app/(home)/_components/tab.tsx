@@ -20,23 +20,23 @@ const HomeTabItem = [
 const NoticeTabItem = [
   {
     leftSection: <Heart size={16} />,
-    href: "/dashboard/notice",
+    href: "/d/notice",
     label: "いいね",
   },
   {
     leftSection: <UserRoundPlus size={16} />,
-    href: "/dashboard/notice/request",
+    href: "/d/notice/request",
     label: "リクエスト",
   },
 ];
 
 const usreTabItem = [
   {
-    href: "/dashboard/user/followee",
+    href: "/d/user/followee",
     label: "フォロー",
   },
   {
-    href: "/dashboard/user/follower",
+    href: "/d/user/follower",
     label: "フォロワー",
   },
 ];
