@@ -20,6 +20,10 @@ export default async function UserDetailInfo({ id }: { id: string }) {
 
   const follow = await getFollowById(user.id, id);
 
+  console.log(follow?.follower_id);
+  console.log(follow?.followee_id);
+  console.log(user.id);
+
   return (
     <>
       <Box h={120} bg={"gray.4"} />
@@ -40,16 +44,17 @@ export default async function UserDetailInfo({ id }: { id: string }) {
             }}
           >
             <Title order={2}>{posts[0].user.name}</Title>
-            {/* Fix undefind */}
-            {!follow?.status ? (
-              <FollowButton type={"unfollow"} follow={follow!}>
-                友達申請
-              </FollowButton>
-            ) : (
-              <FollowButton type={"follow"} follow={follow}>
-                フォロー解除
-              </FollowButton>
-            )}
+            {follow ? (
+              !follow.status ? (
+                <FollowButton type={"unfollow"} follow={follow!}>
+                  友達申請
+                </FollowButton>
+              ) : (
+                <FollowButton type={"follow"} follow={follow}>
+                  フォロー解除
+                </FollowButton>
+              )
+            ) : null}
           </Group>
         </Flex>
       </Box>

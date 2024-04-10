@@ -1,27 +1,18 @@
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import {
-  Box,
-  Card,
-  Flex,
-  Group,
-  Avatar as MantineAvatar,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Box, Card, Flex, Group, Text } from "@mantine/core";
 import dayjs from "dayjs";
 import { CheckSquare2 } from "lucide-react";
 
 import { getFollows } from "@/lib/db/follow";
 import { getAllPosts, getUserLatestPosts } from "@/lib/db/post";
 
-import Avatar from "./_components/avatar";
 import CraeteButton from "./_components/create-button";
-import FollowButton from "./_components/follow-button";
 import LikeButton from "./_components/like-button";
 import NoPostCard from "./_components/no-post-card";
 import PostMenu from "./_components/post-menu";
+import UserMenu from "./_components/user-menu";
 
 export default async function Home() {
   const user = await currentUser();
@@ -58,29 +49,12 @@ export default async function Home() {
           }}
         >
           <Flex gap={16}>
-            <Avatar
-              image={post.user.image}
-              title={post.project.title}
-              start={post.project.start_date}
-            >
-              <Flex justify={"space-between"}>
-                <Group gap={8}>
-                  <MantineAvatar
-                    size={32}
-                    radius={"sm"}
-                    src={post.user.image}
-                  />
-                  <Title order={3}>{post.user.name}</Title>
-                </Group>
-                {user.id !== post.user.id && (
-                  <FollowButton
-                    followerId={user.id}
-                    followeeId={post.user.id}
-                    follows={follows}
-                  />
-                )}
-              </Flex>
-            </Avatar>
+            <UserMenu
+              followerId={user.id}
+              followeeId={post.user.id}
+              follows={follows}
+              avatar={post.user.image}
+            />
 
             <Flex direction={"column"} gap={8} flex={1}>
               <Flex align={"center"}>
