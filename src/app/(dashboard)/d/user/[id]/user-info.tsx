@@ -20,10 +20,6 @@ export default async function UserDetailInfo({ id }: { id: string }) {
 
   const follow = await getFollowById(user.id, id);
 
-  console.log(follow?.follower_id);
-  console.log(follow?.followee_id);
-  console.log(user.id);
-
   return (
     <>
       <Box h={120} bg={"gray.4"} />

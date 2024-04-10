@@ -26,6 +26,8 @@ export default async function Progress({ id }: { id: string }) {
 
   const progress = Math.round((posts.length / project?.total_date!) * 100);
 
+  const isProgress = !!progress;
+
   const getClosestWeekday = ({
     week_days,
     total_date,
@@ -70,11 +72,11 @@ export default async function Progress({ id }: { id: string }) {
           <RingProgress
             label={
               <Text size="md" ta="center" fw={600}>
-                {progress} %
+                {isProgress ? progress : 0} %
               </Text>
             }
             roundCaps
-            sections={[{ value: progress, color: "#2483e2" }]}
+            sections={[{ value: isProgress ? progress : 0, color: "#2483e2" }]}
             size={150}
             thickness={16}
           />

@@ -1,26 +1,18 @@
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import {
-  Box,
-  Button,
-  Card,
-  Flex,
-  Group,
-  Avatar as MantineAvatar,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Box, Card, Flex, Group, Text } from "@mantine/core";
 import dayjs from "dayjs";
 import { CheckSquare2 } from "lucide-react";
 
+import { getFollows } from "@/lib/db/follow";
 import { getFolloweeAllPosts, getUserLatestPosts } from "@/lib/db/post";
 
-import Avatar from "../_components/avatar";
 import CraeteButton from "../_components/create-button";
 import LikeButton from "../_components/like-button";
 import NoPostCard from "../_components/no-post-card";
 import PostMenu from "../_components/post-menu";
+import UserMenu from "../_components/user-menu";
 
 export default async function Home() {
   const user = await currentUser();
@@ -32,8 +24,10 @@ export default async function Home() {
   // Fix promise.all
   const followeesAllPosts = await getFolloweeAllPosts(user.id);
 
-  const [latestPost] = await Promise.all([getUserLatestPosts(user.id)]);
-
+  const [follows, latestPost] = await Promise.all([
+    getFollows(user.id),
+    getUserLatestPosts(user.id),
+  ]);
   const isPostedToday =
     latestPost?.created_at.getDate() === new Date().getDate();
 
@@ -56,27 +50,12 @@ export default async function Home() {
           }}
         >
           <Flex gap={16}>
-            <Avatar
-              image={post.user.image}
-              title={post.project.title}
-              start={post.project.start_date}
-            >
-              <Flex justify={"space-between"}>
-                <Group gap={8}>
-                  <MantineAvatar
-                    size={32}
-                    radius={"sm"}
-                    src={post.user.image}
-                  />
-                  <Title order={3}>{post.user.name}</Title>
-                </Group>
-                {user.id !== post.user.id && (
-                  <Button size={"xs"} disabled>
-                    すでに友達です
-                  </Button>
-                )}
-              </Flex>
-            </Avatar>
+            <UserMenu
+              followerId={user.id}
+              followeeId={post.user.id}
+              follows={follows}
+              avatar={post.user.image}
+            />
 
             <Flex direction={"column"} gap={8} flex={1}>
               <Flex align={"center"}>

@@ -7,5 +7,8 @@ declare namespace NodeJS {
 
     NGROK_WEBHOOK_SECRET: string;
     CLERK_WEBHOOK_SECRET: string;
+
+    TURSO_AUTH_TOKEN: string;
+    TURSO_DATABASE_URL: string;
   }
 }
