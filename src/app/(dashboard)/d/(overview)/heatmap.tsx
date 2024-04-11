@@ -2,8 +2,10 @@
 
 import "react-calendar-heatmap/dist/styles.css";
 
-import { Box, Card, Flex, ScrollArea, Title } from "@mantine/core";
+import { Box, Card, ScrollArea, Title } from "@mantine/core";
 import CalendarHeatmap from "react-calendar-heatmap";
+
+import c from "@/styles/components/dashboard/heatmap.module.css";
 
 export default function HeatMap({ dateArr }: { dateArr: { date: string }[] }) {
   const today = new Date();
@@ -11,8 +13,8 @@ export default function HeatMap({ dateArr }: { dateArr: { date: string }[] }) {
   const endOfYear = new Date(today.getFullYear(), 11, 31, 23, 59, 59, 999);
 
   return (
-    <Card w={"auto"} shadow="xs" padding={"md"} radius="sm" withBorder>
-      <Flex gap={32} direction={"column"}>
+    <Card shadow="xs" className={c.card}>
+      <div className={c.content}>
         <Title order={5}>アクティビティ</Title>
 
         <ScrollArea type={"always"} w={{ base: 252, xs: 436, sm: 636 }}>
@@ -30,7 +32,7 @@ export default function HeatMap({ dateArr }: { dateArr: { date: string }[] }) {
             />
           </Box>
         </ScrollArea>
-      </Flex>
+      </div>
     </Card>
   );
 }

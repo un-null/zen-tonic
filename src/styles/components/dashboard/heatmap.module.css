@@ -1,0 +1,19 @@
+.wrapper {
+  width: auto;
+
+  @media (max-width: em(64)) {
+    width: rem(768);
+  }
+}
+
+.card {
+  width: auto;
+  border-radius: rem(4);
+  border: 1px solid var(--mantine-color-gray-3);
+}
+
+.content {
+  display: flex;
+  gap: rem(32);
+  flex-direction: column;
+}

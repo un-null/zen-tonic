@@ -12,7 +12,11 @@ export function TimelineSkeleton() {
 
 // Dashboard
 export function UserInfoSkeleton() {
-  return <Skeleton w={{ base: "auto" }} h={{ base: 324, md: 395 }} />;
+  return <Skeleton w={{ base: "auto" }} h={{ base: 307, md: 307 }} />;
+}
+
+export function HeatmapSkeleton() {
+  return <Skeleton w={{ base: "auto" }} h={{ base: 216 }} mx={16} />;
 }
 
 export function PostCardSkeleton() {

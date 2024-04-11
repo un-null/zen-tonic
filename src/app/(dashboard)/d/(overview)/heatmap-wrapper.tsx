@@ -1,7 +1,7 @@
 import { currentUser } from "@clerk/nextjs";
-import { Box } from "@mantine/core";
 
 import { prisma } from "@/lib/prisma";
+import c from "@/styles/components/dashboard/heatmap.module.css";
 
 import HeatMap from "./heatmap";
 
@@ -34,8 +34,8 @@ export default async function HeatMapWrapper() {
   });
 
   return (
-    <Box w={{ base: "auto", md: 708 }}>
+    <div className={c.wrapper}>
       <HeatMap dateArr={dateArr} />
-    </Box>
+    </div>
   );
 }
