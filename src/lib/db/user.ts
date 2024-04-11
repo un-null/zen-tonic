@@ -7,3 +7,14 @@ export const getUserDetail = async (id: string) => {
     },
   });
 };
+
+export const getUserCreatedAt = (id: string) => {
+  return prisma.user.findFirst({
+    where: {
+      id: id,
+    },
+    select: {
+      created_at: true,
+    },
+  });
+};

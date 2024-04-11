@@ -47,6 +47,15 @@ export const getAllPosts = () => {
   });
 };
 
+export const getPostsByProjectId = async (projectId: string = "") => {
+  return await prisma.post.findMany({
+    where: {
+      project_id: projectId,
+    },
+    orderBy: { created_at: "desc" },
+  });
+};
+
 export const getPostsByUserId = (userId: string) => {
   return prisma.post.findMany({
     where: {

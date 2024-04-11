@@ -1,12 +1,14 @@
 import { ReactNode } from "react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
 import { Anchor, Avatar, Text, Title } from "@mantine/core";
 import dayjs from "dayjs";
 import { Calendar, Clipboard } from "lucide-react";
 
-import { prisma } from "@/lib/prisma";
+import { getInProgressProject } from "@/lib/db/project";
+import { getUserCreatedAt } from "@/lib/db/user";
 import c from "@/styles/components/dashboard/user-info.module.css";
 
 type CardItem = {
@@ -19,29 +21,21 @@ type CardItem = {
 export default async function UserInfo() {
   const user = await currentUser();
 
-  // Fix: inProgressProject 取得数 + user created_at
-  const inProgressProject = await prisma.project.findFirst({
-    where: {
-      user_id: user?.id,
-    },
-    orderBy: { start_date: "desc" },
-    select: {
-      id: true,
-      title: true,
-      user: {
-        select: {
-          created_at: true,
-        },
-      },
-    },
-  });
+  if (!user) {
+    redirect("/sign-in");
+  }
+
+  const [inProgressProject, dbUser] = await Promise.all([
+    getInProgressProject(user.id),
+    getUserCreatedAt(user.id),
+  ]);
 
   const cardItems = [
     {
       icon: <Calendar size="1rem" style={{ marginRight: 8 }} />,
-      content: inProgressProject?.user.created_at
-        ? dayjs(inProgressProject.user.created_at).format("YYYY/MM/DD")
-        : "未設定",
+      content: dbUser?.created_at
+        ? dayjs(dbUser.created_at).format("YYYY/MM/DD")
+        : "",
       label: "利用開始",
     },
     {
