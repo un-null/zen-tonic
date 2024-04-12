@@ -3,8 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Anchor, Box, Flex, Text } from "@mantine/core";
+import { Tabs } from "@mantine/core";
 import { Heart, UserRoundPlus } from "lucide-react";
+
+import c from "@/styles/layout/tab.module.css";
+
+type Props = "home" | "notice" | "user";
 
 const HomeTabItem = [
   {
@@ -30,7 +34,7 @@ const NoticeTabItem = [
   },
 ];
 
-const usreTabItem = [
+const userTabItem = [
   {
     href: "/d/user/followee",
     label: "フォロー",
@@ -41,87 +45,52 @@ const usreTabItem = [
   },
 ];
 
-// Fix type.type
-export default function Tab({ type }: { type: "home" | "notice" | "user" }) {
+export default function Tab({ type }: { type: Props }) {
   const pathname = usePathname();
 
+  const defaultValue = (path: string) => {
+    switch (path) {
+      case (path = "/"):
+        return "みんな";
+      case (path = "/friends"):
+        return "ともだち";
+      case (path = "/d/notice"):
+        return "いいね";
+      case (path = "/d/notice/request"):
+        return "リクエスト";
+      case (path = "/d/user/followee"):
+        return "フォロー";
+      case (path = "/d/user/follower"):
+        return "フォロワー";
+    }
+  };
+
   return (
-    <Flex
-      flex={1}
-      ta={"center"}
-      w={"100%"}
-      h={"100%"}
-      align={"end"}
-      style={{ borderBottom: "1px solid #C9C9C9" }}
-      gap={type !== "home" ? 16 : undefined}
-      pl={type !== "home" ? 16 : undefined}
+    <Tabs
+      defaultValue={defaultValue(pathname)}
+      classNames={{ root: c.tabs, tab: type === "home" ? c.home : undefined }}
     >
-      {type === "home" &&
-        HomeTabItem.map((item) => (
-          <Anchor
-            key={item.href}
-            component={Link}
-            href={item.href}
-            flex={1}
-            td={"none"}
-          >
-            <Text
-              pb={4}
-              style={
-                pathname === item.href
-                  ? { borderBottom: "2px solid #242424" }
-                  : undefined
-              }
-            >
-              {item.label}
-            </Text>
-          </Anchor>
-        ))}
+      <Tabs.List>
+        {type === "home" &&
+          HomeTabItem.map((item) => (
+            <Link key={item.label} href={item.href} className={c.link}>
+              <Tabs.Tab value={item.label}>{item.label}</Tabs.Tab>
+            </Link>
+          ))}
+        {type === "notice" &&
+          NoticeTabItem.map((item) => (
+            <Link key={item.label} href={item.href}>
+              <Tabs.Tab value={item.label}>{item.label}</Tabs.Tab>
+            </Link>
+          ))}
 
-      {type === "notice" &&
-        NoticeTabItem.map((item) => (
-          <Anchor key={item.href} component={Link} href={item.href} td={"none"}>
-            <Flex
-              gap={4}
-              align={"center"}
-              style={
-                pathname === item.href
-                  ? {
-                      borderBottom: "2px solid #242424",
-                    }
-                  : undefined
-              }
-            >
-              <Box display={"inline-flex"} ta={"center"}>
-                {item.leftSection}
-              </Box>
-              <Text pb={4} size={"sm"}>
-                {item.label}
-              </Text>
-            </Flex>
-          </Anchor>
-        ))}
-
-      {type === "user" &&
-        usreTabItem.map((item) => (
-          <Anchor key={item.href} component={Link} href={item.href} td={"none"}>
-            <Flex
-              gap={4}
-              align={"center"}
-              style={
-                pathname === item.href
-                  ? {
-                      borderBottom: "2px solid #242424",
-                    }
-                  : undefined
-              }
-            >
-              <Text pb={4} size={"sm"}>
-                {item.label}
-              </Text>
-            </Flex>
-          </Anchor>
-        ))}
-    </Flex>
+        {type === "user" &&
+          userTabItem.map((item) => (
+            <Link key={item.label} href={item.href}>
+              <Tabs.Tab value={item.label}>{item.label}</Tabs.Tab>
+            </Link>
+          ))}
+      </Tabs.List>
+    </Tabs>
   );
 }
