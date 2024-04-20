@@ -111,7 +111,7 @@ export async function createProject(prevState: State, formData: FormData) {
           start_date: startDate.toDate(),
           end_date: endDate.toDate(),
           total_date: totalDate,
-          week_days: weekDayOption,
+          week_days: weekDayValue,
           database_id: notionId ? notionId : id,
           user_id: user.id,
           if_then: _if + then || "",

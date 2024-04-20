@@ -7,13 +7,13 @@ import ProjectList from "./project-list";
 
 export default async function Project() {
   return (
-    <Box>
+    <div>
       <Title order={2}>プロジェクト</Title>
       <Suspense fallback={<ProjectHomekeleton />}>
         <Box mt={32}>
           <ProjectList />
         </Box>
       </Suspense>
-    </Box>
+    </div>
   );
 }

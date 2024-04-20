@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import { Box, Flex } from "@mantine/core";
+import c from "@/styles/page/project-id.module.css";
 
 import {
   ProjectDetailInfoSkeleton,
@@ -15,17 +15,17 @@ export default async function PageDetail({
   params: { id: string };
 }) {
   return (
-    <Flex gap={32} direction={"column"}>
+    <div className={c.container}>
       <Suspense fallback={<ProjectDetailInfoSkeleton />}>
         <ProjectInfo id={params.id} />
       </Suspense>
 
       <Suspense fallback={<ProjectProgressSkeleton />}>
         {/* Fix mobile width */}
-        <Box px={32} w={{ base: 300, xs: "auto" }}>
+        <div className={c.progress}>
           <Progress id={params.id} />
-        </Box>
+        </div>
       </Suspense>
-    </Flex>
+    </div>
   );
 }

@@ -2,19 +2,12 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import {
-  Card,
-  CardSection,
-  Checkbox,
-  Flex,
-  Group,
-  SimpleGrid,
-  Text,
-} from "@mantine/core";
+import { Text } from "@mantine/core";
 import dayjs from "dayjs";
 import { Clipboard, Plus } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
+import c from "@/styles/components/dashboard/project-list.module.css";
 
 export default async function ProjectList() {
   const user = await currentUser();
@@ -30,68 +23,43 @@ export default async function ProjectList() {
   });
 
   return (
-    <SimpleGrid cols={{ base: 1, xs: 2 }}>
+    <ul className={c.container}>
       {projects.map((project) => (
-        <Link
-          key={project.id}
-          href={`/d/project/${project.id}`}
-          style={{ textDecoration: "none" }}
-        >
-          <Card
-            style={{ aspectRatio: 1 }}
-            withBorder
-            maw={300}
-            pt={0}
-            px={16}
-            mx={"auto"}
-          >
-            <CardSection h={185} bg={"dark.1"} />
+        <li className={c.card} key={project.id}>
+          <Link key={project.id} href={`/d/project/${project.id}`}>
+            <div className={c.card_top} />
 
-            <Flex direction={"column"} gap={12} mt={16}>
-              <Group gap={"xs"}>
+            <div className={c.card_content}>
+              <div className={c.card_item}>
                 <Clipboard size={18} />
                 <Text fw={600}>{project.title}</Text>
-              </Group>
+              </div>
 
-              {/* Fix ta  */}
               <Text size={"xs"}>
                 {`${dayjs(project.start_date).format("YYYY/MM/DD")} -> ${dayjs(project.end_date).format("YYYY/MM/DD")}`}
               </Text>
 
-              <Group gap={"xs"}>
-                <Checkbox
-                  size={"xs"}
+              <div className={c.card_item}>
+                <input
+                  type="checkbox"
                   checked={new Date() > project.end_date}
                   disabled
                 />
                 <Text size={"xs"}>Done</Text>
-              </Group>
-            </Flex>
-          </Card>
-        </Link>
+              </div>
+            </div>
+          </Link>
+        </li>
       ))}
 
-      <Link href={`/d/project/setup`} style={{ textDecoration: "none" }}>
-        <Card
-          style={{ aspectRatio: 1, placeItems: "center" }}
-          display={"grid"}
-          withBorder
-          maw={300}
-          pt={0}
-          px={16}
-          mx={"auto"}
-        >
-          <Text
-            size={"sm"}
-            display={"inline-flex"}
-            mt={8}
-            style={{ alignItems: "center", gap: 8 }}
-          >
+      <li className={c.new}>
+        <Link href={`/d/project/setup`}>
+          <p>
             new
             <Plus size={16} />
-          </Text>
-        </Card>
-      </Link>
-    </SimpleGrid>
+          </p>
+        </Link>
+      </li>
+    </ul>
   );
 }
