@@ -30,6 +30,7 @@ export default async function Setup() {
   const inProgressProjects = projects.filter(
     (project) => project.end_date >= new Date(),
   );
+
   const hasInProgressProjects = inProgressProjects.length !== 0;
 
   const integratedData = await retrieveIntegratedData(accessToken);

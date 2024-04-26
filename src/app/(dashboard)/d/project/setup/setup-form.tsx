@@ -95,7 +95,6 @@ export default function SetupForm({ data }: Props) {
               w={{ base: "auto", sm: 300 }}
             />
 
-            {/* Todo：FormData での受け渡し方法を考える ??? */}
             <div className={c.weekDaysOption_wrapper}>
               <Select
                 label="繰り返し"
