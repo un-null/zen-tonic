@@ -25,7 +25,7 @@ export default async function Notice() {
       {!isFollowRequest ? (
         <NoPostCard type={"dashboard"}>友達申請がまだ届いていません</NoPostCard>
       ) : (
-        <ul>
+        <ul className={c.container}>
           {followRequests.map((req) => (
             <li key={req.id} className={c.card}>
               <div className={c.content}>

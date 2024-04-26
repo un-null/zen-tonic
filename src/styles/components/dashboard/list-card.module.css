@@ -1,3 +1,7 @@
+.container {
+  padding-inline-start: 0;
+}
+
 .card {
   margin: 0 auto;
   padding: var(--mantine-spacing-xl) 0;

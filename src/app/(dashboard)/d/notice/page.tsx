@@ -18,7 +18,7 @@ export default async function Notice() {
       {!isAllLikes ? (
         <NoPostCard type={"dashboard"}>いいねがまだ届いていません</NoPostCard>
       ) : (
-        <ul>
+        <ul className={c.container}>
           {allLikes.map((like) => (
             <li key={like.id} className={c.card}>
               <div className={c.content}>
