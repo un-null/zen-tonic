@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import Link from "next/link";
 
-import { Text, Title } from "@mantine/core";
+import { Text } from "@mantine/core";
 import dayjs from "dayjs";
 import {
   ArrowLeft,
@@ -26,6 +26,8 @@ export default async function ProjectInfo({ id }: { id: string }) {
 
   const startDate = project?.start_date.toISOString().substring(0, 10);
   const endDate = project?.end_date.toISOString().substring(0, 10);
+
+  const isDone = project?.end_date! < new Date();
 
   const cardItems = [
     {
@@ -58,7 +60,10 @@ export default async function ProjectInfo({ id }: { id: string }) {
       </Link>
       <div className={c.main}>
         <div className={c.content}>
-          <Title order={2}>{project?.title}</Title>
+          <h2>
+            {project?.title}
+            {isDone && <span className={c.tag}>Done</span>}
+          </h2>
           <div className={c.list}>
             {cardItems.map((item) => (
               <div key={item.label} className={c.item}>

@@ -17,6 +17,22 @@
   gap: rem(16);
   border-bottom: rem(1) solid var(--mantine-color-gray-4);
 
+  h2 {
+    font-size: rem(26);
+    font-weight: bold;
+    color: var(--mantine-color-dark-6);
+    display: inline-flex;
+    gap: rem(8);
+    align-items: center;
+
+    span {
+      font-size: rem(16);
+      padding: 0 rem(4);
+      border-radius: var(--mantine-radius-xs);
+      background-color: rgba(0, 135, 107, 0.2);
+    }
+  }
+
   a {
     text-decoration-line: underline;
     text-underline-offset: 2;
