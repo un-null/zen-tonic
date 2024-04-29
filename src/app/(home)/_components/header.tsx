@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { Avatar, Box, em, Flex } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 
@@ -21,9 +23,9 @@ export default function Header() {
     >
       {!isMobile ? (
         <Flex gap={32} h={"100%"} align={"center"}>
-          <Box>
-            <Avatar size={"lg"} radius={"sm"} />
-          </Box>
+          <Link href={"/"}>
+            <Avatar size={"lg"} radius={"sm"} src={"/logo.svg"} />
+          </Link>
 
           <Tab type="home" />
           <CraeteButton type={"button"} />
