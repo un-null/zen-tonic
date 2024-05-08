@@ -1,10 +1,11 @@
+/* general */
 .container {
   padding-inline-start: 0;
 }
 
 .card {
   margin: 0 auto;
-  padding: var(--mantine-spacing-xl) 0;
+  padding: var(--mantine-spacing-lg) 0;
   border-radius: 0;
   list-style: none;
 }
@@ -37,5 +38,46 @@
 }
 
 .button {
+  margin-top: rem(8);
+}
+
+/* post-list ??? */
+.content {
+  font-size: rem(14);
+  white-space: pre-wrap;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: rem(4);
+  padding: rem(12);
+  white-space: "pre-wrap";
+  border: rem(1) solid var(--mantine-color-gray-4);
+  border-radius: rem(4);
+}
+
+.group {
+  display: flex;
+  gap: rem(4);
+  margin-top: rem(8);
+  padding-left: rem(2);
+  color: var(--mantine-color-dimmed);
+}
+
+.label {
+  margin-top: rem(4);
+  margin-left: rem(2);
+
+  p {
+    font-size: rem(12);
+    padding: rem(3) rem(6);
+    background-color: #ddebf1;
+    display: inline;
+    border-radius: rem(4);
+  }
+}
+
+.button_wrapper {
   margin-top: rem(8);
 }

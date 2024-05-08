@@ -42,7 +42,9 @@ export default async function UserInfo() {
       icon: <Clipboard size="1rem" style={{ marginRight: 8 }} />,
       label: "取り組み中",
       content: inProgressProject?.title ? inProgressProject?.title : "未設定",
-      href: `/d/project/${inProgressProject?.id}`,
+      href: inProgressProject
+        ? `/d/project/${inProgressProject?.id}`
+        : "/d/project",
     },
   ] satisfies CardItem[];
 

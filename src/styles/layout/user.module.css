@@ -1,0 +1,8 @@
+.container {
+  margin-top: rem(32);
+}
+
+.main {
+  margin-top: rem(32);
+  padding: 0 rem(16);
+}

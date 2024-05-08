@@ -28,6 +28,7 @@ export const getFolloweeList = async (userId: string) => {
     select: {
       followees: {
         select: {
+          status: true,
           followee: {
             select: {
               id: true,
@@ -48,6 +49,7 @@ export const getFollowerList = async (userId: string) => {
     select: {
       followers: {
         select: {
+          status: true,
           follower: {
             select: {
               id: true,

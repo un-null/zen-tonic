@@ -2,10 +2,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Anchor, Avatar, Box, Card, Flex } from "@mantine/core";
+import { Avatar } from "@mantine/core";
 
 import NoPostCard from "@/app/(home)/_components/no-post-card";
 import { getFolloweeList } from "@/lib/db/follow";
+import c from "@/styles/components/dashboard/user-card.module.css";
 
 export default async function Followee() {
   const user = await currentUser();
@@ -15,41 +16,28 @@ export default async function Followee() {
   }
 
   const followees = await getFolloweeList(user.id);
+  const filterdFollowees = followees?.filter((user) => user.status === true);
 
-  const isFollowee = followees?.length !== 0;
+  const isFollowee = filterdFollowees?.length !== 0;
 
   return (
     <>
       {!isFollowee ? (
         <NoPostCard type={"dashboard"}>まだ誰もフォローしていません</NoPostCard>
       ) : (
-        <Box>
-          {followees?.map((user) => (
-            <Card
-              mx={"auto"}
-              key={user.followee.id}
-              padding="lg"
-              radius={0}
-              style={{
-                borderBottom: "1px solid #C9C9C9",
-              }}
-            >
-              <Flex gap={16} align={"center"}>
+        <ul>
+          {filterdFollowees?.map((user) => (
+            <li key={user.followee.id} className={c.card}>
+              <div className={c.content}>
                 <Avatar size={"md"} radius={"sm"} src={user.followee.image} />
 
-                <Anchor
-                  size="md"
-                  fw={"bold"}
-                  flex={1}
-                  component={Link}
-                  href={`/d/user/${user.followee.id}`}
-                >
+                <Link href={`/d/user/${user.followee.id}`} className={c.link}>
                   {user.followee.name}
-                </Anchor>
-              </Flex>
-            </Card>
+                </Link>
+              </div>
+            </li>
           ))}
-        </Box>
+        </ul>
       )}
     </>
   );

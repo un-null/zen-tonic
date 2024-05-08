@@ -1,10 +1,11 @@
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Avatar, Box, Flex, Group, Title } from "@mantine/core";
+import { Avatar, Button, Title } from "@mantine/core";
 
 import { getFollowById } from "@/lib/db/follow";
-import { getPostsByUserId } from "@/lib/db/post";
+import { getUserDetail } from "@/lib/db/user";
+import c from "@/styles/components/dashboard/user-info.module.css";
 
 import FollowButton from "../follow-button";
 
@@ -15,45 +16,54 @@ export default async function UserDetailInfo({ id }: { id: string }) {
     redirect("/sign-in");
   }
 
-  // Fix posts
-  const posts = await getPostsByUserId(id);
-
+  const dbUser = await getUserDetail(id);
   const follow = await getFollowById(user.id, id);
 
-  return (
-    <>
-      <Box h={120} bg={"gray.4"} />
-      <Box px={{ base: 16, md: 32 }}>
-        <Avatar
-          mt={-36}
-          src={posts[0].user.image}
-          w={72}
-          h={72}
-          radius={"xs"}
-        />
+  const isFollow = !!follow;
+  const isNotOwn = user.id !== id;
 
-        <Flex direction={"column"} mt={32} pb={32} gap={16}>
-          <Group
-            pb={16}
-            style={{
-              borderBottom: "1px solid #C9C9C9",
-            }}
-          >
-            <Title order={2}>{posts[0].user.name}</Title>
-            {follow ? (
-              !follow.status ? (
-                <FollowButton type={"unfollow"} follow={follow!}>
+  return (
+    <div className={c.container}>
+      <div className={c.hero} />
+      <div className={c.wrapper}>
+        <Avatar mt={-36} src={dbUser?.image} w={72} h={72} radius={"xs"} />
+
+        <div className={c.main}>
+          <Title order={2}>{dbUser?.name}</Title>
+          {isNotOwn &&
+            (isFollow ? (
+              follow.status ? (
+                <div className={c.btn_wrapper}>
+                  <FollowButton
+                    type={"follow"}
+                    id={follow.id}
+                    follower_id={follow.follower_id}
+                    followee_id={follow.followee_id}
+                  >
+                    フォロー解除
+                  </FollowButton>
+                  {follow.status && <span>フォローされています</span>}
+                </div>
+              ) : (
+                <div className={c.btn_wrapper}>
+                  <Button size={"xs"} disabled>
+                    友達申請済み
+                  </Button>
+                </div>
+              )
+            ) : (
+              <div className={c.btn_wrapper}>
+                <FollowButton
+                  type={"unfollow"}
+                  follower_id={user.id}
+                  followee_id={id}
+                >
                   友達申請
                 </FollowButton>
-              ) : (
-                <FollowButton type={"follow"} follow={follow}>
-                  フォロー解除
-                </FollowButton>
-              )
-            ) : null}
-          </Group>
-        </Flex>
-      </Box>
-    </>
+              </div>
+            ))}
+        </div>
+      </div>
+    </div>
   );
 }
