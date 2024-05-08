@@ -1,0 +1,24 @@
+.container {
+  height: rem(60);
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  @media (max-width: em(992)) {
+    height: auto;
+  }
+}
+
+.content {
+  display: flex;
+  gap: rem(32);
+  height: 100%;
+  align-items: center;
+
+  @media (max-width: em(768)) {
+    justify-content: space-between;
+    align-items: center;
+    padding: rem(16);
+  }
+}

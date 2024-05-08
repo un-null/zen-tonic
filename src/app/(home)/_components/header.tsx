@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 
-import { Avatar, Box, em, Flex } from "@mantine/core";
+import { Avatar, em } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+
+import c from "@/styles/layout/header.module.css";
 
 import CraeteButton from "./create-button";
 import LinkButton from "./link-button";
@@ -13,39 +15,32 @@ export default function Header() {
   const isMobile = useMediaQuery(`(max-width: ${em(768)})`);
 
   return (
-    <Box
-      component={"header"}
-      h={{ base: "auto", md: 60 }}
-      bg={"white"}
-      pos={"sticky"}
-      top={0}
-      style={{ zIndex: 100 }}
-    >
+    <header className={c.container}>
       {!isMobile ? (
-        <Flex gap={32} h={"100%"} align={"center"}>
+        <div className={c.content}>
           <Link href={"/"}>
             <Avatar size={"lg"} radius={"sm"} src={"/logo.svg"} />
           </Link>
 
           <Tab type="home" />
           <CraeteButton type={"button"} />
-        </Flex>
+        </div>
       ) : (
-        <Box>
-          <Flex justify={"space-between"} align={"center"} p={16}>
-            <Box>
-              <Avatar size={"lg"} radius={"sm"} />
-            </Box>
-            <Box>
+        <div>
+          <div className={c.content}>
+            <Link href={"/"}>
+              <Avatar size={"lg"} radius={"sm"} src={"/logo.svg"} />
+            </Link>
+            <div>
               <LinkButton type={"dashboard"} />
-            </Box>
-          </Flex>
+            </div>
+          </div>
 
-          <Box>
+          <div>
             <Tab type="home" />
-          </Box>
-        </Box>
+          </div>
+        </div>
       )}
-    </Box>
+    </header>
   );
 }
