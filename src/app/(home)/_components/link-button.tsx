@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { useClerk } from "@clerk/nextjs";
 import {
@@ -54,6 +54,7 @@ const navItem = [
 export default function LinkButton({ type }: { type: "home" | "dashboard" }) {
   const [opened, setOpened] = useState(false);
   const router = useRouter();
+  const path = usePathname();
   const { signOut } = useClerk();
 
   return (
@@ -72,7 +73,12 @@ export default function LinkButton({ type }: { type: "home" | "dashboard" }) {
         </ActionIcon>
       )}
       {type === "dashboard" && (
-        <Menu opened={opened} onChange={setOpened}>
+        <Menu
+          opened={opened}
+          onChange={setOpened}
+          position={path.includes("/d") ? "bottom-end" : "bottom-start"}
+          offset={16}
+        >
           <MenuTarget>
             <ActionIcon
               radius={"xl"}

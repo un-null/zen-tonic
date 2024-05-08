@@ -28,7 +28,7 @@ export default async function UserDetailInfo({ id }: { id: string }) {
       <div className={c.wrapper}>
         <Avatar mt={-36} src={dbUser?.image} w={72} h={72} radius={"xs"} />
 
-        <div className={c.main}>
+        <div className={c.u_main}>
           <Title order={2}>{dbUser?.name}</Title>
           {isNotOwn &&
             (isFollow ? (

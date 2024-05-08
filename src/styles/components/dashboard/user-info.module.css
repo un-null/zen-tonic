@@ -23,12 +23,24 @@
   }
 }
 
-.main {
+.o_main {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   margin-top: var(--mantine-spacing-md);
   padding-bottom: rem(8);
+  border-bottom: rem(1) solid var(--mantine-color-gray-4);
+
+  a {
+    text-decoration-line: underline;
+    text-underline-offset: 2;
+  }
+}
+
+.u_main {
+  display: flex;
   gap: rem(48);
+  margin-top: var(--mantine-spacing-md);
+  padding-bottom: rem(8);
   border-bottom: rem(1) solid var(--mantine-color-gray-4);
 
   a {

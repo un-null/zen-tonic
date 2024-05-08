@@ -54,7 +54,7 @@ export default async function UserInfo() {
       <div className={c.wrapper}>
         <Avatar mt={-36} size={72} radius={"sm"} src={user?.imageUrl} />
 
-        <div className={c.main}>
+        <div className={c.o_main}>
           <Anchor component={Link} href={`/d/user/${user?.id}`}>
             <Title order={2}>{user?.firstName}</Title>
           </Anchor>
