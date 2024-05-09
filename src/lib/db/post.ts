@@ -10,6 +10,7 @@ export const getUserLatestPosts = (userId: string) => {
     },
     select: {
       created_at: true,
+      is_done: true,
       user: {
         select: {
           name: true,
@@ -27,6 +28,7 @@ export const getAllPosts = () => {
     select: {
       id: true,
       created_at: true,
+      is_done: true,
       content: true,
       project: {
         select: {
@@ -66,6 +68,7 @@ export const getPostsByUserId = (userId: string) => {
       id: true,
       created_at: true,
       content: true,
+      is_done: true,
       project: {
         select: {
           title: true,
@@ -100,6 +103,7 @@ export const getFolloweeAllPosts = async (userId: string) => {
       id: true,
       created_at: true,
       content: true,
+      is_done: true,
       project: {
         select: {
           title: true,

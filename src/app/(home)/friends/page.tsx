@@ -1,12 +1,12 @@
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Box, Card, Flex, Group, Text } from "@mantine/core";
+import { Text } from "@mantine/core";
 import dayjs from "dayjs";
-import { CheckSquare2 } from "lucide-react";
 
 import { getFollows } from "@/lib/db/follow";
 import { getFolloweeAllPosts, getUserLatestPosts } from "@/lib/db/post";
+import c from "@/styles/components/dashboard/list-card.module.css";
 
 import CraeteButton from "../_components/create-button";
 import LikeButton from "../_components/like-button";
@@ -32,7 +32,7 @@ export default async function Home() {
     latestPost?.created_at.getDate() === new Date().getDate();
 
   return (
-    <Box my={20}>
+    <ul className={c.container}>
       {!isPostedToday && (
         <NoPostCard type={"timeline"}>
           <CraeteButton type={"text"} />
@@ -40,16 +40,8 @@ export default async function Home() {
       )}
 
       {followeesAllPosts.map((post) => (
-        <Card
-          key={post.id}
-          mx={"auto"}
-          padding="lg"
-          radius={0}
-          style={{
-            borderBottom: "1px solid #C9C9C9",
-          }}
-        >
-          <Flex gap={16}>
+        <li key={post.id} className={c.card}>
+          <div className={c.content}>
             <UserMenu
               followerId={user.id}
               followeeId={post.user.id}
@@ -57,62 +49,38 @@ export default async function Home() {
               avatar={post.user.image}
             />
 
-            <Flex direction={"column"} gap={8} flex={1}>
-              <Flex align={"center"}>
-                <Group flex={1} c={"dimmed"} gap={"xs"}>
+            <div className={c.right}>
+              <div className={c.right_top}>
+                <div className={c.right_top_content}>
                   <Text size="sm">{`@${post.user.name}`}</Text>
                   <Text size="xs">
                     {dayjs(post.created_at).format("YYYY.MM.DD")}
                   </Text>
-                </Group>
+                </div>
 
                 <PostMenu postId={post.id} />
-              </Flex>
+              </div>
 
-              <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
-                {post.content}
-              </Text>
+              <p className={c.content}>{post.content}</p>
 
-              <Flex
-                direction={"column"}
-                gap={4}
-                p={12}
-                style={{
-                  whiteSpace: "pre-wrap",
-                  border: "1px solid #C9C9C9",
-                  borderRadius: 4,
-                }}
-              >
+              <div className={c.info}>
                 <Text size="sm" fw={"bold"}>
                   {post.project.title}
                 </Text>
-                <Group gap={4} mt={8} pl={2} c={"dimmed"}>
-                  <CheckSquare2 size={14} />
-                  <Text size="xs">Done</Text>
-                </Group>
+                {post.is_done && (
+                  <div className={c.label}>
+                    <p>Done</p>
+                  </div>
+                )}
+              </div>
 
-                {/* Fix spec  */}
-                <Box mt={4} ml={2}>
-                  <Text
-                    size="xs"
-                    py={3}
-                    px={6}
-                    bg={"#DDEBF1"}
-                    display={"inline"}
-                    style={{ borderRadius: 4 }}
-                  >
-                    {`${dayjs(post.created_at).diff(post.project.start_date, "day")}日継続中`}
-                  </Text>
-                </Box>
-              </Flex>
-
-              <Box mt={8}>
+              <div className={c.button_wrapper}>
                 <LikeButton isLike={post.like.length !== 0} postId={post.id} />
-              </Box>
-            </Flex>
-          </Flex>
-        </Card>
+              </div>
+            </div>
+          </div>
+        </li>
       ))}
-    </Box>
+    </ul>
   );
 }

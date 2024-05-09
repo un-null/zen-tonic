@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { currentUser } from "@clerk/nextjs";
 import { Avatar, Text } from "@mantine/core";
 import dayjs from "dayjs";
-import { CheckSquare2 } from "lucide-react";
 
 import LikeButton from "@/app/(home)/_components/like-button";
 import NoPostCard from "@/app/(home)/_components/no-post-card";
@@ -50,17 +49,11 @@ export default async function PostList({ id }: { id: string }) {
                     <Text size="sm" fw={"bold"}>
                       {post.project.title}
                     </Text>
-                    <div className={c.group}>
-                      <CheckSquare2 size={14} />
-                      <Text size="xs">Done</Text>
-                    </div>
-
-                    {/* Fix spec  */}
-                    <div className={c.label}>
-                      <p>
-                        {`${dayjs(post.created_at).diff(post.project.start_date, "day")}日継続中`}
-                      </p>
-                    </div>
+                    {post.is_done && (
+                      <div className={c.label}>
+                        <p>Done</p>
+                      </div>
+                    )}
                   </div>
 
                   <div className={c.button_wrapper}>
