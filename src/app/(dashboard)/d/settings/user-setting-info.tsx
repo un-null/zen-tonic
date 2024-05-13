@@ -1,11 +1,12 @@
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Avatar, Box, Flex, Group, Text, Title } from "@mantine/core";
+import { Avatar, Text, Title } from "@mantine/core";
 import dayjs from "dayjs";
 import { Calendar, Mailbox } from "lucide-react";
 
 import { getUserDetail } from "@/lib/db/user";
+import c from "@/styles/components/dashboard/user-setting-info.module.css";
 
 export default async function UserSettingInfo() {
   const user = await currentUser();
@@ -30,38 +31,26 @@ export default async function UserSettingInfo() {
   ];
 
   return (
-    <>
-      <Box h={120} bg={"gray.4"} />
-      <Box px={{ base: 16, md: 32 }}>
+    <div className={c.container}>
+      <div className={c.hero} />
+      <div className={c.wrapper}>
         <Avatar mt={-36} src={dbUser?.image} w={72} h={72} radius={"xs"} />
 
-        <Flex
-          direction={"column"}
-          mt={32}
-          pb={32}
-          gap={16}
-          style={{ borderBottom: "1px solid #CDCDCD" }}
-        >
+        <div className={c.o_main}>
           <Title order={2}>{user?.firstName}</Title>
-          <Flex direction={"column"} gap={8}>
+          <ul className={c.list}>
             {items.map((item) => (
-              <Flex key={item.label} gap={16}>
-                <Group
-                  gap={4}
-                  w={100}
-                  display={"inline-flex"}
-                  style={{ alignItems: "center" }}
-                  fz={14}
-                >
+              <li key={item.label} className={c.item}>
+                <div className={c.left}>
                   {item.icon}
                   {item.label}
-                </Group>
+                </div>
                 <Text fz={14}>{item.content}</Text>
-              </Flex>
+              </li>
             ))}
-          </Flex>
-        </Flex>
-      </Box>
-    </>
+          </ul>
+        </div>
+      </div>
+    </div>
   );
 }

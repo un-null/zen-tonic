@@ -1,0 +1,20 @@
+.container {
+  width: rem(992);
+  margin: 0 auto;
+  min-height: 100dvh;
+  position: relative;
+
+  @media (max-width: em(992)) {
+    width: 100%;
+  }
+}
+
+.main {
+  width: rem(576);
+  margin: rem(20) auto;
+  padding: 0 rem(16);
+
+  @media (max-width: em(576)) {
+    width: 100%;
+  }
+}

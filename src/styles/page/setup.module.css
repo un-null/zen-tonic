@@ -1,0 +1,25 @@
+.container {
+  padding: 0 rem(16);
+}
+
+.content {
+  width: fit-content;
+  max-width: rem(768);
+  margin-bottom: rem(32);
+}
+
+.back_content {
+  max-width: rem(768);
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: rem(16);
+
+  a {
+    width: fit-content;
+    display: block;
+    background-color: var(--mantine-color-dark-5);
+    margin: rem(24) auto 0 auto;
+  }
+}

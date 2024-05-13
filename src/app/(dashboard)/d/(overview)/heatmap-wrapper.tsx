@@ -1,31 +1,23 @@
-import { currentUser } from "@clerk/nextjs";
-import { Box } from "@mantine/core";
+import { redirect } from "next/navigation";
 
-import { prisma } from "@/lib/prisma";
+import { currentUser } from "@clerk/nextjs";
+
+import { getPostsByProjectId } from "@/lib/db/post";
+import { getAsyncInProgressProject } from "@/lib/db/project";
+import c from "@/styles/components/dashboard/heatmap.module.css";
 
 import HeatMap from "./heatmap";
 
 export default async function HeatMapWrapper() {
   const user = await currentUser();
 
-  const inProgressProject = await prisma.project.findFirst({
-    where: {
-      user_id: user?.id,
-    },
-    orderBy: { start_date: "desc" },
-    select: {
-      id: true,
-      title: true,
-      start_date: true,
-    },
-  });
+  if (!user) {
+    redirect("/sign-in");
+  }
 
-  const posts = await prisma.post.findMany({
-    where: {
-      project_id: inProgressProject?.id,
-    },
-    orderBy: { created_at: "desc" },
-  });
+  const inProgressProject = await getAsyncInProgressProject(user.id);
+
+  const posts = await getPostsByProjectId(inProgressProject?.id);
 
   const dateArr = posts.map((post) => {
     return {
@@ -34,8 +26,8 @@ export default async function HeatMapWrapper() {
   });
 
   return (
-    <Box w={{ base: "auto", md: 708 }}>
+    <div className={c.wrapper}>
       <HeatMap dateArr={dateArr} />
-    </Box>
+    </div>
   );
 }

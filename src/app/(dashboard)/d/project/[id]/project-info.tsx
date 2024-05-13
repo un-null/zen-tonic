@@ -1,16 +1,18 @@
 import { ReactNode } from "react";
+import Link from "next/link";
 
-import { Avatar, Box, Flex, Group, Text, Title } from "@mantine/core";
+import { Text } from "@mantine/core";
 import dayjs from "dayjs";
 import {
+  ArrowLeft,
   Calendar,
-  Clipboard,
   CopyCheck,
   Repeat2,
   StickyNote,
 } from "lucide-react";
 
 import { getProjectDetail } from "@/lib/db/project";
+import c from "@/styles/components/dashboard/project-info.module.css";
 
 type CardItem = {
   icon: ReactNode;
@@ -25,11 +27,13 @@ export default async function ProjectInfo({ id }: { id: string }) {
   const startDate = project?.start_date.toISOString().substring(0, 10);
   const endDate = project?.end_date.toISOString().substring(0, 10);
 
+  const isDone = project?.end_date! < new Date();
+
   const cardItems = [
     {
       icon: <Calendar size="1rem" style={{ marginRight: 8 }} />,
       label: "期間",
-      content: `${dayjs(startDate).format("YYYY.MM.DD")} - ${dayjs(endDate).format("YYYY.MM.DD")}`,
+      content: `${dayjs(startDate).format("YYYY/MM/DD")} - ${dayjs(endDate).format("YYYY/MM/DD")}`,
     },
     {
       icon: <CopyCheck size="1rem" style={{ marginRight: 8 }} />,
@@ -38,7 +42,7 @@ export default async function ProjectInfo({ id }: { id: string }) {
     },
     {
       icon: <Repeat2 size="1rem" style={{ marginRight: 8 }} />,
-      label: "頻度",
+      label: "繰り返し",
       content: project?.week_days,
     },
     {
@@ -49,41 +53,31 @@ export default async function ProjectInfo({ id }: { id: string }) {
   ] satisfies CardItem[];
 
   return (
-    <Box w={"auto"}>
-      <Box h={{ base: 120, md: 156, lg: 192 }} bg={"gray.4"} />
-      <Box px={{ base: 16, md: 32 }}>
-        <Avatar mt={-36} size={72} radius={"sm"} bg={"white"}>
-          <Clipboard size={48} />
-        </Avatar>
-
-        <Flex
-          direction={"column"}
-          mt={32}
-          pb={32}
-          gap={16}
-          style={{ borderBottom: "1px solid #CDCDCD" }}
-        >
-          <Title order={2}>{project?.title}</Title>
-          <Flex direction={"column"} gap={8}>
+    <div className={c.container}>
+      <Link href={"/d/project"} className={c.link}>
+        <ArrowLeft size={16} style={{ marginRight: 2 }} />
+        プロジェクト一覧に戻る
+      </Link>
+      <div className={c.main}>
+        <div className={c.content}>
+          <h2>
+            {project?.title}
+            {isDone && <span className={c.tag}>Done</span>}
+          </h2>
+          <div className={c.list}>
             {cardItems.map((item) => (
-              <Flex key={item.label} gap={16}>
-                <Group
-                  gap={4}
-                  w={100}
-                  display={"inline-flex"}
-                  style={{ alignItems: "center" }}
-                  fz={14}
-                >
+              <div key={item.label} className={c.item}>
+                <div className={c.left}>
                   {item.icon}
                   {item.label}
-                </Group>
+                </div>
 
                 <Text fz={14}>{item.content}</Text>
-              </Flex>
+              </div>
             ))}
-          </Flex>
-        </Flex>
-      </Box>
-    </Box>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

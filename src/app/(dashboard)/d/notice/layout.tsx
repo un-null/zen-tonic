@@ -12,7 +12,7 @@ export default async function NoticeLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Box>
+    <div>
       <Title order={2}>通知</Title>
       <Box mt={32}>
         <Tab type={"notice"} />
@@ -20,6 +20,6 @@ export default async function NoticeLayout({
           <Suspense fallback={<NoticeSkeleton />}>{children}</Suspense>
         </Box>
       </Box>
-    </Box>
+    </div>
   );
 }

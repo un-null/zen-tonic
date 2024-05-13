@@ -1,10 +1,13 @@
 import { notFound } from "next/navigation";
 
-import { Card, Flex, RingProgress, Text } from "@mantine/core";
+import { RingProgress, Text } from "@mantine/core";
 import { Project } from "@prisma/client";
 import dayjs from "dayjs";
 
+import CraeteButton from "@/app/(home)/_components/create-button";
+import DoneCard from "@/app/(home)/_components/done-card";
 import { prisma } from "@/lib/prisma";
+import c from "@/styles/components/dashboard/progress.module.css";
 
 export default async function Progress({ id }: { id: string }) {
   // promise All
@@ -18,6 +21,9 @@ export default async function Progress({ id }: { id: string }) {
     where: {
       project_id: id,
     },
+    orderBy: {
+      created_at: "desc",
+    },
   });
 
   if (!project) {
@@ -27,6 +33,9 @@ export default async function Progress({ id }: { id: string }) {
   const progress = Math.round((posts.length / project?.total_date!) * 100);
 
   const isProgress = !!progress;
+  const isDone = project.end_date < new Date();
+  const isTodayPost =
+    posts.length !== 0 && dayjs(posts[0].created_at).isSame(new Date(), "day");
 
   const getClosestWeekday = ({
     week_days,
@@ -34,7 +43,11 @@ export default async function Progress({ id }: { id: string }) {
     start_date,
     end_date,
   }: Pick<Project, "week_days" | "total_date" | "start_date" | "end_date">) => {
-    const targetDays = week_days?.split(",").map((day) => day.trim());
+    if (week_days === "毎日") {
+      return dayjs().add(1, "day");
+    }
+
+    const targetDays = week_days.split(",").map((day) => day.trim());
     const startDate = dayjs(start_date);
     const endDate = dayjs(end_date);
 
@@ -63,31 +76,40 @@ export default async function Progress({ id }: { id: string }) {
   });
 
   return (
-    <Card w="auto" shadow="xs" padding="lg" radius="sm" withBorder>
-      <Flex direction={"column"}>
-        <Text size={"xl"} px={16} pb={16} fw={600}>
-          達成率
-        </Text>
-        <Flex gap={32} align={"center"}>
-          <RingProgress
-            label={
-              <Text size="md" ta="center" fw={600}>
-                {isProgress ? progress : 0} %
-              </Text>
-            }
-            roundCaps
-            sections={[{ value: isProgress ? progress : 0, color: "#2483e2" }]}
-            size={150}
-            thickness={16}
-          />
-          <Text size={"lg"} px={16} pb={16} fw={600}>
-            次の記録日:
-            <Text span ml={16} fw={600}>
-              {closestDate?.format("YYYY/MM/DD")}
-            </Text>
-          </Text>
-        </Flex>
-      </Flex>
-    </Card>
+    <div className={c.card}>
+      {isDone ? (
+        <DoneCard />
+      ) : (
+        <div>
+          <p className={c.title}>進捗</p>
+          <div className={c.content}>
+            <RingProgress
+              label={
+                <Text size="md" ta="center" fw={600}>
+                  {isProgress ? progress : 0} %
+                </Text>
+              }
+              roundCaps
+              sections={[
+                { value: isProgress ? progress : 0, color: "#2483e2" },
+              ]}
+              size={152}
+              thickness={16}
+            />
+            {isProgress && !isTodayPost ? (
+              <div className={c.button_wrapper}>
+                <CraeteButton type={"text"} />
+              </div>
+            ) : null}
+            {isProgress && isTodayPost ? (
+              <div className={c.text}>
+                次の記録日:
+                <span>{closestDate?.format("YYYY/MM/DD")}</span>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

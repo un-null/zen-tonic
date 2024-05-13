@@ -1,0 +1,10 @@
+.pc {
+  position: fixed;
+  bottom: rem(32);
+}
+
+.mobile {
+  position: fixed;
+  bottom: rem(32);
+  right: rem(32);
+}

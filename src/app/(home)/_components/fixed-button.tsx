@@ -1,7 +1,9 @@
 "use client";
 
-import { Box, em } from "@mantine/core";
+import { em } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+
+import c from "@/styles/components/home/fixed-button.module.css";
 
 import CraeteButton from "./create-button";
 import LinkButton from "./link-button";
@@ -12,13 +14,13 @@ export default function FixedButton() {
   return (
     <>
       {!isMobile ? (
-        <Box pos={"sticky"} bottom={32}>
+        <div className={c.pc}>
           <LinkButton type="dashboard" />
-        </Box>
+        </div>
       ) : (
-        <Box pos={"fixed"} bottom={48} right={48}>
+        <div className={c.mobile}>
           <CraeteButton type={"button"} />
-        </Box>
+        </div>
       )}
     </>
   );

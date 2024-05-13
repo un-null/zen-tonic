@@ -25,6 +25,7 @@ CREATE TABLE "Project" (
 CREATE TABLE "Post" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "content" TEXT NOT NULL,
+    "is_done" BOOLEAN NOT NULL,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME NOT NULL,
     "user_id" TEXT NOT NULL,

@@ -1,0 +1,13 @@
+.container {
+  min-width: 100%;
+  max-width: rem(768);
+  margin: rem(32) auto 0 auto;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  gap: rem(16);
+}

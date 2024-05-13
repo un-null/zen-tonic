@@ -1,0 +1,53 @@
+.card {
+  width: auto;
+  box-shadow: var(--mantine-shadow-xs);
+  padding: rem(16);
+  border-radius: rem(4);
+  border: 1px solid var(--mantine-color-gray-3);
+}
+
+.title {
+  font-size: rem(20);
+  padding: 0 rem(16);
+  font-weight: bold;
+  margin: 0;
+
+  @media (max-width: em(768)) {
+    text-align: center;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: rem(8);
+
+  @media (max-width: em(768)) {
+    flex-direction: column;
+    margin-top: rem(4);
+  }
+}
+
+.button_wrapper {
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.text {
+  font-size: var(--mantine-font-size-lg);
+  padding: 0 rem(16) rem(8) rem(16);
+  margin: 0 auto;
+
+  span {
+    margin-left: rem(16);
+  }
+
+  @media (max-width: em(768)) {
+    font-size: var(--mantine-font-size-sm);
+
+    span {
+      margin-left: rem(8);
+    }
+  }
+}

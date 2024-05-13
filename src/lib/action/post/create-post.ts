@@ -72,6 +72,7 @@ export async function createPost(state: State, formData: FormData) {
         content: comment || "",
         user_id: user.id || "",
         project_id: projectId || "",
+        is_done: isDone,
       },
     });
   } catch (error) {

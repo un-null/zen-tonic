@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 
-import { Box, Container } from "@mantine/core";
+import c from "@/styles/layout/timeline.module.css";
 
 import FixedButton from "./_components/fixed-button";
 import Header from "./_components/header";
@@ -20,15 +20,16 @@ export default async function TimelineLayout({
   modal: React.ReactNode;
 }>) {
   return (
-    <Container size={"md"} mih={"100dvh"} pos={"relative"}>
+    <div className={c.container}>
       <Header />
 
-      <Box w={{ base: "100%", xs: 576 }} mx={"auto"} component={"main"} my={20}>
+      <main className={c.main}>
         <Suspense fallback={<TimelineSkeleton />}>{children}</Suspense>
-      </Box>
+      </main>
+
       {modal}
 
       <FixedButton />
-    </Container>
+    </div>
   );
 }

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import { Flex } from "@mantine/core";
+import c from "@/styles/page/user-id.module.css";
 
 import {
   PostCardSkeleton,
@@ -15,7 +15,7 @@ export default async function UserIdPage({
   params: { id: string };
 }) {
   return (
-    <Flex mt={32} direction={"column"} gap={16}>
+    <div className={c.container}>
       <Suspense fallback={<UserDetailInfoSkeleton />}>
         <UserDetailInfo id={params.id} />
       </Suspense>
@@ -23,6 +23,6 @@ export default async function UserIdPage({
       <Suspense fallback={<PostCardSkeleton />}>
         <PostList id={params.id} />
       </Suspense>
-    </Flex>
+    </div>
   );
 }

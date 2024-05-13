@@ -2,14 +2,23 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
-import { ActionIcon, Menu, MenuItem, MenuTarget } from "@mantine/core";
+import { useClerk } from "@clerk/nextjs";
+import {
+  ActionIcon,
+  Menu,
+  MenuDivider,
+  MenuItem,
+  MenuTarget,
+} from "@mantine/core";
 import {
   Bell,
   ClipboardList,
   Contact,
   Home,
   LayoutTemplate,
+  LogOut,
   MoreHorizontal,
   Settings,
 } from "lucide-react";
@@ -44,6 +53,9 @@ const navItem = [
 
 export default function LinkButton({ type }: { type: "home" | "dashboard" }) {
   const [opened, setOpened] = useState(false);
+  const router = useRouter();
+  const path = usePathname();
+  const { signOut } = useClerk();
 
   return (
     <>
@@ -61,7 +73,12 @@ export default function LinkButton({ type }: { type: "home" | "dashboard" }) {
         </ActionIcon>
       )}
       {type === "dashboard" && (
-        <Menu opened={opened} onChange={setOpened}>
+        <Menu
+          opened={opened}
+          onChange={setOpened}
+          position={path.includes("/d") ? "bottom-end" : "bottom-start"}
+          offset={16}
+        >
           <MenuTarget>
             <ActionIcon
               radius={"xl"}
@@ -86,6 +103,16 @@ export default function LinkButton({ type }: { type: "home" | "dashboard" }) {
                 {item.label}
               </MenuItem>
             ))}
+            <MenuDivider />
+
+            <MenuItem
+              component={"button"}
+              c={"#e06259"}
+              leftSection={<LogOut size={16} />}
+              onClick={() => signOut(() => router.push("/"))}
+            >
+              ログアウト
+            </MenuItem>
           </Menu.Dropdown>
         </Menu>
       )}

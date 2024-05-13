@@ -1,0 +1,17 @@
+.tabs {
+  flex: 1;
+
+  a {
+    text-decoration: none;
+    color: var(--mantine-color-dark-4);
+  }
+}
+
+.link {
+  width: 50%;
+  display: flex;
+}
+
+.home {
+  flex: 1;
+}

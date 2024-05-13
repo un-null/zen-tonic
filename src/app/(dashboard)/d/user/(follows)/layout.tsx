@@ -1,8 +1,9 @@
 import { Suspense } from "react";
 
-import { Box, Title } from "@mantine/core";
+import { Title } from "@mantine/core";
 
 import Tab from "@/app/(home)/_components/tab";
+import c from "@/styles/layout/user.module.css";
 
 import { NoticeSkeleton } from "../../../../(home)/_components/skeletons";
 
@@ -12,15 +13,15 @@ export default async function UserLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Box>
+    <div>
       <Title order={2}>友達</Title>
 
-      <Box mt={32}>
+      <div className={c.container}>
         <Tab type={"user"} />
-        <Box mt={32} px={16}>
+        <div className={c.main}>
           <Suspense fallback={<NoticeSkeleton />}>{children}</Suspense>
-        </Box>
-      </Box>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 }

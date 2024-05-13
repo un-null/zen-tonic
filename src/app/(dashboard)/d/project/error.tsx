@@ -1,6 +1,8 @@
 "use client";
 
-import { Button, Container, Flex, Title } from "@mantine/core";
+import { Button, Title } from "@mantine/core";
+
+import c from "@/styles/layout/error.module.css";
 
 export default function Error({
   reset,
@@ -9,13 +11,15 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <Container miw={"md"} mx={"auto"} mt={32} component={"main"}>
-      <Flex direction={"column"} align={"center"} justify={"center"} gap={32}>
+    <main className={c.container}>
+      <div className={c.main}>
         <Title order={3} c={"#e06259"}>
           エラーが発生しました
         </Title>
-        <Button onClick={() => reset()}>戻る</Button>
-      </Flex>
-    </Container>
+        <Button onClick={() => reset()} bg={"dark.5"}>
+          戻る
+        </Button>
+      </div>
+    </main>
   );
 }

@@ -43,6 +43,7 @@ model Project {
 model Post {
   id         String   @id @default(cuid())
   content    String
+  is_done    Boolean
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   user_id    String

@@ -2,20 +2,12 @@
 
 import { useState } from "react";
 
-import {
-  Box,
-  Checkbox,
-  ComboboxItem,
-  Flex,
-  Group,
-  Select,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import { ComboboxItem, Select, TextInput } from "@mantine/core";
 import { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { useFormState } from "react-dom";
 
 import { createProject } from "@/lib/action/project/create-project";
+import c from "@/styles/components/dashboard/setup-form.module.css";
 
 import SubmitButton from "./submit-button";
 
@@ -29,6 +21,8 @@ type Props = {
 };
 
 const initialState = { message: "", errors: {} };
+
+const weekDays = ["月", "火", "水", "木", "金", "土", "日"];
 
 export default function SetupForm({ data }: Props) {
   const [value, setValue] = useState<ComboboxItem | null>({
@@ -48,8 +42,8 @@ export default function SetupForm({ data }: Props) {
   return (
     // + database or page ID を action に渡す！
     <form action={dispatch}>
-      <Flex direction={"column"} gap={32} w={"auto"}>
-        <Box>
+      <div className={c.container}>
+        <div>
           <TextInput
             label="タイトル"
             name="title"
@@ -61,37 +55,33 @@ export default function SetupForm({ data }: Props) {
           <Select
             label="アクション"
             name="object"
-            w={{ base: "auto", sm: 300 }}
-            my={16}
             data={[
               { value: "database", label: "データベースを登録する" },
               { value: "page", label: "ページにデータベースを作成する" },
             ]}
             onChange={(_, option) => setValue(option)}
             withAsterisk
+            w={{ base: "auto", sm: 300 }}
+            my={16}
             size={"xs"}
           />
 
-          <Box my={16}>
+          <div className={c.dbOption_wrapper}>
             <Select
               key={value?.value}
               label={value?.value === "database" ? "データベース" : "ページ"}
               name="id"
-              w={{ base: "auto", sm: 300 }}
               data={value?.value === "database" ? dbOption : pageOption}
               withAsterisk
+              w={{ base: "auto", sm: 300 }}
               size={"xs"}
             />
 
             {state.error?.id &&
-              state.error.id.map((error, index) => (
-                <Text key={index} mt={8} size={"xs"} fw={"bold"} c={"#e06259"}>
-                  {error}
-                </Text>
-              ))}
-          </Box>
+              state.error.id.map((error, index) => <p key={index}>{error}</p>)}
+          </div>
 
-          <Flex gap={16} my={16} direction={{ base: "column", md: "row" }}>
+          <div className={c.dayOption_wrapper}>
             <Select
               label="期間"
               name="numberOfWeek"
@@ -105,55 +95,55 @@ export default function SetupForm({ data }: Props) {
               w={{ base: "auto", sm: 300 }}
             />
 
-            {/* Todo：FormData での受け渡し方法を考える */}
-            <Select
-              label="曜日"
-              data={[
-                { value: "毎日", label: "毎日" },
-                { value: "カスタム", label: "カスタム" },
-              ]}
-              defaultValue={"毎日"}
-              onChange={(_, option) => setWeekdayOption(option)}
-              withAsterisk
-              name="weekDayOption"
-              size={"xs"}
-              w={{ base: "auto", sm: 300 }}
-            />
-            {weekdayOption?.value === "カスタム" && (
-              <Checkbox.Group withAsterisk size={"xs"}>
-                <Group mt="xs">
-                  <Checkbox name="weekDays[]" value="月" label="月" />
-                  <Checkbox name="weekDays[]" value="火" label="火" />
-                  <Checkbox name="weekDays[]" value="水" label="水" />
-                  <Checkbox name="weekDays[]" value="木" label="木" />
-                  <Checkbox name="weekDays[]" value="金" label="金" />
-                  <Checkbox name="weekDays[]" value="土" label="土" />
-                  <Checkbox name="weekDays[]" value="日" label="日" />
-                </Group>
-              </Checkbox.Group>
-            )}
-          </Flex>
+            <div className={c.weekDaysOption_wrapper}>
+              <Select
+                label="繰り返し"
+                data={[
+                  { value: "毎日", label: "毎日" },
+                  { value: "カスタム", label: "カスタム" },
+                ]}
+                defaultValue={"毎日"}
+                onChange={(_, option) => setWeekdayOption(option)}
+                withAsterisk
+                name="weekDayOption"
+                size={"xs"}
+                w={{ base: "auto", sm: 300 }}
+              />
+              {weekdayOption?.value === "カスタム" && (
+                <div className={c.weekDaysOption}>
+                  {weekDays.map((day) => (
+                    <label key={day}>
+                      <input type={"checkbox"} name="weekDays[]" value={day} />
+                      <span>{day}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
 
-          <Flex gap={16} my={16} direction={{ base: "column", md: "row" }}>
+          <div className={c.rule}>
             <TextInput
-              label="if"
+              label="どんなとき"
+              placeholder="寝る前に"
               name="_if"
               w={{ base: "auto", sm: 300 }}
               size={"xs"}
             />
             <TextInput
-              label="then"
+              label="なにをする"
+              placeholder="30分読書する"
               name="then"
               w={{ base: "auto", sm: 300 }}
               size={"xs"}
             />
-          </Flex>
-        </Box>
+          </div>
+        </div>
 
-        <Box w={"fit"}>
+        <div className={c.button_wrapper}>
           <SubmitButton />
-        </Box>
-      </Flex>
+        </div>
+      </div>
     </form>
   );
 }

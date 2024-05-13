@@ -1,0 +1,37 @@
+.container {
+  width: auto;
+  margin: 0 auto;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  @media (max-width: em(768)) {
+    flex-direction: column;
+  }
+}
+
+.image {
+  width: rem(200);
+  height: rem(200);
+  margin: 0 auto;
+  position: relative;
+
+  @media (max-width: em(768)) {
+    width: rem(150);
+    height: rem(150);
+  }
+}
+
+.link {
+  padding: 0 rem(8);
+  margin: auto;
+
+  a {
+    size: var(--mantine-font-size-md);
+    text-decoration: underline;
+    color: var(--mantine-color-dark-6);
+    cursor: pointer;
+  }
+}

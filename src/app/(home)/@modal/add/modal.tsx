@@ -17,7 +17,6 @@ import { useFormState } from "react-dom";
 
 import { createPost, State } from "@/lib/action/post/create-post";
 
-// type cut out ???
 const initialState: State = { message: null, errors: {} };
 
 export default function Modal({

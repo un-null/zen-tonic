@@ -2,11 +2,12 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Box, Button, Text, Title } from "@mantine/core";
+import { Button, Text, Title } from "@mantine/core";
 import { Client } from "@notionhq/client";
 
 import { getAccessToken } from "@/lib/auth/getAccessToken";
 import { prisma } from "@/lib/prisma";
+import c from "@/styles/page/setup.module.css";
 
 import SetupForm from "./setup-form";
 
@@ -29,37 +30,40 @@ export default async function Setup() {
   const inProgressProjects = projects.filter(
     (project) => project.end_date >= new Date(),
   );
+
   const hasInProgressProjects = inProgressProjects.length !== 0;
 
   const integratedData = await retrieveIntegratedData(accessToken);
 
   return (
-    <Box px={16} w={{ base: "100%", md: 992 }}>
+    <div className={c.container}>
       {!hasInProgressProjects ? (
         <>
-          <Box w={"fit"} mb={32}>
+          <div className={c.content}>
             <Title order={3}>プロジェクトを作成</Title>
             <Text size={"sm"} mt={16}>
               習慣にしたいことを決めてみましょう！
             </Text>
-          </Box>
+          </div>
 
           <SetupForm data={integratedData} />
         </>
       ) : (
-        <>
-          <Box w={"fit"} mb={32}>
-            <Title order={3} c={"#2483e2"}>
-              現在進行中のプロジェクトがあります
-            </Title>
-          </Box>
+        <div className={c.back_content}>
+          <Title order={3} c={"#2483e2"}>
+            現在進行中のプロジェクトがあります
+          </Title>
+
+          <Text size={"sm"}>
+            複数のプロジェクトを作成したい場合は、有料版へのアップグレードが必要です
+          </Text>
 
           <Button component={Link} href={"/d/project"}>
             プロジェクト一覧に戻る
           </Button>
-        </>
+        </div>
       )}
-    </Box>
+    </div>
   );
 }
 

@@ -1,17 +1,22 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
 import { Client } from "@notionhq/client";
 import dayjs, { Dayjs } from "dayjs";
+
+import "dayjs/locale/ja";
+
+import { revalidatePath } from "next/cache";
+
 import { z } from "zod";
 
 import { getAccessToken } from "@/lib/auth/getAccessToken";
 import { prisma } from "@/lib/prisma";
 
-// Todo review key name and error message
+dayjs.locale("ja");
+
 const schema = z.object({
   title: z.string().min(1, { message: "タイトルを入力してください" }),
   object: z.string(),
@@ -23,7 +28,6 @@ const schema = z.object({
   then: z.string(),
 });
 
-// Fix type cuz maybe use only id
 type SchemaType = z.infer<typeof schema>;
 type SchemaKey = keyof SchemaType;
 
@@ -75,7 +79,6 @@ export async function createProject(prevState: State, formData: FormData) {
   const startDate = dayjs();
   const endDate = startDate.add(7 * Number(numberOfWeek), "day").endOf("day");
 
-  // Todo: fix
   const totalDate = getTotalDays({ startDate, endDate, weekDays });
 
   const weekDayValue =
@@ -111,7 +114,7 @@ export async function createProject(prevState: State, formData: FormData) {
           start_date: startDate.toDate(),
           end_date: endDate.toDate(),
           total_date: totalDate,
-          week_days: weekDayOption,
+          week_days: weekDayValue,
           database_id: notionId ? notionId : id,
           user_id: user.id,
           if_then: _if + then || "",
@@ -126,7 +129,6 @@ export async function createProject(prevState: State, formData: FormData) {
   redirect("/d/project");
 }
 
-// Todo: rewrite reduce ???
 const getTotalDays = ({
   startDate,
   endDate,
@@ -136,9 +138,13 @@ const getTotalDays = ({
   endDate: Dayjs;
   weekDays: string[];
 }) => {
+  if (weekDays.length === 0) {
+    weekDays = ["月", "火", "水", "木", "金", "土", "日"];
+  }
+
   return Array.from({ length: endDate.diff(startDate, "day") + 1 }, (_, i) =>
     startDate.add(i, "day"),
-  ).filter((day) => weekDays.includes(day.format("ddd"))).length;
+  ).filter((day) => weekDays.includes(day.format("dd"))).length;
 };
 
 const createNotionDb = async ({

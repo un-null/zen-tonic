@@ -10,6 +10,15 @@ export default function NoPostCard({
   children: ReactNode;
   type: "timeline" | "dashboard";
 }) {
+  const src = (type: "timeline" | "dashboard") => {
+    switch (type) {
+      case (type = "timeline"):
+        return "/no-content-image1.svg";
+      case (type = "dashboard"):
+        return "/no-content-image2.svg";
+    }
+  };
+
   return (
     <Card shadow="xs" padding="lg" radius="sm" withBorder>
       <SimpleGrid cols={2}>
@@ -19,15 +28,7 @@ export default function NoPostCard({
           h={{ base: 150, xs: 200 }}
           pos={"relative"}
         >
-          <Image
-            src={
-              type === "timeline"
-                ? "/no-content-image1.svg"
-                : "/no-content-image2.svg"
-            }
-            alt=""
-            fill
-          />
+          <Image src={src(type)} alt="" fill />
         </Box>
 
         <Box px={8} m={"auto"}>

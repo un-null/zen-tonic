@@ -3,25 +3,43 @@
 import { ReactNode } from "react";
 
 import { Button } from "@mantine/core";
-import { Follow } from "@prisma/client";
 
-import { disallowRequest, requestFollow } from "@/lib/action/user/follow";
+import {
+  disallowRequest,
+  requestFollowForProfile,
+} from "@/lib/action/user/follow";
+
+type Props = {
+  children: ReactNode;
+};
+
+type FollowBtn = Props & {
+  type: "follow";
+  id: string;
+  follower_id?: string;
+  followee_id?: string;
+};
+
+type UnFollowBtn = Props & {
+  type: "unfollow";
+  id?: never;
+  follower_id?: string;
+  followee_id?: string;
+};
 
 export default function FollowButton({
-  type,
-  follow,
   children,
-}: {
-  type: "follow" | "unfollow";
-  follow: Follow;
-  children: ReactNode;
-}) {
+  type,
+  id,
+  follower_id = "",
+  followee_id = "",
+}: FollowBtn | UnFollowBtn) {
   if (type === "follow") {
     return (
       <Button
         size={"xs"}
         bg={"#e06259"}
-        onClick={async () => await disallowRequest(follow.id)}
+        onClick={async () => await disallowRequest(id)}
       >
         {children}
       </Button>
@@ -32,7 +50,7 @@ export default function FollowButton({
       size={"xs"}
       bg={"#2483e2"}
       onClick={async () =>
-        await requestFollow(follow.follower_id, follow.followee_id)
+        await requestFollowForProfile(follower_id, followee_id)
       }
     >
       {children}

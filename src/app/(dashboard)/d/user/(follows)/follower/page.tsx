@@ -15,8 +15,9 @@ export default async function Follower() {
   }
 
   const followers = await getFollowerList(user.id);
+  const filterdFollowers = followers?.filter((user) => user.status === true);
 
-  const isFollower = followers?.length !== 0;
+  const isFollower = filterdFollowers?.length !== 0;
 
   return (
     <>
@@ -24,7 +25,7 @@ export default async function Follower() {
         <NoPostCard type={"dashboard"}>まだフォロワーがいません</NoPostCard>
       ) : (
         <Box>
-          {followers?.map((user) => (
+          {filterdFollowers?.map((user) => (
             <Card
               mx={"auto"}
               key={user.follower.id}

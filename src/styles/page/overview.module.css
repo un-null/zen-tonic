@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: rem(32);
+}
+
+.heatmap {
+  padding: 0 var(--mantine-spacing-md);
+}

@@ -1,12 +1,15 @@
 import { ReactNode } from "react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Anchor, Avatar, Box, Flex, Group, Text, Title } from "@mantine/core";
+import { Anchor, Avatar, Text, Title } from "@mantine/core";
 import dayjs from "dayjs";
 import { Calendar, Clipboard } from "lucide-react";
 
-import { prisma } from "@/lib/prisma";
+import { getInProgressProject } from "@/lib/db/project";
+import { getUserCreatedAt } from "@/lib/db/user";
+import c from "@/styles/components/dashboard/user-info.module.css";
 
 type CardItem = {
   icon: ReactNode;
@@ -18,65 +21,50 @@ type CardItem = {
 export default async function UserInfo() {
   const user = await currentUser();
 
-  const inProgressProject = await prisma.project.findFirst({
-    where: {
-      user_id: user?.id,
-    },
-    orderBy: { start_date: "desc" },
-    select: {
-      id: true,
-      title: true,
-      start_date: true,
-    },
-  });
+  if (!user) {
+    redirect("/sign-in");
+  }
 
-  const startDate = inProgressProject?.start_date
-    .toISOString()
-    .substring(0, 10);
+  const [inProgressProject, dbUser] = await Promise.all([
+    getInProgressProject(user.id),
+    getUserCreatedAt(user.id),
+  ]);
 
   const cardItems = [
     {
       icon: <Calendar size="1rem" style={{ marginRight: 8 }} />,
-      content: startDate ? dayjs(startDate).format("YYYY.MM.DD") : "未設定",
+      content: dbUser?.created_at
+        ? dayjs(dbUser.created_at).format("YYYY/MM/DD")
+        : "",
       label: "利用開始",
     },
     {
       icon: <Clipboard size="1rem" style={{ marginRight: 8 }} />,
       label: "取り組み中",
       content: inProgressProject?.title ? inProgressProject?.title : "未設定",
-      href: `/d/project/${inProgressProject?.id}`,
+      href: inProgressProject
+        ? `/d/project/${inProgressProject?.id}`
+        : "/d/project",
     },
   ] satisfies CardItem[];
 
   return (
-    <Box w={"auto"}>
-      <Box h={{ base: 120, md: 156, lg: 192 }} bg={"gray.4"} />
-      <Box px={{ base: 16, md: 32 }}>
+    <div className={c.container}>
+      <div className={c.hero} />
+      <div className={c.wrapper}>
         <Avatar mt={-36} size={72} radius={"sm"} src={user?.imageUrl} />
 
-        <Flex
-          direction={"column"}
-          mt={32}
-          pb={32}
-          gap={16}
-          style={{ borderBottom: "1px solid #CDCDCD" }}
-        >
+        <div className={c.o_main}>
           <Anchor component={Link} href={`/d/user/${user?.id}`}>
             <Title order={2}>{user?.firstName}</Title>
           </Anchor>
-          <Flex direction={"column"} gap={8}>
+          <ul className={c.list}>
             {cardItems.map((item) => (
-              <Flex key={item.label} gap={16}>
-                <Group
-                  gap={4}
-                  w={100}
-                  display={"inline-flex"}
-                  style={{ alignItems: "center" }}
-                  fz={14}
-                >
-                  {item.icon}
+              <div key={item.label} className={c.item}>
+                <div className={c.left}>
+                  <span>{item.icon}</span>
                   {item.label}
-                </Group>
+                </div>
                 {item.href ? (
                   <Anchor component={Link} href={item.href} fz={14}>
                     {item.content}
@@ -84,11 +72,11 @@ export default async function UserInfo() {
                 ) : (
                   <Text fz={14}>{item.content}</Text>
                 )}
-              </Flex>
+              </div>
             ))}
-          </Flex>
-        </Flex>
-      </Box>
-    </Box>
+          </ul>
+        </div>
+      </div>
+    </div>
   );
 }
