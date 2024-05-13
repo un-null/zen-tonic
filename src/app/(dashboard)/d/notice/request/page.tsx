@@ -3,11 +3,11 @@ import { redirect } from "next/navigation";
 import { currentUser } from "@clerk/nextjs";
 import { Avatar, Text } from "@mantine/core";
 
-import NoPostCard from "@/app/(home)/_components/no-post-card";
-import { getFollowsRequest } from "@/lib/db/follow";
+import NoPostCard from "@/components/layout/no-post-card";
+import RequestButtons from "@/components/routes/notice/request-button";
+import { getFollowsRequest } from "@/features/db/follow";
+// fix css file
 import c from "@/styles/components/dashboard/list-card.module.css";
-
-import RequestButtons from "./request-buttons";
 
 export default async function Notice() {
   const user = await currentUser();

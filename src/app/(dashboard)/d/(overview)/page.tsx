@@ -1,13 +1,12 @@
 import { Suspense } from "react";
 
-import c from "@/styles/page/overview.module.css";
-
 import {
   HeatmapSkeleton,
   UserInfoSkeleton,
-} from "../../../(home)/_components/skeletons";
-import HeatMapWrapper from "./heatmap-wrapper";
-import UserInfo from "./user-info";
+} from "@/components/layout/skeltons";
+import HeatMapWrapper from "@/components/routes/overview/heatmap-wrapper";
+import UserInfo from "@/components/routes/overview/user-info";
+import c from "@/styles/page/overview.module.css";
 
 export default async function Dashboard() {
   return (

@@ -2,9 +2,9 @@ import { Metadata } from "next";
 
 import { Box, Container } from "@mantine/core";
 
-import AsideNav from "./aside-nav";
-import FixedButton from "./fixed-button";
-import Footer from "./footer";
+import AsideNav from "@/components/layout/aside-nav";
+import FixedButton from "@/components/layout/d-fixed-button";
+import Footer from "@/components/layout/footer";
 
 export const metadata: Metadata = {
   title: "Dashboard",

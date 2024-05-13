@@ -4,15 +4,15 @@ import { currentUser } from "@clerk/nextjs";
 import { Text } from "@mantine/core";
 import dayjs from "dayjs";
 
-import { getFollows } from "@/lib/db/follow";
-import { getAllPosts, getUserLatestPosts } from "@/lib/db/post";
+import { getFollows } from "@/features/db/follow";
+import { getAllPosts, getUserLatestPosts } from "@/features/db/post";
 import c from "@/styles/components/dashboard/list-card.module.css";
 
-import CraeteButton from "./_components/create-button";
-import LikeButton from "./_components/like-button";
-import NoPostCard from "./_components/no-post-card";
-import PostMenu from "./_components/post-menu";
-import UserMenu from "./_components/user-menu";
+import CraeteButton from "../../components/common/create-button";
+import LikeButton from "../../components/common/like-button";
+import PostMenu from "../../components/common/post-menu";
+import UserMenu from "../../components/common/user-menu";
+import NoPostCard from "../../components/layout/no-post-card";
 
 export default async function Home() {
   const user = await currentUser();

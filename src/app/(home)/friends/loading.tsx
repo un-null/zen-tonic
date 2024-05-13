@@ -1,4 +1,4 @@
-import { TimelineSkeleton } from "../_components/skeletons";
+import { TimelineSkeleton } from "../../../components/layout/skeltons";
 
 export default function Loading() {
   return <TimelineSkeleton />;

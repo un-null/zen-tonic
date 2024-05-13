@@ -2,8 +2,8 @@ import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
 
-import { getUserLatestPosts } from "@/lib/db/post";
-import { getProjectTitles } from "@/lib/db/project";
+import { getUserLatestPosts } from "@/features/db/post";
+import { getProjectTitles } from "@/features/db/project";
 
 import Modal from "./modal";
 

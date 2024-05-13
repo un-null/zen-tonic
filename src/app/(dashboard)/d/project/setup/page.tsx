@@ -5,11 +5,10 @@ import { currentUser } from "@clerk/nextjs";
 import { Button, Text, Title } from "@mantine/core";
 import { Client } from "@notionhq/client";
 
-import { getAccessToken } from "@/lib/auth/getAccessToken";
-import { prisma } from "@/lib/prisma";
+import SetupForm from "@/components/routes/project/setup-form";
+import { getAccessToken } from "@/features/lib/auth/getAccessToken";
+import { prisma } from "@/features/lib/prisma";
 import c from "@/styles/page/setup.module.css";
-
-import SetupForm from "./setup-form";
 
 export default async function Setup() {
   const user = await currentUser();

@@ -4,8 +4,8 @@ import { redirect } from "next/navigation";
 import { currentUser } from "@clerk/nextjs";
 import { Anchor, Avatar, Box, Card, Flex } from "@mantine/core";
 
-import NoPostCard from "@/app/(home)/_components/no-post-card";
-import { getFollowerList } from "@/lib/db/follow";
+import NoPostCard from "@/components/layout/no-post-card";
+import { getFollowerList } from "@/features/db/follow";
 
 export default async function Follower() {
   const user = await currentUser();

@@ -2,8 +2,8 @@ import { Suspense } from "react";
 
 import { Box, Title } from "@mantine/core";
 
-import { ProjectHomekeleton } from "../../../(home)/_components/skeletons";
-import ProjectList from "./project-list";
+import { ProjectHomekeleton } from "@/components/layout/skeltons";
+import ProjectList from "@/components/routes/project/project-list";
 
 export default async function Project() {
   return (

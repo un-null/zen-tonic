@@ -1,13 +1,12 @@
 import { Suspense } from "react";
 
-import c from "@/styles/page/user-id.module.css";
-
 import {
   PostCardSkeleton,
   UserDetailInfoSkeleton,
-} from "../../../../(home)/_components/skeletons";
-import PostList from "./post-list";
-import UserDetailInfo from "./user-info";
+} from "@/components/layout/skeltons";
+import PostList from "@/components/routes/user/post-list";
+import UserDetailInfo from "@/components/routes/user/user-info";
+import c from "@/styles/page/user-id.module.css";
 
 export default async function UserIdPage({
   params,

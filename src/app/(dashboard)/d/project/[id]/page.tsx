@@ -1,13 +1,12 @@
 import { Suspense } from "react";
 
-import c from "@/styles/page/project-id.module.css";
-
 import {
   ProjectDetailInfoSkeleton,
   ProjectProgressSkeleton,
-} from "../../../../(home)/_components/skeletons";
-import Progress from "./progress";
-import ProjectInfo from "./project-info";
+} from "@/components/layout/skeltons";
+import Progress from "@/components/routes/project/progress";
+import ProjectInfo from "@/components/routes/project/project-info";
+import c from "@/styles/page/project-id.module.css";
 
 export default async function PageDetail({
   params,

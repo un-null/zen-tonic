@@ -2,8 +2,9 @@ import { currentUser } from "@clerk/nextjs";
 import { Avatar, Text } from "@mantine/core";
 import dayjs from "dayjs";
 
-import NoPostCard from "@/app/(home)/_components/no-post-card";
-import { getAllLikes } from "@/lib/db/like";
+import NoPostCard from "@/components/layout/no-post-card";
+import { getAllLikes } from "@/features/db/like";
+// fix css file
 import c from "@/styles/components/dashboard/list-card.module.css";
 
 export default async function Notice() {

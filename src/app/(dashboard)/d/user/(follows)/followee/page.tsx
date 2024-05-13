@@ -4,8 +4,8 @@ import { redirect } from "next/navigation";
 import { currentUser } from "@clerk/nextjs";
 import { Avatar } from "@mantine/core";
 
-import NoPostCard from "@/app/(home)/_components/no-post-card";
-import { getFolloweeList } from "@/lib/db/follow";
+import NoPostCard from "@/components/layout/no-post-card";
+import { getFolloweeList } from "@/features/db/follow";
 import c from "@/styles/components/dashboard/user-card.module.css";
 
 export default async function Followee() {

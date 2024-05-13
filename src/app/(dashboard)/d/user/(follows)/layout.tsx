@@ -2,10 +2,10 @@ import { Suspense } from "react";
 
 import { Title } from "@mantine/core";
 
-import Tab from "@/app/(home)/_components/tab";
+import Tab from "@/components/layout/tab";
 import c from "@/styles/layout/user.module.css";
 
-import { NoticeSkeleton } from "../../../../(home)/_components/skeletons";
+import { NoticeSkeleton } from "../../../../../components/layout/skeltons";
 
 export default async function UserLayout({
   children,
