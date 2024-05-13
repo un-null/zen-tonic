@@ -52,14 +52,14 @@ export default async function ProjectList() {
         </li>
       ))}
 
-      <li className={c.new}>
-        <Link href={`/d/project/setup`}>
+      <Link href={`/d/project/setup`}>
+        <li className={c.new}>
           <p>
             new
             <Plus size={16} />
           </p>
-        </Link>
-      </li>
+        </li>
+      </Link>
     </ul>
   );
 }
