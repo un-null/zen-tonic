@@ -1,0 +1,22 @@
+.container {
+  margin-top: rem(32);
+}
+
+.main {
+  margin-top: rem(16);
+  padding: 0 rem(32);
+
+  @media (max-width: em(992)) {
+    padding: 0 rem(16);
+  }
+}
+
+.card {
+  padding: var(--mantine-spacing-md);
+  border-radius: var(--mantine-radius-xs);
+  border: rem(1) solid var(--mantine-color-gray-4);
+}
+
+.btn_wrapper {
+  margin-top: rem(16);
+}
