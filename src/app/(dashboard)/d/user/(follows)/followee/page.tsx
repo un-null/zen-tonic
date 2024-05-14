@@ -6,7 +6,7 @@ import { Avatar } from "@mantine/core";
 
 import NoPostCard from "@/components/layout/no-post-card";
 import { getFolloweeList } from "@/features/db/follow";
-import c from "@/styles/components/dashboard/user-card.module.css";
+import c from "@/styles/page/follow.module.css";
 
 export default async function Followee() {
   const user = await currentUser();

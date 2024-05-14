@@ -4,8 +4,7 @@ import dayjs from "dayjs";
 
 import NoPostCard from "@/components/layout/no-post-card";
 import { getAllLikes } from "@/features/db/like";
-// fix css file
-import c from "@/styles/components/dashboard/list-card.module.css";
+import c from "@/styles/layout/list-card.module.css";
 
 export default async function Notice() {
   const user = await currentUser();

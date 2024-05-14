@@ -7,8 +7,7 @@ import dayjs from "dayjs";
 import LikeButton from "@/components/common/like-button";
 import NoPostCard from "@/components/layout/no-post-card";
 import { getPostsByUserId } from "@/features/db/post";
-// fix css file
-import c from "@/styles/components/dashboard/list-card.module.css";
+import c from "@/styles/layout/list-card.module.css";
 
 export default async function PostList({ id }: { id: string }) {
   const user = await currentUser();

@@ -4,9 +4,9 @@ import { currentUser } from "@clerk/nextjs";
 
 import { getPostsByProjectId } from "@/features/db/post";
 import { getAsyncInProgressProject } from "@/features/db/project";
-import c from "@/styles/components/dashboard/heatmap.module.css";
 
 import HeatMap from "../heatmap";
+import c from "./index.module.css";
 
 export default async function HeatMapWrapper() {
   const user = await currentUser();

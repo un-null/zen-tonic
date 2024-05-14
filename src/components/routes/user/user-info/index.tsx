@@ -6,7 +6,7 @@ import { Avatar, Button, Title } from "@mantine/core";
 import FollowButton from "@/components/routes/user/follow-button";
 import { getFollowById } from "@/features/db/follow";
 import { getUserDetail } from "@/features/db/user";
-import c from "@/styles/components/dashboard/user-info.module.css";
+import c from "@/styles/layout/user-info.module.css";
 
 export default async function UserDetailInfo({ id }: { id: string }) {
   const user = await currentUser();

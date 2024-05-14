@@ -8,7 +8,7 @@ import { Clipboard, Plus } from "lucide-react";
 
 import { prisma } from "@/features/lib/prisma";
 
-import c from ".index.module.css";
+import c from "./index.module.css";
 
 export default async function ProjectList() {
   const user = await currentUser();

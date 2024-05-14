@@ -9,8 +9,7 @@ import { Calendar, Clipboard } from "lucide-react";
 
 import { getInProgressProject } from "@/features/db/project";
 import { getUserCreatedAt } from "@/features/db/user";
-
-import c from "./index.module.css";
+import c from "@/styles/layout/user-info.module.css";
 
 type CardItem = {
   icon: ReactNode;

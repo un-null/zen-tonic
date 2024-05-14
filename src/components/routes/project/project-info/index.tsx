@@ -13,7 +13,7 @@ import {
 
 import { getProjectDetail } from "@/features/db/project";
 
-import c from ".index.module.css";
+import c from "./index.module.css";
 
 type CardItem = {
   icon: ReactNode;

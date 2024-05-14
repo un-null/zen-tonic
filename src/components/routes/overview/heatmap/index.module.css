@@ -1,11 +1,3 @@
-.wrapper {
-  width: auto;
-
-  @media (max-width: em(64)) {
-    width: rem(768);
-  }
-}
-
 .card {
   width: auto;
   border-radius: rem(4);

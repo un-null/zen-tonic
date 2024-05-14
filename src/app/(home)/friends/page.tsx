@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 
 import { getFollows } from "@/features/db/follow";
 import { getFolloweeAllPosts, getUserLatestPosts } from "@/features/db/post";
-import c from "@/styles/components/dashboard/list-card.module.css";
+import c from "@/styles/layout/list-card.module.css";
 
 import CraeteButton from "../../../components/common/create-button";
 import LikeButton from "../../../components/common/like-button";
