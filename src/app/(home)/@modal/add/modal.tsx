@@ -15,7 +15,7 @@ import {
 } from "@mantine/core";
 import { useFormState } from "react-dom";
 
-import { createPost, State } from "@/lib/action/post/create-post";
+import { createPost, State } from "@/features/actions/post/create-post";
 
 const initialState: State = { message: null, errors: {} };
 

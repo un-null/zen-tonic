@@ -1,4 +1,4 @@
-import { ProjectSetupSkeleton } from "@/app/(home)/_components/skeletons";
+import { ProjectSetupSkeleton } from "@/components/layout/skeltons";
 
 export default function Loading() {
   return <ProjectSetupSkeleton />;

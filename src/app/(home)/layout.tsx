@@ -1,11 +1,10 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 
+import Header from "@/components/layout/header";
+import FixedButton from "@/components/layout/home-fixed-button";
+import { TimelineSkeleton } from "@/components/layout/skeltons";
 import c from "@/styles/layout/timeline.module.css";
-
-import FixedButton from "./_components/fixed-button";
-import Header from "./_components/header";
-import { TimelineSkeleton } from "./_components/skeletons";
 
 export const metadata: Metadata = {
   title: "Timeline | All",

@@ -2,10 +2,9 @@ import { Suspense } from "react";
 
 import { Button, Text } from "@mantine/core";
 
+import { UserDetailInfoSkeleton } from "@/components/layout/skeltons";
+import UserSettingInfo from "@/components/routes/settings/user-setting";
 import c from "@/styles/page/settings.module.css";
-
-import { UserDetailInfoSkeleton } from "../../../(home)/_components/skeletons";
-import UserSettingInfo from "./user-setting-info";
 
 export default async function Settings() {
   return (

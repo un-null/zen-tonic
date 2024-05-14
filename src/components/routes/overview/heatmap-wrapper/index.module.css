@@ -1,0 +1,7 @@
+.wrapper {
+  width: auto;
+
+  @media (max-width: em(64)) {
+    width: rem(768);
+  }
+}

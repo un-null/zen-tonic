@@ -2,10 +2,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
-import { Anchor, Avatar, Box, Card, Flex } from "@mantine/core";
+import { Avatar } from "@mantine/core";
 
-import NoPostCard from "@/app/(home)/_components/no-post-card";
-import { getFollowerList } from "@/lib/db/follow";
+import NoPostCard from "@/components/layout/no-post-card";
+import { getFollowerList } from "@/features/db/follow";
+import c from "@/styles/page/follow.module.css";
 
 export default async function Follower() {
   const user = await currentUser();
@@ -24,33 +25,19 @@ export default async function Follower() {
       {!isFollower ? (
         <NoPostCard type={"dashboard"}>まだフォロワーがいません</NoPostCard>
       ) : (
-        <Box>
+        <ul>
           {filterdFollowers?.map((user) => (
-            <Card
-              mx={"auto"}
-              key={user.follower.id}
-              padding="lg"
-              radius={0}
-              style={{
-                borderBottom: "1px solid #C9C9C9",
-              }}
-            >
-              <Flex gap={16} align={"center"}>
+            <li key={user.follower.id} className={c.card}>
+              <div className={c.content}>
                 <Avatar size={"md"} radius={"sm"} src={user.follower.image} />
 
-                <Anchor
-                  size="md"
-                  fw={"bold"}
-                  flex={1}
-                  component={Link}
-                  href={`/d/user/${user.follower.id}`}
-                >
+                <Link href={`/d/user/${user.follower.id}`} className={c.link}>
                   {user.follower.name}
-                </Anchor>
-              </Flex>
-            </Card>
+                </Link>
+              </div>
+            </li>
           ))}
-        </Box>
+        </ul>
       )}
     </>
   );
