@@ -8,6 +8,14 @@ export const getUserDetail = async (id: string) => {
   });
 };
 
+export const getUserById = (id: string) => {
+  return prisma.user.findFirst({
+    where: {
+      id: id,
+    },
+  });
+};
+
 export const getUserCreatedAt = (id: string) => {
   return prisma.user.findFirst({
     where: {

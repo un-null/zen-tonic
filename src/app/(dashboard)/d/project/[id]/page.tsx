@@ -20,7 +20,6 @@ export default async function PageDetail({
       </Suspense>
 
       <Suspense fallback={<ProjectProgressSkeleton />}>
-        {/* Fix mobile width */}
         <div className={c.progress}>
           <Progress id={params.id} />
         </div>

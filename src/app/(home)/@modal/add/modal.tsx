@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import {
@@ -8,6 +9,7 @@ import {
   Checkbox,
   Divider,
   Flex,
+  Group,
   Modal as MantineModal,
   Select,
   Text,
@@ -124,7 +126,14 @@ export default function Modal({
           >
             <Text>プロジェクトが存在しません</Text>
 
-            <Button onClick={close}>モーダルを閉じる</Button>
+            <Group>
+              <Button onClick={close} variant={"outline"}>
+                モーダルを閉じる
+              </Button>
+              <Button component={Link} href={"/d/project/setup"} bg={"#2483e2"}>
+                プロジェクトを開始
+              </Button>
+            </Group>
           </Flex>
         )}
       </MantineModal>

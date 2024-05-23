@@ -28,8 +28,8 @@ export default async function Add() {
     <Modal
       projects={projectTitleArr}
       isDone={isPostedToday}
-      username={latestPost?.user.name}
-      avatar={latestPost?.user.image}
+      username={user.username}
+      avatar={user.imageUrl}
     />
   );
 }

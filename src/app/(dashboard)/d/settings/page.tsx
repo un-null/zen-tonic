@@ -1,12 +1,33 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 
-import { Button, Text } from "@mantine/core";
+import { currentUser } from "@clerk/nextjs";
 
 import { UserDetailInfoSkeleton } from "@/components/layout/skeltons";
+import DeleteAccountCard from "@/components/routes/settings/delete-account-card";
+import SyncCard from "@/components/routes/settings/sync-card";
 import UserSettingInfo from "@/components/routes/settings/user-setting";
+import { getInProgressProject } from "@/features/db/project";
+import { getTodaysSyncData } from "@/features/db/sync";
 import c from "@/styles/page/settings.module.css";
 
 export default async function Settings() {
+  const user = await currentUser();
+
+  if (!user) {
+    redirect("/sign-in");
+  }
+
+  const [project, todaySyncData] = await Promise.all([
+    getInProgressProject(user.id),
+    getTodaysSyncData(user.id),
+  ]);
+
+  const isExecuted =
+    todaySyncData?.executed_at.getDate() === new Date().getDate();
+
+  const isProject = !!project;
+
   return (
     <div className={c.container}>
       <Suspense fallback={<UserDetailInfoSkeleton />}>
@@ -14,20 +35,12 @@ export default async function Settings() {
       </Suspense>
 
       <div className={c.main}>
-        <div className={c.card}>
-          <Text fw={"bold"}>アカウントの削除</Text>
-
-          <Text pt={8} fz={{ base: 14, md: 16 }} c={"dimmed"}>
-            Zen-Tonic のアカウントが削除されます。
-            Notionのアカウントは削除されません。
-          </Text>
-
-          <div className={c.btn_wrapper}>
-            <Button variant={"outline"} color={"#e06259"}>
-              削除
-            </Button>
-          </div>
-        </div>
+        <SyncCard
+          userId={user.id}
+          disabled={isExecuted}
+          isProject={isProject}
+        />
+        <DeleteAccountCard userId={user.id} />
       </div>
     </div>
   );
