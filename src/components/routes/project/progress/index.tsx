@@ -36,7 +36,7 @@ export default async function Progress({ id }: { id: string }) {
   const isProgress = !!progress;
   const isDone = project.end_date < new Date();
   const isTodayPost =
-    posts.length !== 0 && dayjs(posts[0].created_at).isSame(new Date(), "day");
+    posts.length !== 0 && dayjs(posts[0]?.created_at).isSame(new Date(), "day");
 
   const getClosestWeekday = ({
     week_days,
@@ -97,17 +97,16 @@ export default async function Progress({ id }: { id: string }) {
               size={152}
               thickness={16}
             />
-            {isProgress && !isTodayPost ? (
+            {!isTodayPost ? (
               <div className={c.button_wrapper}>
                 <CraeteButton type={"text"} />
               </div>
-            ) : null}
-            {isProgress && isTodayPost ? (
+            ) : (
               <div className={c.text}>
                 次の記録日:
                 <span>{closestDate?.format("YYYY/MM/DD")}</span>
               </div>
-            ) : null}
+            )}
           </div>
         </div>
       )}

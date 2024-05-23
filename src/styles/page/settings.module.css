@@ -32,6 +32,11 @@
   }
 }
 
+.no_project {
+  font-size: rem(14);
+  color: "#06259";
+}
+
 .btn_wrapper {
   margin-top: rem(16);
 }

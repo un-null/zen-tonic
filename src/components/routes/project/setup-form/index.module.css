@@ -18,6 +18,17 @@
   }
 }
 
+.no_allow {
+  color: #e06259;
+
+  span {
+    font-weight: bold;
+    text-decoration: underline;
+    text-underline-offset: rem(2);
+    cursor: pointer;
+  }
+}
+
 .dayOption_wrapper {
   display: flex;
   flex-direction: row;
@@ -88,5 +99,8 @@
 .button_wrapper {
   width: 100%;
   display: flex;
-  justify-content: center;
+
+  @media (max-width: em(768)) {
+    justify-content: center;
+  }
 }

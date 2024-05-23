@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
+import { useClerk } from "@clerk/nextjs";
 import { ComboboxItem, Select, TextInput } from "@mantine/core";
 import { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { useFormState } from "react-dom";
@@ -25,11 +27,6 @@ const initialState = { message: "", errors: {} };
 const weekDays = ["月", "火", "水", "木", "金", "土", "日"];
 
 export default function SetupForm({ data }: Props) {
-  const [value, setValue] = useState<ComboboxItem | null>({
-    value: "database",
-    label: "データベースを登録する",
-  });
-
   const [weekdayOption, setWeekdayOption] = useState<ComboboxItem | null>({
     value: "毎日",
     label: "毎日",
@@ -37,10 +34,12 @@ export default function SetupForm({ data }: Props) {
 
   const [state, dispatch] = useFormState(createProject, initialState);
 
-  const { pageOption, dbOption } = retrieveOptions(data);
+  const { pageOption } = retrieveOptions(data);
+
+  const { signOut } = useClerk();
+  const router = useRouter();
 
   return (
-    // + database or page ID を action に渡す！
     <form action={dispatch}>
       <div className={c.container}>
         <div>
@@ -52,33 +51,26 @@ export default function SetupForm({ data }: Props) {
             size={"xs"}
           />
 
-          <Select
-            label="アクション"
-            name="object"
-            data={[
-              { value: "database", label: "データベースを登録する" },
-              { value: "page", label: "ページにデータベースを作成する" },
-            ]}
-            onChange={(_, option) => setValue(option)}
-            withAsterisk
-            w={{ base: "auto", sm: 300 }}
-            my={16}
-            size={"xs"}
-          />
-
           <div className={c.dbOption_wrapper}>
             <Select
-              key={value?.value}
-              label={value?.value === "database" ? "データベース" : "ページ"}
+              label="ページ"
               name="id"
-              data={value?.value === "database" ? dbOption : pageOption}
+              data={pageOption}
+              disabled={pageOption.length === 0}
+              placeholder="データベースが作成されるNotionページ"
               withAsterisk
               w={{ base: "auto", sm: 300 }}
               size={"xs"}
             />
 
-            {state.error?.id &&
-              state.error.id.map((error, index) => <p key={index}>{error}</p>)}
+            {pageOption.length === 0 && (
+              <p className={c.no_allow}>
+                ページへのアクセスを許可してください。{" "}
+                <span onClick={() => signOut(() => router.push("/"))}>
+                  アクセスを許可する
+                </span>
+              </p>
+            )}
           </div>
 
           <div className={c.dayOption_wrapper}>

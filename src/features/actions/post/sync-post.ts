@@ -4,32 +4,28 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { Client } from "@notionhq/client";
+import dayjs from "dayjs";
 
 import { getAccessToken } from "@/features/lib/auth/getAccessToken";
 import { prisma } from "@/features/lib/prisma";
 
 export const syncNotion = async (userId: string) => {
   try {
-    const dbInfo = await prisma.user.findFirst({
+    const project = await prisma.project.findFirst({
       where: {
-        id: userId,
+        user_id: userId,
       },
       select: {
-        project: {
-          orderBy: { start_date: "desc" },
-          select: {
-            id: true,
-            database_id: true,
-          },
-        },
+        id: true,
+        database_id: true,
         post: true,
       },
+      orderBy: { start_date: "desc" },
     });
 
     const accessToken = await getAccessToken(userId);
-    const databaseId = dbInfo?.project[0].database_id
-      ? dbInfo.project[0].database_id
-      : "";
+
+    const databaseId = project?.database_id ? project.database_id : "";
 
     const latestNotionData = await getLatestNotionData({
       databaseId,
@@ -39,9 +35,16 @@ export const syncNotion = async (userId: string) => {
     // notion DB にあって、turso にないデータがあれば、turso へインサート
     const filterdInsertData = latestNotionData.filter(
       (data) =>
-        !dbInfo?.post.some((post) => {
+        !project?.post.some((post) => {
           if (data.object === "page" && "properties" in data) {
-            return new Date(data.created_time) === post.created_at;
+            const notionDate =
+              data.properties["Date"].type === "date" &&
+              data.properties["Date"].date?.start;
+
+            return dayjs(new Date(notionDate || "")).isSame(
+              dayjs(post.created_at),
+              "day",
+            );
           }
         }),
     );
@@ -51,7 +54,9 @@ export const syncNotion = async (userId: string) => {
         const comment =
           data.properties["Comment"].type === "rich_text" &&
           data.properties["Comment"].rich_text[0].plain_text;
-        const created_at = new Date(data.created_time);
+        const created_at =
+          data.properties["Date"].type === "date" &&
+          data.properties["Date"].date?.start;
         const isDone =
           data.properties["Done"].type === "checkbox" &&
           data.properties["Done"].checkbox;
@@ -70,8 +75,8 @@ export const syncNotion = async (userId: string) => {
           data: {
             content: item?.comment || "",
             user_id: userId,
-            project_id: dbInfo?.project[0].id!,
-            created_at: item?.created_at!,
+            project_id: project?.id!,
+            created_at: new Date(item?.created_at || "").toISOString() || "",
             is_done: item?.isDone || false,
           },
         });
@@ -79,12 +84,19 @@ export const syncNotion = async (userId: string) => {
     }
 
     // turso にしかないデータの id　配列を抽出し、 turso 側でデリートする
-    const deleteDataIds = dbInfo?.post
+    const deleteDataIds = project?.post
       .filter(
         (post) =>
           !latestNotionData.some((data) => {
             if (data.object === "page" && "properties" in data) {
-              return new Date(data.created_time) === post.created_at;
+              const notionDate =
+                data.properties["Date"].type === "date" &&
+                data.properties["Date"].date?.start;
+
+              return dayjs(new Date(notionDate || "")).isSame(
+                dayjs(post.created_at),
+                "day",
+              );
             }
           }),
       )
